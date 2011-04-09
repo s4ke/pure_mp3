@@ -52,6 +52,7 @@ public class Player
 	    	case 0:
 	    		//normal playmode:
 	    		Global.playList.prev();
+	    		
 	    		break;    		
 	    	case 1:
 	    		//random playmode
@@ -63,6 +64,10 @@ public class Player
 	    		}
 	    		break;
     	}
+    	if(Global.playList.getModelSize() == 0)
+		{
+			playing = false;
+		}
     }
     
     public void playNext()
@@ -90,12 +95,16 @@ public class Player
 	    		{
 	    			next();
 	    		}
+	    		break;
     	}
+    	if(Global.playList.getModelSize() == 0)
+		{
+			playing = false;
+		}
     }
     
 	public synchronized void playpause()
     {		
-		
 		if(musicPlayer == null && (Global.playList.getNumberOfSongs() > 0))
 		{
 			//if player hasn't started playing yet and and the playmode is random

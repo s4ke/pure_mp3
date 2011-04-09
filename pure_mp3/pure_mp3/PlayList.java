@@ -148,7 +148,10 @@ public class PlayList extends JScrollPane
     public void random()
     {
     	Random random = new Random();
-    	setCurrent(random.nextInt(model.getSize())-1);
+    	if(model.getSize() > 0)
+    	{
+    		setCurrent(random.nextInt(model.getSize())-1);
+    	}
     }
     
     public void playSelected(int index)
