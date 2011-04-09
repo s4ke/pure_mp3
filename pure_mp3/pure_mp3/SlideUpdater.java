@@ -1,0 +1,137 @@
+/**
+ *  @author Martin Braun
+ *  SlideUpdater inspired by Matthias Pfisterer's examples on JavaSound
+ *  (jsresources.org). Because of the fact, that this Software is meant 
+ *  to be Open-Source and I don't want to get anybody angry about me 
+ *  using parts of his intelligence without mentioning it, I hereby 
+ *  mention him as inspiration, because his code helped me to write this class.
+ * 
+ *  This file is part of pure.mp3.
+ *
+ *  pure.mp3 is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *  
+ *  pure.mp3 is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *  
+ *  You should have received a copy of the GNU General Public License
+ *  along with pure.mp3.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package pure_mp3;
+
+//import java.io.File;
+//import java.io.FileNotFoundException;
+////import java.io.FileInputStream;
+//import java.io.IOException;
+////import java.net.URL;
+//import java.util.Map;
+
+//import javax.swing.*;
+//import javax.sound.sampled.AudioFormat;
+//import javax.sound.sampled.AudioFileFormat;
+//import javax.sound.sampled.AudioSystem;
+//import javax.sound.sampled.UnsupportedAudioFileException;
+//import org.tritonus.share.sampled.file.TAudioFileFormat;
+
+public class SlideUpdater extends Thread
+{
+	private MusicPlayer musicPlayer;
+	private Progress progress;
+	private boolean paused;
+	private boolean stop;
+	
+	public SlideUpdater(MusicPlayer xMusicPlayer, Progress xProgress)
+	{
+		super();
+		musicPlayer = xMusicPlayer;
+		progress = xProgress;
+		paused = false;
+	}
+	
+	public void run()
+	{
+			long frameLength = 0;
+			synchronized(this)
+			{
+				if(musicPlayer != null && !stop)
+				{
+					frameLength = musicPlayer.getFrameLength();
+					//Maybe it was stopped? Or sth went wrong
+					if(frameLength == -1)
+					{
+						stop = true;
+					}
+				}
+			}
+			//while not stopped just run and run and run...
+			while(!stop)
+			{	
+				//Block for pausing/unpausing
+				synchronized(this) 
+				{		
+	                while (paused && (!stop))
+	                {
+	                	try
+	                	{
+	                		wait();
+	                	}
+	                	catch(Exception e)
+	                	{
+	                	}
+	                }
+	                notify();
+	            }
+				//update if everything is ok
+				if(musicPlayer != null && frameLength > 0)
+				{
+					double percentage_ = (double)musicPlayer.getFramePosition()/frameLength*100;
+					int percentage = (int) percentage_;
+					//set the value and don't make a listener listen :)
+					progress.setValue2(percentage);
+				}
+				else
+				{
+					break;
+				}
+				try
+				{
+					//Don't work too much. That get's the PC crazy
+					sleep(500);
+				}
+				catch(Exception e)
+				{
+				}
+			}
+		
+		progress.setValue2(0);	
+	}
+	
+	public synchronized void pause()
+	{
+		paused = !paused;
+		notify();
+	}
+	
+	public synchronized void stop_()
+	{
+		stop = true;
+		notify();
+	}
+	
+	public synchronized boolean isStopped()
+	{
+		return stop;
+	}
+	
+	public void setMusicPlayer(MusicPlayer xMusicPlayer)
+	{
+		musicPlayer = xMusicPlayer;
+	}
+	
+
+}
