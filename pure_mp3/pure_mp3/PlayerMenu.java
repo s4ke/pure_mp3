@@ -91,7 +91,7 @@ public class PlayerMenu extends JPanel
     	{
     		public void run()
     		{
-    			Global.player.playpause();
+    			Global.player.playpause(true);
     		}
     	}.start();        
     }

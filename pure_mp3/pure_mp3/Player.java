@@ -42,7 +42,7 @@ public class Player
     	Global.info.update();
         System.out.println("Previous Title: " + Global.playList.getCurrent());
         stop();
-        playpause();
+        playpause(false);
     }
     
     public void prev()
@@ -76,7 +76,7 @@ public class Player
     	Global.info.update();
         System.out.println("Next Title: " + Global.playList.getCurrent());
         stop();
-        playpause();    	
+        playpause(false);    	
     }
     
     public void next()
@@ -103,14 +103,18 @@ public class Player
 		}
     }
     
-	public synchronized void playpause()
+	public synchronized void playpause(boolean byUser)
     {		
 		if(musicPlayer == null && (Global.playList.getNumberOfSongs() > 0))
 		{
 			//if player hasn't started playing yet and and the playmode is random
-			if(playMode == 1 && !playing)
+			if(playMode == 1 && !playing && byUser)
 			{
 				next();
+			}
+			else if(playMode == 0 && !playing)
+			{
+				Global.playList.setCurrent(0);
 			}
 			//normal playmode; the value for the current song could be negative because of
 			//deleting the whole playList. So it has to be checked and fixed.

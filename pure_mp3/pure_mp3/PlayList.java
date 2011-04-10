@@ -158,7 +158,7 @@ public class PlayList extends JScrollPane
     {
         setCurrent(index);
         Global.player.stop();
-        Global.player.playpause();
+        Global.player.playpause(true);
     }
     
     public void setCurrent(int xCurrent)
