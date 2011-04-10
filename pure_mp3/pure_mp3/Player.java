@@ -112,7 +112,7 @@ public class Player
 			{
 				next();
 			}
-			else if(playMode == 0 && !playing)
+			else if(playMode == 0 && !playing && byUser)
 			{
 				Global.playList.setCurrent(0);
 			}
