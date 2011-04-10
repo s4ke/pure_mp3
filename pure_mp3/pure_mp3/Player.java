@@ -107,11 +107,13 @@ public class Player
     {		
 		if(musicPlayer == null && (Global.playList.getNumberOfSongs() > 0))
 		{
-			//if player hasn't started playing yet and and the playmode is random
+			//if player hasn't started playing yet and and the playmode is random and 
+			//the user himself clicked on play and not another method invoked playpause(byUser)
 			if(playMode == 1 && !playing && byUser)
 			{
 				next();
 			}
+			//same but for playMode == 0
 			else if(playMode == 0 && !playing && byUser)
 			{
 				Global.playList.setCurrent(0);
