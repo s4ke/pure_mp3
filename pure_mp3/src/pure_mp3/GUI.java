@@ -24,6 +24,7 @@ public class GUI extends JFrame
     public GUI()
     {
         super("pure.mp3");
+        Global.setGUI(this);
         init();
     }
     

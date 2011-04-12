@@ -1,17 +1,13 @@
 package pure_mp3;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FilenameFilter;
-import javax.swing.SwingWorker;
 
 //import javax.swing.DefaultListModel;
 //import javax.swing.ListModel;
 
-public class FileCrawler extends SwingWorker<Void,Void> implements PropertyChangeListener
-{
-	
+public class FileCrawler
+{	
 	public FileCrawler()
 	{	
 	}
@@ -20,8 +16,7 @@ public class FileCrawler extends SwingWorker<Void,Void> implements PropertyChang
 	{
 		if(file != null)
 		{
-			File [] files = file.listFiles(
-					new FilenameFilter()
+			final File [] files = file.listFiles(new FilenameFilter()
 			{
 				public boolean accept(File dir, String name)
 			    {
@@ -39,8 +34,16 @@ public class FileCrawler extends SwingWorker<Void,Void> implements PropertyChang
 	    		else
 	    		{
 			    	try
-			    	{			    			
-			    		Global.playList.addSong(new Song(files[i]));
+			    	{		
+			    		final int j = i;
+			    		javax.swing.SwingUtilities.invokeLater(new Runnable()
+			    		{
+			    		    public void run()
+			    		    {
+			    		    	Global.playList.addSong(new Song(files[j]));
+			    		    }
+			    		});
+			    		
 			    	}
 			    	catch(Exception e)
 			    	{
@@ -49,18 +52,6 @@ public class FileCrawler extends SwingWorker<Void,Void> implements PropertyChang
 	    		}
 	    	}
 	    }			
-	}
-	
-	@Override
-	public void propertyChange(PropertyChangeEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected Void doInBackground() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
 	}
 	
 	

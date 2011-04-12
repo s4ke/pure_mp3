@@ -40,13 +40,19 @@ public class Menu extends JMenuBar
         {
         	public void actionPerformed(ActionEvent event)
         	{
-        		Object answer = JOptionPane.showInputDialog(null, "Input path:", "Add File",
+        		final Object answer = JOptionPane.showInputDialog(null, "Input path:", "Add File",
                         JOptionPane.INFORMATION_MESSAGE); 
         		if(answer instanceof String)
         		{
         			try
         			{
-        				Global.fileCrawler.add(new File((String)answer));
+        				new Thread()
+        				{
+        					public void run()
+        					{
+        						Global.fileCrawler.add(new File((String)answer));
+        					}
+        				}.start();
         			}
         			catch(Exception e)
         			{
@@ -60,13 +66,19 @@ public class Menu extends JMenuBar
         {
         	public void actionPerformed(ActionEvent event)
         	{
-        		Object answer = JOptionPane.showInputDialog(null, "Input path:", "Add Folder",
+        		final Object answer = JOptionPane.showInputDialog(null, "Input path:", "Add Folder",
                         JOptionPane.INFORMATION_MESSAGE); 
         		if(answer instanceof String)
         		{
         			try
         			{
-        				Global.fileCrawler.add(new File((String)answer));
+        				new Thread()
+        				{
+        					public void run()
+        					{
+        						Global.fileCrawler.add(new File((String)answer));
+        					}
+        				}.start();        				
         			}
         			catch(Exception e)
         			{

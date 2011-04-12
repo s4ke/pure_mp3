@@ -7,6 +7,7 @@ public class Global {
 	public static final Player player = new Player(0);
 	public static PlayList playList = null;
 	public static Info info = null;
+	public static GUI GUI = null;
 	
 	public static void setVolume(float xVolume)
 	{
@@ -21,6 +22,11 @@ public class Global {
 	public static void setInfo(Info xInfo)
 	{
 		info = xInfo;
+	}
+	
+	public static void setGUI(GUI xGUI)
+	{
+		GUI = xGUI;
 	}
 
 }

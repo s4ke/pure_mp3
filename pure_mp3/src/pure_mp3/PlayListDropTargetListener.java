@@ -52,18 +52,25 @@ public class PlayListDropTargetListener  implements DropTargetListener {
 	    	  if(flavors[i].equals(java.awt.datatransfer.DataFlavor.javaFileListFlavor))
 	    	  {
 	    		  dropTargetDropEvent.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
-	    		  List list = (List<File>) transferable.getTransferData(flavors[i]);
+	    		  final List list = (List<File>) transferable.getTransferData(flavors[i]);
 	    		  System.out.println(((File)list.get(0)).getPath());
-	    		  for(int j = 0; j < list.size(); j++)
-    			  {
-    				  try
-    				  {
-    					  Global.fileCrawler.add((File)list.get(j));
-    				  }
-    				  catch(Exception e)
-    				  {
-    				  }
-    			  }   			  
+	    		  new Thread()
+				  {
+					  public void run()
+					  {
+						  for(int j = 0; j < list.size(); j++)
+		    			  {
+		    				  try
+		    				  {
+		    					  Global.fileCrawler.add((File)list.get(j));
+		    				  }
+		    				  catch(Exception e)
+		    				  {
+		    				  }
+		    			  }   		
+					  }
+				  }.start();
+	    		  	  
     			  dropTargetDropEvent.dropComplete(true);
     			  return;
 	    	  }
@@ -75,29 +82,35 @@ public class PlayListDropTargetListener  implements DropTargetListener {
 	    		  if(transferData instanceof String)
 	    		  {
 	    			  String string = (String) transferData;
-	    			  String strings[] = string.split("\n");
+	    			  final String strings[] = string.split("\n");
 	    			  if(strings[strings.length-1].endsWith("\n"));
 	    			  {
 	    				  strings[strings.length-1] = strings[strings.length-1].substring(0,strings[strings.length-1].length()-1);
 	    			  }
 //	    			  int position = Global.playList.getList().locationToIndex(dropTargetDropEvent.getLocation());
-	    			  for(int j = 0; j < strings.length; j++)
-	    			  {
-	    				  try
-	    				  {	    					  
-//	    					  if(position >= 0)
-//	    					  {
-//	    						  position = Global.fileCrawler.addFileAt(new File(new URL(strings[j]).toURI().getPath()),position);
-//	    					  }
-//	    					  else
-	    					  {
-	    						  Global.fileCrawler.add(new File(new URL(strings[j]).toURI().getPath()));
-	    					  }
-	    				  }
-	    				  catch(Exception e)
-	    				  {
-	    				  }
-	    			  }   			  
+					  new Thread()
+					  {
+						  public void run()
+						  {
+			    			  for(int j = 0; j < strings.length; j++)
+			    			  {
+			    				  try
+			    				  {	    					  
+		//	    	    					  if(position >= 0)
+		//	    	    					  {
+		//	    	    						  position = Global.fileCrawler.addFileAt(new File(new URL(strings[j]).toURI().getPath()),position);
+		//	    	    					  }
+		//	    	    					  else
+			    					  {
+			    						  Global.fileCrawler.add(new File(new URL(strings[j]).toURI().getPath()));
+			    					  }
+			    				  }
+			    				  catch(Exception e)
+			    				  {
+			    				  }
+			    			  }   	
+						  }
+					  }.start();			  		  
 	    			  dropTargetDropEvent.dropComplete(true);
 	    			  return;
 	    		  }

@@ -82,6 +82,7 @@ public class PlayList extends JScrollPane
             			{
             				selectAfter = 0;
             			}
+        				model.trimToSize();
         			}
         			int killCount = 0;
         			for(int i = 0; i < selected.length; i++)
@@ -312,10 +313,16 @@ public class PlayList extends JScrollPane
     	}
     }
     
+    public void setValueIsAdjusting(boolean isAdjusting)
+    {
+    	list.setValueIsAdjusting(isAdjusting);
+    }
+    
     public void removeAllElements()
     {
     	model.removeAllElements();
-    	current = -1;
+    	model.trimToSize();
+    	current = -1;    	
     }
     
     public DefaultListModel getModel()
