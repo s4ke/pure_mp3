@@ -58,7 +58,7 @@ public class PlayListDropTargetListener  implements DropTargetListener {
     			  {
     				  try
     				  {
-    					  Global.fileCrawler.addFile((File)list.get(j));
+    					  Global.fileCrawler.add((File)list.get(j));
     				  }
     				  catch(Exception e)
     				  {
@@ -91,7 +91,7 @@ public class PlayListDropTargetListener  implements DropTargetListener {
 //	    					  }
 //	    					  else
 	    					  {
-	    						  Global.fileCrawler.addFile(new File(new URL(strings[j]).toURI().getPath()));
+	    						  Global.fileCrawler.add(new File(new URL(strings[j]).toURI().getPath()));
 	    					  }
 	    				  }
 	    				  catch(Exception e)

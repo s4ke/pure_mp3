@@ -46,7 +46,7 @@ public class Menu extends JMenuBar
         		{
         			try
         			{
-        				Global.fileCrawler.addFile(new File((String)answer));
+        				Global.fileCrawler.add(new File((String)answer));
         			}
         			catch(Exception e)
         			{
@@ -66,7 +66,7 @@ public class Menu extends JMenuBar
         		{
         			try
         			{
-        				Global.fileCrawler.addDirectory(new File((String)answer));
+        				Global.fileCrawler.add(new File((String)answer));
         			}
         			catch(Exception e)
         			{
