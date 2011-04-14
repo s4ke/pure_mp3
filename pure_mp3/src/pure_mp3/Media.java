@@ -7,6 +7,9 @@ package pure_mp3;
  * @version (a version number or a date)
  */
 import javax.swing.JPanel;
+
+import net.miginfocom.swing.MigLayout;
+
 public class Media extends JPanel
 {
 	private static final long serialVersionUID = 2385007980763532219L;
@@ -15,14 +18,12 @@ public class Media extends JPanel
     public Media()
     {
         super();
-        setLayout(null);        
+        setLayout(new MigLayout("insets 0 0 0 0","[grow,fill]","[][grow,fill]"));        
         
         mediabar = new MediaBar();
-        mediabar.setBounds(0,0,515,20);
-        add(mediabar);
+        add(mediabar,"wrap");
         
         mediatable = new MediaTable();
-        mediatable.setBounds(0,20,515,405);
         add(mediatable);
     }
 }

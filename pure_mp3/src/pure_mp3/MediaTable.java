@@ -19,6 +19,7 @@ import java.awt.Color;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
 public class MediaTable extends JScrollPane
 {
 	private static final long serialVersionUID = 2385007980763532219L;
@@ -27,27 +28,23 @@ public class MediaTable extends JScrollPane
     {
         super();
         setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);          
-        table = new JTable() {
+        table = new JTable() 
+        {
         	private static final long serialVersionUID = 20100125;
-            public boolean isCellEditable(int x, int y) {
+            public boolean isCellEditable(int x, int y) 
+            {
                 return false;
             }
         };
-        
-        table.setSize(780,411);
-        table.setLocation(0,0);
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("Artist");
         model.addColumn("Title");
         model.addColumn("Album");
         model.addColumn("Length");
         String string[]={"This","feature","is not implemented","yet"};
-//        int i = 0;
-//        while(i < 100)
-//        {
-            model.addRow(string);
-//            i++;
-//        }
+        
+        model.addRow(string);
+        
         table.setModel(model);
         table.getTableHeader().setReorderingAllowed(false); 
         add(table);

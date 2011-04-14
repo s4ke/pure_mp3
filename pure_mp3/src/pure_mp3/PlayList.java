@@ -41,7 +41,7 @@ public class PlayList extends JScrollPane
         Global.setPlayList(this);
         current = 0;        
         list = new JList();
-        list.setLocation(0,0);
+//        list.setLocation(0,0);
         model = new MyListModel(this);
         
         list.setModel(model);

@@ -1,11 +1,5 @@
 package pure_mp3;
 
-/**
- * Write a description of class PlayerMenu here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
- */
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -14,6 +8,8 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import net.miginfocom.swing.MigLayout;
+
 public class PlayerMenu extends JPanel
 {
 	private static final long serialVersionUID = 2385007980763532219L;
@@ -25,7 +21,7 @@ public class PlayerMenu extends JPanel
     public PlayerMenu()
     {
         super();
-        setLayout(null);
+        setLayout(new MigLayout("insets 0 0 0 0"));
         
         prev = new JButton("<|");
         prev.addActionListener(new ActionListener()
@@ -35,11 +31,9 @@ public class PlayerMenu extends JPanel
                 playPrev();
             }
         });
-        prev.setBounds(0,20,50,40);
-        add(prev);
+        add(prev,"sizegroup playerMenu");
         
         play = new JButton(">");
-        play.setBounds(50,20,80,40);
         play.addActionListener(new ActionListener()
         {               
             public void actionPerformed(ActionEvent e)
@@ -47,12 +41,11 @@ public class PlayerMenu extends JPanel
                 play();
             }
         });
-        add(play);
+        add(play,"sizegroup playerMenu");
         
         //TODO: PAUSE-BUTTON
         
         next = new JButton("|>");
-        next.setBounds(130,20,50,40);
         next.addActionListener(new ActionListener()
         {               
             public void actionPerformed(ActionEvent e)
@@ -60,7 +53,7 @@ public class PlayerMenu extends JPanel
                 playNext();
             }
         });
-        add(next);
+        add(next,"sizegroup playerMenu");
         
         volume = new JSlider();
         volume.setOrientation(JSlider.VERTICAL);
@@ -76,7 +69,6 @@ public class PlayerMenu extends JPanel
                 changeVolume((int)source.getValue());
             }
         });
-        volume.setBounds(196,0,20,80);
         add(volume);
     }
     

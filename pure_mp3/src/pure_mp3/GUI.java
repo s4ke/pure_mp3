@@ -8,14 +8,16 @@ package pure_mp3;
  */
 
 
+import java.awt.Dimension;
+
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Line;
 import javax.sound.sampled.Mixer;
 import javax.sound.sampled.SourceDataLine;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
-//import javax.swing.UIManager;
-//import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 public class GUI extends JFrame
 {
@@ -33,18 +35,34 @@ public class GUI extends JFrame
         SwingUtilities.invokeLater(new Runnable(){
              public void run() 
              {
-                    setLayout(null);
-                    setSize(800,600); 
+            	 try {
+            		    // Set cross-platform Java L&F (also called "Metal")
+            	        UIManager.setLookAndFeel(
+            	            UIManager.getSystemLookAndFeelClassName());
+            	    } 
+            	    catch (UnsupportedLookAndFeelException e) {
+            	       // handle exception
+            	    }
+            	    catch (ClassNotFoundException e) {
+            	       // handle exception
+            	    }
+            	    catch (InstantiationException e) {
+            	       // handle exception
+            	    }
+            	    catch (IllegalAccessException e) {
+            	       // handle exception
+            	    }
+
+            	    setSize(800,600);
+            	    setMinimumSize(new Dimension(410,300));
                     mainPanel = new MainPanel();
-                    mainPanel.setBounds(0,0,800,600);
-                    add(mainPanel);
+                    setContentPane(mainPanel);
                     setJMenuBar(new Menu());
                     System.setProperty("apple.laf.useScreenMenuBar", "true");
                     System.setProperty("com.apple.mrj.application.apple.menu.about.name", "pure.mp3");
-//                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                     setDefaultCloseOperation(EXIT_ON_CLOSE);   
                     setLocationRelativeTo(null);
-                    setResizable(false);
+                    setResizable(true);
                     setVisible(true);
                     
             }

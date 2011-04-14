@@ -8,6 +8,8 @@ package pure_mp3;
  */
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+
+import net.miginfocom.swing.MigLayout;
 public class MainPanel extends JPanel
 {
 	private static final long serialVersionUID = 2385007980763532219L;
@@ -19,27 +21,22 @@ public class MainPanel extends JPanel
     private Media media;
     public MainPanel()
     {
-        setLayout(null);
+        setLayout(new MigLayout("insets 5 5 5 5","[fill][grow,fill]","[][][grow,fill]"));
        
-        playList = new PlayList();
-        playList.setBounds(533,7,258,535);
-        add(playList);
-                
-        info = new Info();
-        info.setBounds(233,7,290,80);
-        add(info);       
-                
         playerMenu = new PlayerMenu();
-        playerMenu.setBounds(10,7,221,80);
-        add(playerMenu);
+        add(playerMenu, "h ::80");
+        
+        info = new Info();
+        add(info,"align left, gapright 0, wrap"); 
+        
+        playList = new PlayList();
+        add(playList, "east, gapright 5, gaptop 5, gapbottom 5, w 33%!, h 100%");
         
         progress = new Progress();
-        progress.setBounds(6,92,520,20);
-        add(progress);
+        add(progress,"span 2, gapright 0, wrap");
         
         media = new Media();
-        media.setBounds(10,117,515,463);
-        add(media);       
+        add(media,"span 2 2, gapright 0, wrap"); 
     }
     
     public PlayList getPlayList()
