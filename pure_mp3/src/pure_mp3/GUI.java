@@ -16,8 +16,10 @@ import javax.sound.sampled.Mixer;
 import javax.sound.sampled.SourceDataLine;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+//import javax.swing.UIManager;
+//import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.UIManager;
 
 public class GUI extends JFrame
 {
@@ -35,24 +37,21 @@ public class GUI extends JFrame
         SwingUtilities.invokeLater(new Runnable(){
              public void run() 
              {
-            	 try {
-            		    // Set cross-platform Java L&F (also called "Metal")
-            	        UIManager.setLookAndFeel(
-            	            UIManager.getSystemLookAndFeelClassName());
-            	    } 
-            	    catch (UnsupportedLookAndFeelException e) {
-            	       // handle exception
-            	    }
-            	    catch (ClassNotFoundException e) {
-            	       // handle exception
-            	    }
-            	    catch (InstantiationException e) {
-            	       // handle exception
-            	    }
-            	    catch (IllegalAccessException e) {
-            	       // handle exception
-            	    }
-
+//            	 	try {
+//            	        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+//            	    } 
+//            	    catch (UnsupportedLookAndFeelException e) {
+//            	       // handle exception
+//            	    }
+//            	    catch (ClassNotFoundException e) {
+//            	       // handle exception
+//            	    }
+//            	    catch (InstantiationException e) {
+//            	       // handle exception
+//            	    }
+//            	    catch (IllegalAccessException e) {
+//            	       // handle exception
+//            	    }
             	    setSize(800,600);
             	    setMinimumSize(new Dimension(410,300));
                     mainPanel = new MainPanel();
@@ -64,6 +63,7 @@ public class GUI extends JFrame
                     setLocationRelativeTo(null);
                     setResizable(true);
                     setVisible(true);
+                    
                     
             }
         });

@@ -19,24 +19,25 @@ public class MainPanel extends JPanel
     private Player player;
     private JSlider progress;
     private Media media;
+    
     public MainPanel()
     {
-        setLayout(new MigLayout("insets 5 5 5 5","[fill][grow,fill]","[][][grow,fill]"));
-       
+        setLayout(new MigLayout("insets 5 5 5 5, nogrid, nocache"));
+        
         playerMenu = new PlayerMenu();
-        add(playerMenu, "h ::80");
+        add(playerMenu, "pos 5 5 n 90, id playerMenu");
         
         info = new Info();
-        add(info,"align left, gapright 0, wrap"); 
+        add(info,"x (playerMenu.x2 + 5), x2 (playList.x - 5), y 5, id info"); 
         
         playList = new PlayList();
-        add(playList, "east, gapright 5, gaptop 5, gapbottom 5, w 33%!, h 100%");
+        add(playList, "pos (66% - 5) 5 (100% - 5) (100% -5), id playList");
         
         progress = new Progress();
-        add(progress,"span 2, gapright 0, wrap");
+        add(progress,"pos 0 (info.y2 + 5) (playList.x) n, id progress");
         
         media = new Media();
-        add(media,"span 2 2, gapright 0, wrap"); 
+        add(media,"pos 5 (progress.y2 + 5) (playList.x - 5) (100% - 5), id media"); 
     }
     
     public PlayList getPlayList()

@@ -34,6 +34,8 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.Mixer;
 import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -57,6 +59,7 @@ public class StreamMusicPlayer extends Thread implements MusicPlayer
 //	private boolean running = false;
 	private boolean pause = false;
 	private boolean stop = false;
+	private static boolean lineAvailable = true;
 	
 	public StreamMusicPlayer(Song xSong, Player xPlayer)
 	{
@@ -109,27 +112,32 @@ public class StreamMusicPlayer extends Thread implements MusicPlayer
 		}
 		audioFormat = audioInputStream.getFormat();
 		info = new DataLine.Info(SourceDataLine.class,audioFormat);
+	}
+
+	public void run()
+	{
+//		running = true;
 		try
 		{
 			line = (SourceDataLine) AudioSystem.getLine(info);
 			line.open(audioFormat);
 			line.start();
 		}
+		catch(LineUnavailableException e)
+		{
+			System.out.println(e.getMessage());
+			System.out.println("Line unavailable");
+		}
 		catch(Exception e)
 		{
 			System.out.println("Error while starting playback");
 		}
-	}
-
-	public void run()
-	{
-//		running = true;
-		
 		int nBytesRead = 0;
 		int bufferSize = EXTERNAL_BUFFER_SIZE;
 		if(audioFormat != null)
 		{
 			bufferSize = (int) audioFormat.getSampleRate() * audioFormat.getFrameSize();
+			System.out.println(audioFormat);
 		}
 		byte[]	abData = new byte[bufferSize];
 		System.out.println("Buffer Size: " + bufferSize);
@@ -248,7 +256,14 @@ public class StreamMusicPlayer extends Thread implements MusicPlayer
 	
 	public int getFramePosition()
 	{
-		return line.getFramePosition()+skippedFrames;
+		if(line != null)
+		{
+			return line.getFramePosition()+skippedFrames;
+		}
+		else
+		{
+			return 0;
+		}
 	}
 	
 	public int getFrameLength()
