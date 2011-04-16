@@ -40,11 +40,11 @@ public class Info extends JPanel
        
        artist_l = new JTextField("Artist:");
        artist_l.setEditable(false);
-       add(artist_l, "id artist_l, x 5, y 5, sizegroup l");
+       add(artist_l, "id artist_l, x 5, y 0, sizegroup l");
        
        artist_r = new JTextField("");
        artist_r.setEditable(false);
-       add(artist_r,"id artist_r, pos (artist_l.x2 + 5) artist_l.y (100% - 5) artist_l.y2");
+       add(artist_r,"id artist_r, pos (artist_l.x2 + 5) artist_l.y 100% artist_l.y2");
        
        title_l = new JTextField("Title:");
        title_l.setEditable(false);
@@ -53,7 +53,7 @@ public class Info extends JPanel
        title_r = new JTextField("");
        title_r.setEditable(false);
 //       title_r.setLineWrap(true);
-       add(title_r,"id title_r,pos (title_l.x2 + 5) title_l.y (100% - 5) title_l.y2");
+       add(title_r,"id title_r,pos (title_l.x2 + 5) title_l.y 100% title_l.y2");
        
        album_l = new JTextField("Album:");
        album_l.setEditable(false);
@@ -61,7 +61,7 @@ public class Info extends JPanel
        
        album_r = new JTextField("");
        album_r.setEditable(false);
-       add(album_r,"id album_r, pos (album_l.x2 + 5) album_l.y (100% - 5) album_l.y2");
+       add(album_r,"id album_r, pos (album_l.x2 + 5) album_l.y 100% album_l.y2");
        
        length_l = new JTextField("Length:");
        length_l.setEditable(false);
@@ -69,7 +69,7 @@ public class Info extends JPanel
        
        length_r = new JTextField("");
        length_r.setEditable(false);
-       add(length_r,"id length_r, pos (length_l.x2 + 5) length_l.y (100% - 5) length_l.y2");
+       add(length_r,"id length_r, pos (length_l.x2 + 5) length_l.y 100% length_l.y2");
        
        setDropTarget(new DropTarget(this,new PlayListDropTargetListener()));
    }

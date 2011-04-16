@@ -16,15 +16,18 @@ public class FileCrawler
 	{
 		if(file != null)
 		{
+			if(!file.isDirectory())
+			{
+				Global.playList.addSong(new Song(file));
+			}
 			final File [] files = file.listFiles(new FilenameFilter()
 			{
 				public boolean accept(File dir, String name)
-			    {
+				{
 					File help = new File(dir, name);
 			    	return name.endsWith(".mp3")||name.endsWith(".MP3")||help.isDirectory();
 			    }
-			}
-					);
+			});
 	    	for(int i = 0; i  < files.length; i++)
 	    	{
 	    		if(files[i].isDirectory())

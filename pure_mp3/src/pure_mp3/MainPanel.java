@@ -25,7 +25,7 @@ public class MainPanel extends JPanel
         setLayout(new MigLayout("insets 5 5 5 5, nogrid, nocache"));
         
         playerMenu = new PlayerMenu();
-        add(playerMenu, "pos 5 5 n 90, id playerMenu");
+        add(playerMenu, "pos 5 5 n 85, id playerMenu");
         
         info = new Info();
         add(info,"x (playerMenu.x2 + 5), x2 (playList.x - 5), y 5, id info"); 
