@@ -52,7 +52,6 @@ public class Info extends JPanel
        
        title_r = new JTextField("");
        title_r.setEditable(false);
-//       title_r.setLineWrap(true);
        add(title_r,"id title_r,pos (title_l.x2 + 5) title_l.y 100% title_l.y2");
        
        album_l = new JTextField("Album:");
@@ -82,19 +81,22 @@ public class Info extends JPanel
        title_r.setCaretPosition(0);
        album_r.setText(Global.playList.getAlbum());
        album_r.setCaretPosition(0);
-       length_r.setText(Global.playList.getLength());
+       length_r.setText("/" + Global.playList.getLength());
+       updatePlayedTime(0);
        length_r.setCaretPosition(0);
    }
    
    public void updatePlayedTime(int seconds)
    {
+	   String text = length_r.getText();
+	   String parts[] = text.split("/");
 	   int minutes = seconds / 60;
 	   String seconds_ = "" + seconds % 60;
 	   if(seconds_.length() < 2)
 	   {
 		   seconds_ = "0" + seconds_;
 	   }
-	   length_r.setText(minutes + ":" + seconds_);
+	   length_r.setText(minutes + ":" + seconds_ + "/" + parts[1]);
    }
    
 }

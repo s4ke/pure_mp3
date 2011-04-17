@@ -25,20 +25,15 @@
 package pure_mp3;
 
 //import java.net.URL;
-import java.util.Map;
 import java.io.File;
 import java.io.IOException;
-
-import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.Mixer;
 import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.FloatControl;
-import javax.sound.sampled.UnsupportedAudioFileException;
 
 
 public class StreamMusicPlayer extends Thread implements MusicPlayer
@@ -266,63 +261,6 @@ public class StreamMusicPlayer extends Thread implements MusicPlayer
 		}
 	}
 	
-	public int getFrameLength()
-	{
-//		if(stop)
-//		{
-//			return -1;
-//		}
-		try
-		{
-			int durationInSeconds = getDurationInSeconds();
-			if(durationInSeconds > 0)
-			{
-				return (int)(durationInSeconds)*((int)audioFormat.getSampleRate());
-			}
-			return -1;
-		}
-		catch(Exception e)
-		{
-			System.out.println("Some other bug!");
-			return -1;
-		}
-	}
-	
-	public int getDurationInSeconds()
-	{
-		try
-		{
-			File file = song.getSource();
-			if(file != null)
-			{
-				AudioFileFormat audioFileFormat = null;
-				try
-				{
-					audioFileFormat = AudioSystem.getAudioFileFormat(file);
-				}
-				catch(Exception e)
-				{
-					System.out.println("Couldn't get AudioFileFormat!");
-				}
-				// get all properties
-				if(audioFileFormat != null)
-				{
-					Map<String, Object> properties = audioFileFormat.properties();
-					Long duration = (Long) properties.get("duration");
-					double durationInSeconds = (duration/1000)/1000;
-					return (int)(durationInSeconds);
-				}
-				System.out.println("AudioFileFormat equals null-Reference");
-			}
-			return -1;
-		}
-		catch(Exception e)
-		{
-			System.out.println("Some other bug!");
-			return -1;
-		}
-	}
-	
 	public AudioFormat getAudioFormat() 
 	{
 		return audioFormat;
@@ -360,12 +298,7 @@ public class StreamMusicPlayer extends Thread implements MusicPlayer
 				}
 				if(file != null)
 				{
-					AudioFileFormat audioFileFormat = null;
-					audioFileFormat = AudioSystem.getAudioFileFormat(file);
-					// get all properties
-					Map<String, Object> properties = audioFileFormat.properties();
-					Long duration = (Long) properties.get("duration");
-					long durationInSeconds = (duration/1000)/1000;
+					long durationInSeconds = getDurationInSeconds();
 					double skippedPercentage = (double)percentage/100;
 					long skippedDurationInSeconds = (long) (durationInSeconds * skippedPercentage);
 					long bytesToSkip = (long)((skippedDurationInSeconds)*(double)(audioFormat.getSampleRate()*audioFormat.getFrameSize()));
@@ -377,10 +310,6 @@ public class StreamMusicPlayer extends Thread implements MusicPlayer
 					System.out.println("Frame Length: " + getFrameLength());
 					System.out.println("Frames Skipped: " + skippedFrames);
 				}
-			}
-			catch (UnsupportedAudioFileException e) 
-			{
-				e.printStackTrace();
 			} 
 			catch (IOException e) 
 			{
@@ -392,6 +321,33 @@ public class StreamMusicPlayer extends Thread implements MusicPlayer
 			}
 			// start playing again
 			pause();
+	}
+	
+	public int getFrameLength()
+	{
+//		if(stop)
+//		{
+//			return -1;
+//		}
+		try
+		{
+			int durationInSeconds = getDurationInSeconds();
+			if(durationInSeconds > 0)
+			{
+				return (int)(durationInSeconds)*((int)audioFormat.getSampleRate());
+			}
+			return -1;
+		}
+		catch(Exception e)
+		{
+			System.out.println("Some other bug!");
+			return -1;
+		}
+	}
+	
+	public int getDurationInSeconds()
+	{
+		return song.getDurationInSeconds();
 	}
 	
 }
