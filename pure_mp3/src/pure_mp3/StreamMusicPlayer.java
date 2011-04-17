@@ -268,10 +268,28 @@ public class StreamMusicPlayer extends Thread implements MusicPlayer
 	
 	public int getFrameLength()
 	{
-		if(stop)
+//		if(stop)
+//		{
+//			return -1;
+//		}
+		try
 		{
+			int durationInSeconds = getDurationInSeconds();
+			if(durationInSeconds > 0)
+			{
+				return (int)(durationInSeconds)*((int)audioFormat.getSampleRate());
+			}
 			return -1;
 		}
+		catch(Exception e)
+		{
+			System.out.println("Some other bug!");
+			return -1;
+		}
+	}
+	
+	public int getDurationInSeconds()
+	{
 		try
 		{
 			File file = song.getSource();
@@ -292,7 +310,7 @@ public class StreamMusicPlayer extends Thread implements MusicPlayer
 					Map<String, Object> properties = audioFileFormat.properties();
 					Long duration = (Long) properties.get("duration");
 					double durationInSeconds = (duration/1000)/1000;
-					return (int)(durationInSeconds)*((int)audioFormat.getSampleRate());
+					return (int)(durationInSeconds);
 				}
 				System.out.println("AudioFileFormat equals null-Reference");
 			}

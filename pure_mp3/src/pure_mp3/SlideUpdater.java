@@ -24,6 +24,8 @@
 
 package pure_mp3;
 
+import javax.swing.SwingUtilities;
+
 //import java.io.File;
 //import java.io.FileNotFoundException;
 ////import java.io.FileInputStream;
@@ -55,12 +57,14 @@ public class SlideUpdater extends Thread
 	
 	public void run()
 	{
-			long frameLength = 0;
+			int frameLength = 0;
+			int durationInSeconds = 0;
 			synchronized(this)
 			{
 				if(musicPlayer != null && !stop)
 				{
 					frameLength = musicPlayer.getFrameLength();
+					durationInSeconds = musicPlayer.getDurationInSeconds();
 					//Maybe it was stopped? Or sth went wrong
 					if(frameLength == -1)
 					{
@@ -68,6 +72,7 @@ public class SlideUpdater extends Thread
 					}
 				}
 			}
+			final int durationInSeconds_ = durationInSeconds;
 			//while not stopped just run and run and run...
 			while(!stop)
 			{	
@@ -89,10 +94,22 @@ public class SlideUpdater extends Thread
 				//update if everything is ok
 				if(musicPlayer != null && frameLength > 0)
 				{
-					double percentage_ = (double)musicPlayer.getFramePosition()/frameLength*100;
-					int percentage = (int) percentage_;
-					//set the value and don't make a listener listen :)
-					progress.setValue2(percentage);
+					final double percentage_ = (double)musicPlayer.getFramePosition()/frameLength*100;
+					final int percentage = (int) percentage_;
+					//The EDT Thread has to set everything that nothing breaks
+					SwingUtilities.invokeLater(new Runnable()
+					{
+						public void run()
+						{
+							//set the value and don't make a listener listen :)
+							progress.setValue2(percentage);
+							//update the played Time in Info
+							if(durationInSeconds_ > 0)
+							{
+								Global.info.updatePlayedTime((int)(durationInSeconds_*percentage_/100));
+							}
+						}
+					});
 				}
 				else
 				{

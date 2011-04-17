@@ -13,6 +13,7 @@ public interface MusicPlayer {
 	public AudioFormat getAudioFormat();
 	public int getFramePosition();
 	public int getFrameLength();
+	public int getDurationInSeconds();
 //	public long getPosition();
 	public Song getCurrentSong();
 }

@@ -128,8 +128,6 @@ public class Player
 			}
 			//now start the playback
 			playing = true;
-			//but first update the Info about the song
-			Global.info.update();
 			//create and start the musicplayer
 			musicPlayer = new StreamMusicPlayer(Global.playList.getCurrentSong(),this);
 			musicPlayer.start();
@@ -137,6 +135,8 @@ public class Player
 			slideUpdater = new SlideUpdater(musicPlayer,progress);			
 			slideUpdater.start();	
 			System.out.println("Play: " + Global.playList.getCurrent());
+			//but first update the Info about the song
+			Global.info.update();
 		}
 		else
 		{
@@ -233,8 +233,11 @@ public class Player
      */
     public Song getCurrentSong()
     {
-    	return musicPlayer.getCurrentSong();
+    	if(musicPlayer != null)
+    	{
+    		return musicPlayer.getCurrentSong();
+    	}
+    	return null;
     }
-    
 
 }

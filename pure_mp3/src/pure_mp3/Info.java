@@ -86,4 +86,15 @@ public class Info extends JPanel
        length_r.setCaretPosition(0);
    }
    
+   public void updatePlayedTime(int seconds)
+   {
+	   int minutes = seconds / 60;
+	   String seconds_ = "" + seconds % 60;
+	   if(seconds_.length() < 2)
+	   {
+		   seconds_ = "0" + seconds_;
+	   }
+	   length_r.setText(minutes + ":" + seconds_);
+   }
+   
 }

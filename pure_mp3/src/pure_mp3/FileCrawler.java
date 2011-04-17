@@ -18,7 +18,10 @@ public class FileCrawler
 		{
 			if(!file.isDirectory())
 			{
-				Global.playList.addSong(new Song(file));
+				if(file.getPath().endsWith(".mp3")||file.getPath().endsWith(".MP3"))
+				{
+					Global.playList.addSong(new Song(file));
+				}
 			}
 			final File [] files = file.listFiles(new FilenameFilter()
 			{
