@@ -1,19 +1,24 @@
-package pure_mp3;
-
-/**
- * Write a description of class MediaTable here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
+ /**
+ * @author Martin Braun
+ *   
+ * This file is part of pure.mp3.
+ *
+ *  pure.mp3 is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *  
+ *  pure.mp3 is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *  
+ *  You should have received a copy of the GNU General Public License
+ *  along with pure.mp3.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// To retrieve the current selection, use JTable.getSelectedRows which returns an array of row indexes, and JTable.getSelectedColumns which returns an array of column indexes. To retrieve the coordinates of the lead selection, refer to the selection models for the table itself and for the table's column model. The following code formats a string containing the row and column of the lead selection:
-// 
-//     String.format("Lead Selection: %d, %d. ",
-//         table.getSelectionModel().getLeadSelectionIndex(),
-//         table.getColumnModel().getSelectionModel().getLeadSelectionIndex());
+package pure_mp3;     
 
-        
 import java.awt.Color;
 
 import javax.swing.JScrollPane;

@@ -1,12 +1,23 @@
-package pure_mp3;
-
-/**
- * Write a description of class GUI here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
+ /**
+ * @author Martin Braun
+ *   
+ * This file is part of pure.mp3.
+ *
+ *  pure.mp3 is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *  
+ *  pure.mp3 is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *  
+ *  You should have received a copy of the GNU General Public License
+ *  along with pure.mp3.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+package pure_mp3;
 
 import java.awt.Dimension;
 
@@ -20,6 +31,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 //import javax.swing.UIManager;
 //import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.UIManager;
+import javax.swing.plaf.metal.MetalLookAndFeel;
 
 public class GUI extends JFrame
 {
@@ -37,21 +49,13 @@ public class GUI extends JFrame
         SwingUtilities.invokeLater(new Runnable(){
              public void run() 
              {
-//            	 	try {
-//            	        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-//            	    } 
-//            	    catch (UnsupportedLookAndFeelException e) {
-//            	       // handle exception
-//            	    }
-//            	    catch (ClassNotFoundException e) {
-//            	       // handle exception
-//            	    }
-//            	    catch (InstantiationException e) {
-//            	       // handle exception
-//            	    }
-//            	    catch (IllegalAccessException e) {
-//            	       // handle exception
-//            	    }
+            	 	try {
+//            	 		MetalLookAndFeel.setCurrentTheme(new TestTheme());
+            	        UIManager.setLookAndFeel(new MetalLookAndFeel());
+            	    } 
+            	    catch (UnsupportedLookAndFeelException e) {
+            	       System.out.println("Something is wrong with your MetalLookAndFeel!!!");
+            	    }
             	    setSize(800,600);
             	    setMinimumSize(new Dimension(410,300));
                     mainPanel = new MainPanel();
