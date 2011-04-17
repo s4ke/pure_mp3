@@ -29,6 +29,7 @@ public class Info extends JPanel
    private final JTextField album_r;
    private final JTextField length_l;
    private final JTextField length_r;
+   private String length;
    
    public Info()
    {
@@ -81,22 +82,30 @@ public class Info extends JPanel
        title_r.setCaretPosition(0);
        album_r.setText(Global.playList.getAlbum());
        album_r.setCaretPosition(0);
-       length_r.setText("/" + Global.playList.getLength());
+//       length_r.setText(Global.playList.getLength());
+//       length_r.setCaretPosition(0);
+       length = Global.playList.getLength();
        updatePlayedTime(0);
-       length_r.setCaretPosition(0);
    }
    
    public void updatePlayedTime(int seconds)
    {
-	   String text = length_r.getText();
-	   String parts[] = text.split("/");
+//	   String parts[] = text.split("/");
 	   int minutes = seconds / 60;
 	   String seconds_ = "" + seconds % 60;
 	   if(seconds_.length() < 2)
 	   {
 		   seconds_ = "0" + seconds_;
 	   }
-	   length_r.setText(minutes + ":" + seconds_ + "/" + parts[1]);
+	   if(length.length() > 0)
+	   {
+		   length_r.setText(minutes + ":" + seconds_ + "/" + length);
+	   }
+	   else
+	   {
+		   length_r.setText("");
+	   }
+	   length_r.setCaretPosition(0);
    }
    
 }
