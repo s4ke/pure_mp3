@@ -21,9 +21,9 @@ package pure_mp3;
 
 import javax.swing.plaf.*;
 import javax.swing.plaf.metal.*;
-import javax.swing.*;
-import javax.swing.border.*;
-import java.awt.*;
+//import javax.swing.*;
+//import javax.swing.border.*;
+//import java.awt.*;
 
 public class TestTheme extends DefaultMetalTheme {
 

@@ -54,7 +54,7 @@ public class StreamMusicPlayer extends Thread implements MusicPlayer
 //	private boolean running = false;
 	private boolean pause = false;
 	private boolean stop = false;
-	private static boolean lineAvailable = true;
+//	private static boolean lineAvailable = true;
 	
 	public StreamMusicPlayer(Song xSong, Player xPlayer)
 	{

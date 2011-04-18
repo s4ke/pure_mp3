@@ -42,10 +42,10 @@ public class Menu extends JMenuBar
     private JMenu help;
     private JMenuItem helpAbout;
     
-    //TO-DO: ActionListener Methoden Methoden aufrufen lassen -> Übersicht
     public Menu()
     {
         super();
+        
         //File Menu
         file = new JMenu("File");
         fileAddFilePlayList = new JMenuItem("Add File to Playlist...");
@@ -53,52 +53,20 @@ public class Menu extends JMenuBar
         {
         	public void actionPerformed(ActionEvent event)
         	{
-        		final Object answer = JOptionPane.showInputDialog(null, "Input path:", "Add File",
-                        JOptionPane.INFORMATION_MESSAGE); 
-        		if(answer instanceof String)
-        		{
-        			try
-        			{
-        				new Thread()
-        				{
-        					public void run()
-        					{
-        						Global.fileCrawler.add(new File((String)answer));
-        					}
-        				}.start();
-        			}
-        			catch(Exception e)
-        			{
-        			}
-        		}
+        		showAddFileDialog();
         	}
         });
+        
         file.add(fileAddFilePlayList);
         fileAddFolderPlayList = new JMenuItem("Add Folder to Playlist...");
         fileAddFolderPlayList.addActionListener(new ActionListener()
         {
         	public void actionPerformed(ActionEvent event)
         	{
-        		final Object answer = JOptionPane.showInputDialog(null, "Input path:", "Add Folder",
-                        JOptionPane.INFORMATION_MESSAGE); 
-        		if(answer instanceof String)
-        		{
-        			try
-        			{
-        				new Thread()
-        				{
-        					public void run()
-        					{
-        						Global.fileCrawler.add(new File((String)answer));
-        					}
-        				}.start();        				
-        			}
-        			catch(Exception e)
-        			{
-        			}
-        		}
+        		showAddFolderDialog();
         	}
         });
+        
         file.add(fileAddFolderPlayList);
         fileRemoveAllFilesPlayList = new JMenuItem("Remove all Files from Playlist");
         fileRemoveAllFilesPlayList.addActionListener(new ActionListener()
@@ -108,6 +76,7 @@ public class Menu extends JMenuBar
         		Global.playList.removeAllElements();
         	}
         });
+        
         file.add(fileRemoveAllFilesPlayList);
         file.add(new JSeparator());
         exit = new JMenuItem("Exit");
@@ -118,6 +87,7 @@ public class Menu extends JMenuBar
         		System.exit(0);
         	}
         });
+        
         file.add(exit);
         add(file);
         
@@ -128,14 +98,7 @@ public class Menu extends JMenuBar
         {
         	public void actionPerformed(ActionEvent event)
         	{
-        		if(Global.player.getPlayMode()==0)
-        		{
-        			Global.player.setPlayMode(1);
-        		}
-        		else
-        		{
-        			Global.player.setPlayMode(0);
-        		}
+        		switchPlayMode();
         	}
         });
         edit.add(editSetRandomPlayMode);        
@@ -148,16 +111,77 @@ public class Menu extends JMenuBar
         {
         	public void actionPerformed(ActionEvent e)
         	{
-        		JOptionPane.showMessageDialog(null, 
-        				"Author: Martin Braun \n" +
-        				"Website: www.notcreatedyet.com \n" +
-        				"Released under GPLv3 License \n" +
-        				"Some Parts are under different Licences \n" +
-        				"See readme.txt for further information");
+        		showAbout();
         	}
         });
         help.add(helpAbout);
         add(help);
+    }
+    
+    private void showAddFileDialog()
+    {
+    	final Object answer = JOptionPane.showInputDialog(null, "Input path:", "Add File",
+                JOptionPane.INFORMATION_MESSAGE); 
+		if(answer instanceof String)
+		{
+			try
+			{
+				new Thread()
+				{
+					public void run()
+					{
+						Global.fileCrawler.add(new File((String)answer));
+					}
+				}.start();
+			}
+			catch(Exception e)
+			{
+			}
+		}
+    }
+    
+    private void showAddFolderDialog()
+    {
+    	final Object answer = JOptionPane.showInputDialog(null, "Input path:", "Add Folder",
+                JOptionPane.INFORMATION_MESSAGE); 
+		if(answer instanceof String)
+		{
+			try
+			{
+				new Thread()
+				{
+					public void run()
+					{
+						Global.fileCrawler.add(new File((String)answer));
+					}
+				}.start();        				
+			}
+			catch(Exception e)
+			{
+			}
+		}
+    }
+    
+    private void switchPlayMode()
+    {
+    	if(Global.player.getPlayMode()==0)
+		{
+			Global.player.setPlayMode(1);
+		}
+		else
+		{
+			Global.player.setPlayMode(0);
+		}
+    }
+    
+    private void showAbout()
+    {
+    	JOptionPane.showMessageDialog(null, 
+				"Author: Martin Braun \n" +
+				"Website: www.puremp3.co.de \n" +
+				"Released under GPLv3 License \n" +
+				"Some Parts are under different Licences \n" +
+				"See readme.txt for further information");
     }
     
 //    public void updatePlayModes()
