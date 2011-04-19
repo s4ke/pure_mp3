@@ -33,6 +33,12 @@ public class FileCrawler
 	
 	public void add(File file)
 	{
+		add2(file);
+		Global.playList.revalidateList();
+	}
+	
+	public void add2(File file)
+	{
 		if(file != null)
 		{
 			if(!file.isDirectory())
@@ -54,7 +60,7 @@ public class FileCrawler
 	    	{
 	    		if(files[i].isDirectory())
 	    		{
-	    			add(files[i]);
+	    			add2(files[i]);
 	    		}
 	    		else
 	    		{

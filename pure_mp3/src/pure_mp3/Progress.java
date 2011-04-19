@@ -62,6 +62,7 @@ public class Progress extends JSlider
 			lastValue = x;
 			userChanged = true;	
 		}
+//		repaint();
 		notify();
 	}
 	

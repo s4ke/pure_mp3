@@ -197,6 +197,7 @@ public class PlayList extends JScrollPane
 	            list.ensureIndexIsVisible(current);	
 	        }
     	}
+    	list.repaint(getViewport().getViewRect());
     }
     
     public void setDropTargetActive(boolean isActive)
@@ -326,6 +327,11 @@ public class PlayList extends JScrollPane
     	}
     }
     
+    public void revalidateList()
+    {
+    	list.revalidate();
+    }
+    
     public void setValueIsAdjusting(boolean isAdjusting)
     {
     	list.setValueIsAdjusting(isAdjusting);
@@ -335,7 +341,7 @@ public class PlayList extends JScrollPane
     {
     	model.removeAllElements();
     	model.trimToSize();
-    	current = -1;    	
+    	current = -1;
     }
     
     public DefaultListModel getModel()

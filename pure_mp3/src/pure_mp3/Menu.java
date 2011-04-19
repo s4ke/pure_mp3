@@ -130,7 +130,7 @@ public class Menu extends JMenuBar
 				{
 					public void run()
 					{
-						Global.fileCrawler.add(new File((String)answer));
+						Global.fileCrawler.add2(new File((String)answer));
 					}
 				}.start();
 			}
@@ -152,7 +152,7 @@ public class Menu extends JMenuBar
 				{
 					public void run()
 					{
-						Global.fileCrawler.add(new File((String)answer));
+						Global.fileCrawler.add2(new File((String)answer));
 					}
 				}.start();        				
 			}

@@ -91,10 +91,13 @@ public class Info extends JPanel
    {
        artist_r.setText(Global.playList.getArtist());
        artist_r.setCaretPosition(0);
+//       artist_r.repaint(artist_r.getVisibleRect());
        title_r.setText(Global.playList.getTitle());
        title_r.setCaretPosition(0);
+//       title_r.repaint(title_r.getVisibleRect());
        album_r.setText(Global.playList.getAlbum());
        album_r.setCaretPosition(0);
+//       album_r.repaint(album_r.getVisibleRect());
 //       length_r.setText(Global.playList.getLength());
 //       length_r.setCaretPosition(0);
        length = Global.playList.getLength();
@@ -119,6 +122,7 @@ public class Info extends JPanel
 		   length_r.setText("");
 	   }
 	   length_r.setCaretPosition(0);
+//	   length_r.repaint(length_r.getVisibleRect());
    }
    
 }
