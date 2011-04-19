@@ -20,12 +20,19 @@
 package pure_mp3;
 
 import java.awt.Dimension;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Line;
 import javax.sound.sampled.Mixer;
 import javax.sound.sampled.SourceDataLine;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UnsupportedLookAndFeelException;
 //import javax.swing.UIManager;
@@ -33,10 +40,14 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.UIManager;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 
+import com.seaglasslookandfeel.SeaGlassLookAndFeel;
+
 public class GUI extends JFrame
 {
 	private static final long serialVersionUID = 2385007980763532219L;
-    private MainPanel mainPanel;     
+    private MainPanel mainPanel;    
+    private static GUI gui;
+    
     public GUI()
     {
         super("pure.mp3");
@@ -49,13 +60,6 @@ public class GUI extends JFrame
         SwingUtilities.invokeLater(new Runnable(){
              public void run() 
              {
-            	 	try {
-//            	 		MetalLookAndFeel.setCurrentTheme(new TestTheme());
-            	        UIManager.setLookAndFeel(new MetalLookAndFeel());
-            	    } 
-            	    catch (UnsupportedLookAndFeelException e) {
-            	       System.out.println("Something is wrong with your MetalLookAndFeel!!!");
-            	    }
             	    setSize(800,600);
             	    setMinimumSize(new Dimension(410,300));
                     mainPanel = new MainPanel();
@@ -66,9 +70,7 @@ public class GUI extends JFrame
                     setDefaultCloseOperation(EXIT_ON_CLOSE);   
                     setLocationRelativeTo(null);
                     setResizable(true);
-                    setVisible(true);
-                    
-                    
+                    setVisible(true); 
             }
         });
     }
@@ -99,7 +101,79 @@ public class GUI extends JFrame
 		}
 		if(support)
 		{
-			new GUI();
+			try 
+    	 	{
+				Object choices[] = {"Swing","SeaGlass"};
+    	 		System.out.println(System.getProperty("os.name"));
+    	 		try
+    	 		{
+    	 			BufferedReader buffread = new BufferedReader(new FileReader(new File("puremp3","config.txt")));
+    	 			String laf = buffread.readLine();
+    	 			if(laf.equals("Swing"))
+    	 			{
+    	 				UIManager.setLookAndFeel(new MetalLookAndFeel());
+    	 			}
+    	 			else if(laf.equals("SeaGlass"))
+    	 			{
+    	 				UIManager.setLookAndFeel(new SeaGlassLookAndFeel());
+    	 			}
+    	 			else
+    	 			{
+    	 				throw new Exception();
+    	 			}
+    	 		}
+    	 		catch(Exception e)
+    	 		{
+    	 			PrintWriter writer = null;
+    	 			int answer = JOptionPane.showOptionDialog(
+    	 					null,
+    	 					"Do you want to use Swing or SeaGlass?\nOn slow systems please use Swing!", 
+    	 					"Which Look and Feel do you want?" , 
+    	 					JOptionPane.DEFAULT_OPTION, 
+    	 					JOptionPane.QUESTION_MESSAGE, 
+    	 					null, 
+    	 					choices,
+    	 					choices[0]);
+    	 			try
+    	 			{
+    	 				new File("puremp3").mkdir();
+    	 				writer = new PrintWriter(new FileWriter(new File("puremp3","config.txt")));
+    	 			}
+    	 			catch(Exception ex)
+    	 			{
+    	 				System.out.println("Failed saving LookAndFeel!");
+    	 			}
+		        	if(answer == 0)
+		        	{
+		    	        UIManager.setLookAndFeel(new MetalLookAndFeel());
+		    	        if(writer != null)
+		    	        {
+		    	        	writer.println("Swing");
+		    	        	writer.flush();
+		    	        	writer.close();
+		    	        }
+		        	}
+		        	else if(answer == 1)
+		        	{
+		        		UIManager.setLookAndFeel(new SeaGlassLookAndFeel());
+		        		if(writer != null)
+		    	        {
+		    	        	writer.println("SeaGlass");
+		    	        	writer.flush();
+		    	        	writer.close();
+		    	        }
+		        	}
+		        	else
+		        	{
+		        		System.exit(0);
+		        	}
+    	 		}    	 		
+    	    } 
+    	    catch (UnsupportedLookAndFeelException e)
+    	    {
+    	       System.out.println("Something is wrong with your Look and Feel!!!");
+    	    }
+			gui = new GUI();
 		}
 		else
 		{

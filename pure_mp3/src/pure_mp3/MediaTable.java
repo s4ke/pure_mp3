@@ -54,6 +54,6 @@ public class MediaTable extends JScrollPane
         table.getTableHeader().setReorderingAllowed(false); 
         add(table);
         setViewportView(table);
-        setBackground(Color.white);
+//        setBackground(Color.white);
     }
 }

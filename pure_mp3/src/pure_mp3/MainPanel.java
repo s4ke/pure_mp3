@@ -38,7 +38,7 @@ public class MainPanel extends JPanel
         setLayout(new MigLayout("insets 5 5 5 5, nogrid, nocache"));
         
         playerMenu = new PlayerMenu();
-        add(playerMenu, "pos 5 5 n 85, id playerMenu");
+        add(playerMenu, "pos 5 5 n info.y2, id playerMenu");
         
         info = new Info();
         add(info,"x (playerMenu.x2 + 5), x2 (playList.x - 5), y 5, id info"); 
@@ -47,7 +47,7 @@ public class MainPanel extends JPanel
         add(playList, "pos (66% - 5) 5 (100% - 5) (100% -5), id playList");
         
         progress = new Progress();
-        add(progress,"pos 0 (info.y2 + 5) (playList.x) n, id progress");
+        add(progress,"pos 5 (info.y2 + 5) (playList.x - 5) n, id progress");
         
         media = new Media();
         add(media,"pos 5 (progress.y2 + 5) (playList.x - 5) (100% - 5), id media"); 

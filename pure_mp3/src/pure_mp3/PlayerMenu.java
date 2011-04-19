@@ -50,7 +50,7 @@ public class PlayerMenu extends JPanel
                 playPrev();
             }
         });
-        add(prev,"sizegroup playerMenu");
+        add(prev,"hmax 30, sizegroup playerMenu, dock center");
         
         play = new JButton(">");
         play.addActionListener(new ActionListener()
@@ -60,7 +60,7 @@ public class PlayerMenu extends JPanel
                 play();
             }
         });
-        add(play,"sizegroup playerMenu");
+        add(play,"hmax 30, sizegroup playerMenu, dock center");
         
         //TODO: PAUSE-BUTTON
         
@@ -72,7 +72,7 @@ public class PlayerMenu extends JPanel
                 playNext();
             }
         });
-        add(next,"sizegroup playerMenu");
+        add(next,"hmax 30, sizegroup playerMenu, dock center");
         
         volume = new JSlider();
         volume.setOrientation(JSlider.VERTICAL);
@@ -88,7 +88,7 @@ public class PlayerMenu extends JPanel
                 changeVolume((int)source.getValue());
             }
         });
-        add(volume);
+        add(volume,"h 75!, dock center");
     }
     
     public void playPrev()

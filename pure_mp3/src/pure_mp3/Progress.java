@@ -31,7 +31,9 @@ public class Progress extends JSlider
 	
 	public Progress()
 	{
+		super();
 		userChanged = true;
+		setPaintTrack(true);
 		setMinimum(0);
         setMaximum(100);
         setValue(0);
