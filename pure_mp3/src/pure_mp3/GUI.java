@@ -19,13 +19,16 @@
 
 package pure_mp3;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import net.miginfocom.swing.MigLayout;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Line;
@@ -60,16 +63,17 @@ public class GUI extends JFrame
         SwingUtilities.invokeLater(new Runnable(){
              public void run() 
              {
-            	    setSize(800,600);
-            	    setMinimumSize(new Dimension(410,300));
+            	 	setMinimumSize(new Dimension(420,300));
                     mainPanel = new MainPanel();
                     setContentPane(mainPanel);
                     setJMenuBar(new Menu());
                     System.setProperty("apple.laf.useScreenMenuBar", "true");
                     System.setProperty("com.apple.mrj.application.apple.menu.about.name", "pure.mp3");
                     setDefaultCloseOperation(EXIT_ON_CLOSE);   
-                    setLocationRelativeTo(null);
                     setResizable(true);
+                    pack();
+                    setSize(800,600); //Has to be done after the Window has been layouted to prevent a bug under Windows
+                    setLocationRelativeTo(null);
                     setVisible(true); 
             }
         });
@@ -182,4 +186,10 @@ public class GUI extends JFrame
 		}
     
 	}
+    
+    public void invalidate()
+    {
+    	super.invalidate();
+    	System.out.println("ABC");
+    }
 }

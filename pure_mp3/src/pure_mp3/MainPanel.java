@@ -50,7 +50,8 @@ public class MainPanel extends JPanel
         add(progress,"pos 5 (info.y2 + 5) (playList.x - 5) n, id progress");
         
         media = new Media();
-        add(media,"pos 5 (progress.y2 + 5) (playList.x - 5) (100% - 5), id media"); 
+        add(media,"pos 5 (progress.y2 + 5) (playList.x - 5) (100% - 5), id media");
+        repaint();
     }
     
     public PlayList getPlayList()
