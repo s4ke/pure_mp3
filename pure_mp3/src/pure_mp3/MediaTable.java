@@ -19,6 +19,8 @@
 
 package pure_mp3;     
 
+import java.awt.Color;
+
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -48,10 +50,10 @@ public class MediaTable extends JScrollPane
         
         model.addRow(string);
         
+        table.setBackground(Color.WHITE);
         table.setModel(model);
         table.getTableHeader().setReorderingAllowed(false); 
         add(table);
         setViewportView(table);
-//        setBackground(Color.white);
     }
 }
