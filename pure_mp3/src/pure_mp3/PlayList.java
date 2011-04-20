@@ -25,19 +25,12 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-//import java.io.File;
-//import java.io.FileNotFoundException;
-//import java.io.FileReader;
-//import java.io.FilenameFilter;
 import java.util.Random;
-//import java.io.IOException;
-
 import javax.swing.DefaultListModel;
 import javax.swing.DropMode;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
-//import javax.swing.event.ListDataEvent;
-//import javax.swing.event.ListDataListener;
+
 public class PlayList extends JScrollPane
 {
 	private static final long serialVersionUID = 2385007980763532219L;

@@ -19,8 +19,6 @@
 
 package pure_mp3;     
 
-import java.awt.Color;
-
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;

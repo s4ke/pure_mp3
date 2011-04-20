@@ -19,19 +19,12 @@
 
 package pure_mp3;
 
-import java.awt.BorderLayout;
-import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import net.miginfocom.swing.MigLayout;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Line;
@@ -41,12 +34,9 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UnsupportedLookAndFeelException;
-//import javax.swing.UIManager;
-//import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.plaf.metal.MetalLookAndFeel;
-
-import com.seaglasslookandfeel.SeaGlassLookAndFeel;
 
 public class GUI extends JFrame
 {
@@ -77,23 +67,6 @@ public class GUI extends JFrame
                     pack();
                     setSize(800,600); //Has to be done after the Window has been layouted to prevent a bug under Windows
                     setLocationRelativeTo(null);
-                    addMouseListener(new MouseListener() //MouseListener for Bug Prevention
-                    {
-            			@Override
-            			public void mouseClicked(MouseEvent arg0){}
-            			@Override
-            			public void mouseEntered(MouseEvent arg0){}
-            			@Override
-            			public void mouseExited(MouseEvent arg0){}
-            			@Override
-            			public void mousePressed(MouseEvent arg0){}
-            			@Override
-            			public void mouseReleased(MouseEvent arg0) 
-            			{
-            				//Resets the Cursor in order to prevent a SeaGlass Bug
-            				setCursor(Cursor.getDefaultCursor());	
-            			}
-                    });
                     setVisible(true); 
             }
         });
@@ -127,19 +100,34 @@ public class GUI extends JFrame
 		{
 			try 
     	 	{
-				Object choices[] = {"Swing","SeaGlass"};
+				Object choices[] = {"Metal","Nimbus"};
     	 		System.out.println(System.getProperty("os.name"));
     	 		try
     	 		{
     	 			BufferedReader buffread = new BufferedReader(new FileReader(new File("puremp3","config.txt")));
     	 			String laf = buffread.readLine();
-    	 			if(laf.equals("Swing"))
+    	 			if(laf.equals("Metal"))
     	 			{
     	 				UIManager.setLookAndFeel(new MetalLookAndFeel());
     	 			}
-    	 			else if(laf.equals("SeaGlass"))
+    	 			else if(laf.equals("Nimbus"))
     	 			{
-    	 				UIManager.setLookAndFeel(new SeaGlassLookAndFeel());
+    	 				try 
+		        		{
+		        		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) 
+		        		    {
+		        		        if ("Nimbus".equals(info.getName())) 
+		        		        {
+		        		            UIManager.setLookAndFeel(info.getClassName());
+		        		            break;
+		        		        }
+		        		    }
+		        		}
+		        		catch(Exception ex)
+		        		{
+		        			JOptionPane.showMessageDialog(null,"Swing has been chosen, because your System doesn't support Nimbus.\nPlease update your config.txt");
+		        			UIManager.setLookAndFeel(new MetalLookAndFeel());
+		        		}
     	 			}
     	 			else
     	 			{
@@ -151,7 +139,7 @@ public class GUI extends JFrame
     	 			PrintWriter writer = null;
     	 			int answer = JOptionPane.showOptionDialog(
     	 					null,
-    	 					"Do you want to use Swing or SeaGlass?\nOn slow systems please use Swing!", 
+    	 					"Do you want to use Metal or Nimbus?", 
     	 					"Which Look and Feel do you want?" , 
     	 					JOptionPane.DEFAULT_OPTION, 
     	 					JOptionPane.QUESTION_MESSAGE, 
@@ -172,17 +160,38 @@ public class GUI extends JFrame
 		    	        UIManager.setLookAndFeel(new MetalLookAndFeel());
 		    	        if(writer != null)
 		    	        {
-		    	        	writer.println("Swing");
+		    	        	writer.println("Metal");
 		    	        	writer.flush();
 		    	        	writer.close();
 		    	        }
 		        	}
 		        	else if(answer == 1)
 		        	{
-		        		UIManager.setLookAndFeel(new SeaGlassLookAndFeel());
+		        		try 
+		        		{
+		        		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) 
+		        		    {
+		        		        if ("Nimbus".equals(info.getName())) 
+		        		        {
+		        		            UIManager.setLookAndFeel(info.getClassName());
+		        		            break;
+		        		        }
+		        		    }
+		        		}
+		        		catch(Exception ex)
+		        		{
+		        			JOptionPane.showMessageDialog(null,"Swing has been chosen, because your System doesn't support Nimbus.");
+		        			UIManager.setLookAndFeel(new MetalLookAndFeel());
+			    	        if(writer != null)
+			    	        {
+			    	        	writer.println("Metal");
+			    	        	writer.flush();
+			    	        	writer.close();
+			    	        }
+		        		}
 		        		if(writer != null)
 		    	        {
-		    	        	writer.println("SeaGlass");
+		    	        	writer.println("Nimbus");
 		    	        	writer.flush();
 		    	        	writer.close();
 		    	        }
