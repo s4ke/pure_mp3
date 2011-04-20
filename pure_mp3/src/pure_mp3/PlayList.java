@@ -48,7 +48,7 @@ public class PlayList extends JScrollPane
         current = 0;        
         list = new JList();
 //        list.setLocation(0,0);
-        model = new MyListModel(this);
+        model = new DefaultListModel();
         
         list.setModel(model);
         list.setDragEnabled(true);

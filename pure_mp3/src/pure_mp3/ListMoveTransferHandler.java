@@ -2,11 +2,8 @@ package pure_mp3;
 /* Copyright 2009 Sebastian Haufe
  * 
  * This is an extension made by Martin Braun:
- * ListModel help = list.getModel();
-   if(help instanceof MyListModel)
-   {
-       ((MyListModel) help).checkCurrent();
-   }
+ * 
+   Global.playList.checkCurrent(insertAt-1);
    
    Global.playList.setDropTarget(null);
    Global.playList.getList().setTransferHandler(new ListMoveTransferHandler());
@@ -137,11 +134,7 @@ public class ListMoveTransferHandler extends TransferHandler {
             listModel.insertElementAt(elements.pop(), insertAt);
             sm.addSelectionInterval(insertAt, insertAt++);
           }
-          ListModel help = list.getModel();
-          if(help instanceof MyListModel)
-          {
-        	  ((MyListModel) help).checkCurrent(insertAt-1);
-          }
+          Global.playList.checkCurrent(insertAt-1);
           final int lead = insertAt - 1;
           if (!sm.isSelectionEmpty()) {
             sm.setAnchorSelectionIndex(anchor);
