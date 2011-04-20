@@ -20,8 +20,11 @@
 package pure_mp3;
 
 import java.awt.BorderLayout;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -74,6 +77,23 @@ public class GUI extends JFrame
                     pack();
                     setSize(800,600); //Has to be done after the Window has been layouted to prevent a bug under Windows
                     setLocationRelativeTo(null);
+                    addMouseListener(new MouseListener() //MouseListener for Bug Prevention
+                    {
+            			@Override
+            			public void mouseClicked(MouseEvent arg0){}
+            			@Override
+            			public void mouseEntered(MouseEvent arg0){}
+            			@Override
+            			public void mouseExited(MouseEvent arg0){}
+            			@Override
+            			public void mousePressed(MouseEvent arg0){}
+            			@Override
+            			public void mouseReleased(MouseEvent arg0) 
+            			{
+            				//Resets the Cursor in order to prevent a SeaGlass Bug
+            				setCursor(Cursor.getDefaultCursor());	
+            			}
+                    });
                     setVisible(true); 
             }
         });
@@ -184,12 +204,5 @@ public class GUI extends JFrame
 			System.out.println("Sound playback not supported properly!");
 			System.exit(ERROR);
 		}
-    
 	}
-    
-    public void invalidate()
-    {
-    	super.invalidate();
-    	System.out.println("ABC");
-    }
 }
