@@ -30,6 +30,9 @@ public class Progress extends JSlider
 	private boolean userChanged;
 	private int lastValue;
 	
+	/**
+	 * Basic Constructor
+	 */
 	public Progress()
 	{
 		super();
@@ -56,6 +59,10 @@ public class Progress extends JSlider
         });
 	}	
 	
+	/**
+	 * Method that sets the value without making a Listener use the Chang
+	 * @param x new Value
+	 */
 	public synchronized void setValue2(int x)
 	{
 		if(!getValueIsAdjusting())
@@ -65,20 +72,22 @@ public class Progress extends JSlider
 			lastValue = x;
 			userChanged = true;	
 		}
-//		repaint();
 		notify();
 	}
 	
-	public void setValue(int x)
-	{
-		super.setValue(x);
-	}
-
+	/**
+	 * Returns if setValue was invoked by the user
+	 * @return
+	 */
 	private synchronized boolean getUserChanged()
 	{
 		return userChanged;
 	}
 	
+	/**
+	 * Controls the seek mechanism in Player
+	 * @param value
+	 */
 	public synchronized void seek(int value)
 	{
 		Global.player.seek(value);

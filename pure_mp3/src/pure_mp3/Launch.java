@@ -38,12 +38,19 @@ public class Launch
 {
 	private static GUI gui;
 	
-	//Let's throw any Exceptions that happen, normally no Exception will ever be thrown.
+	/**
+	 * Main Method for pure.mp3. Looks wheter there are mixers that are supported
+	 * and if they exist starts the program. At the first startup the User can choose
+	 * the Look And Feel of the Program (Metal or Nimbus, if neither is available,
+	 * the program uses the default LaF). This will be saved in puremp3/config.txt in the
+	 * current directory.
+	 * @param args
+	 * @throws Exception
+	 */
 	public static void main (String args[]) throws Exception
     {
     	boolean support = false;
 		System.out.println("Available Mixers:");
-		//Let's look, if there are Mixers available
 		Mixer.Info[]	aInfos = AudioSystem.getMixerInfo();
 		for (int i = 0; i < aInfos.length; i++)			
 		{
@@ -56,7 +63,6 @@ public class Launch
 			}
 			else
 			{
-				//Oh a Mixer that doesn't like SourceDataLines. Tell that the cli
 				System.out.println("Not supported: " + aInfos[i].getName());
 			}
 		}
@@ -65,34 +71,25 @@ public class Launch
 			System.out.println("[No mixers available]");
 			System.exit(-1);
 		}
-		//Not supported?
 		if(!support)
 		{
 			JOptionPane.showMessageDialog(null,"Sound playback not supported properly!");
 		}
-		// if everything has worked so far, start executing
 		else
 		{
-			//but first choose the LaF
 			File config = new File("puremp3","config.txt");
-			//The predefined Choices for the LaF
 			Object choices[] = {"Metal","Nimbus"};			
 	 		System.out.println(System.getProperty("os.name"));
 	 		if(config.exists())
 	 		{
 	 			boolean success = false;
-	 			//read in the config file and see what it says
 	 			BufferedReader buffread = new BufferedReader(new FileReader(config));
-	 			//Read in the first line
 	 			String laf = buffread.readLine();
-	 			//if Metal is he LaF
 	 			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) 
     		    {
     		        if (laf.equals(info.getName())) 
     		        {
-    		        	//set the LaF
     		            UIManager.setLookAndFeel(info.getClassName());
-    		            //Everything worked fine
     		            success = true;
     		            break;
     		        }
@@ -104,9 +101,7 @@ public class Launch
 	 		}
 	 		else
 	 		{
-	 			//first we need a PrintWriter variable.
 	 			PrintWriter writer = null;
-	 			//Let the user decide what he wants
 	 			int answer = JOptionPane.showOptionDialog(
 	 					null,
 	 					"Do you want to use Metal or Nimbus?", 
@@ -118,9 +113,7 @@ public class Launch
 	 					choices[0]);
 	 			try
 	 			{
-	 				//Create the directory for the config if it doesn't exist, yet
 	 				new File("puremp3").mkdir();
-	 				//initializing the PrintWriter
 	 				writer = new PrintWriter(new FileWriter(config));
 	 			}
 	 			catch(Exception ex)
@@ -129,7 +122,6 @@ public class Launch
 	 			}
 	        	if(answer == 0 || answer == 1)
 	        	{
-	        		//Initialize the variable laf;
 	        		String laf = "";
 	        		if(answer == 0)
 		        	{
@@ -143,9 +135,7 @@ public class Launch
 	    		    {
 	    		        if (laf.equals(info.getName())) 
 	    		        {
-	    		        	//Set the LaF according to the User
 	    		            UIManager.setLookAndFeel(info.getClassName());
-	    		            //And write it into the config
 	    		            writer.println("Metal");
 		    	        	writer.flush();
 		    	        	writer.close();

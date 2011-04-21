@@ -81,13 +81,13 @@ public class Info extends JPanel
    
    public void update()
    {
-       artist_r.setText(Global.playList.getArtist());
+       artist_r.setText(Global.playList.getCurrentSong().getArtist());
        artist_r.setCaretPosition(0);
-       title_r.setText(Global.playList.getTitle());
+       title_r.setText(Global.playList.getCurrentSong().getTitle());
        title_r.setCaretPosition(0);
-       album_r.setText(Global.playList.getAlbum());
+       album_r.setText(Global.playList.getCurrentSong().getAlbum());
        album_r.setCaretPosition(0);
-       length = Global.playList.getLength();
+       length = Global.playList.getCurrentSong().getLength();
        updatePlayedTime(0);
    }
    

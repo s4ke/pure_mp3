@@ -29,13 +29,8 @@ import javax.swing.ListCellRenderer;
 public class PlayListRenderer extends JLabel implements ListCellRenderer {
 	 private static final long serialVersionUID = 2385007980763532219L;
 
-     public Component getListCellRendererComponent(
-       JList list,
-       Object value,            // value to display
-       int index,               // cell index
-       boolean isSelected,      // is the cell selected
-       boolean cellHasFocus)    // the list and the cell have the focus
-      {
+     public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)    // the list and the cell have the focus
+     {
            Song song = (Song) value;
            String s = song.getData();
            setText(s);

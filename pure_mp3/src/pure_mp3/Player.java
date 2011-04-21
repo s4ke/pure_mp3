@@ -66,7 +66,7 @@ public class Player
 	    		}
 	    		break;
     	}
-    	if(Global.playList.getModelSize() == 0)
+    	if(Global.playList.getNumberOfSongs() == 0)
 		{
 			playing = false;
 		}
@@ -93,13 +93,13 @@ public class Player
 	    		//random playmode
 	    		int current = Global.playList.getCurrent();
 	    		Global.playList.random();
-	    		if(current == Global.playList.getCurrent() && (Global.playList.getModelSize() > 1))
+	    		if(current == Global.playList.getCurrent() && (Global.playList.getNumberOfSongs() > 1))
 	    		{
 	    			next();
 	    		}
 	    		break;
     	}
-    	if(Global.playList.getModelSize() == 0)
+    	if(Global.playList.getNumberOfSongs() == 0)
 		{
 			playing = false;
 		}

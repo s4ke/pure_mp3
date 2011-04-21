@@ -142,7 +142,7 @@ public class ListMoveTransferHandler extends TransferHandler {
           }
         } finally {
           sm.setValueIsAdjusting(false);
-          Global.playList.getList().setDropTarget(new DropTarget(Global.playList.getList(),new PlayListDropTargetListener()));
+          Global.playList.setDropTarget(new DropTarget(Global.playList.getList(),new PlayListDropTargetListener()));
         }
         return true;
       } catch (UnsupportedFlavorException ex) {

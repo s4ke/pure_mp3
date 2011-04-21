@@ -37,6 +37,9 @@ public class SlideUpdater extends Thread
 		paused = false;
 	}
 	
+	/**
+	 * The actual method that does the work for updating Progress
+	 */
 	public void run()
 	{
 			int frameLength = 0;
@@ -55,7 +58,6 @@ public class SlideUpdater extends Thread
 				}
 			}
 			final int durationInSeconds_ = durationInSeconds;
-			//while not stopped just run and run and run...
 			while(!stop)
 			{	
 				//Block for pausing/unpausing
@@ -83,9 +85,7 @@ public class SlideUpdater extends Thread
 					{
 						public void run()
 						{
-							//set the value and don't make a listener listen :)
 							progress.setValue2(percentage);
-							//update the played Time in Info
 							if(durationInSeconds_ > 0)
 							{
 								Global.info.updatePlayedTime((int)(durationInSeconds_*percentage_/100));
@@ -110,27 +110,30 @@ public class SlideUpdater extends Thread
 		progress.setValue2(0);	
 	}
 	
+	/**
+	 * Pauses the SlideUpdater
+	 */
 	public synchronized void pause()
 	{
 		paused = !paused;
 		notify();
 	}
 	
+	/**
+	 * Stops the SlideUpdater
+	 */
 	public synchronized void stop_()
 	{
 		stop = true;
 		notify();
 	}
 	
+	/**
+	 * @return the variable stop
+	 */
 	public synchronized boolean isStopped()
 	{
 		return stop;
 	}
-	
-	public void setMusicPlayer(MusicPlayer xMusicPlayer)
-	{
-		musicPlayer = xMusicPlayer;
-	}
-	
 
 }

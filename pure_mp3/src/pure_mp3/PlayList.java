@@ -40,6 +40,9 @@ public class PlayList extends JScrollPane
     private DefaultListModel model;
     private int current;
     
+    /**
+     * BAsic Constructor
+     */
     public PlayList()
     {
         super();
@@ -136,23 +139,32 @@ public class PlayList extends JScrollPane
         	}
         });
         
-        list.setDropTarget(new DropTarget(Global.playList.getList(),new PlayListDropTargetListener()));
+        list.setDropTarget(new DropTarget(list,new PlayListDropTargetListener()));
 
         list.setSelectedIndex(current);
         add(list);        
         setViewportView(list);
     }    
     
+    /**
+     * chooses the next Song
+     */
     public void next()
     {
         setCurrent(current+1);
     }
     
+    /**
+     * chooses the previous Song
+     */
     public void prev()
     {
         setCurrent(current-1);
     }
     
+    /**
+     * chooses a random Song
+     */
     public void random()
     {
     	Random random = new Random();
@@ -162,13 +174,21 @@ public class PlayList extends JScrollPane
     	}
     }
     
-    public void playSelected(int index)
+    /**
+     * Method used by a Internal Class for Playing the current Song    
+     * @param index
+     */
+    private void playSelected(int index)
     {
         setCurrent(index);
         Global.player.stop();
         Global.player.playpause(false);
     }
     
+    /**
+     * sets the chosen Song
+     * @param xCurrent
+     */
     public void setCurrent(int xCurrent)
     {
     	if(model.getSize() > 0)
@@ -194,22 +214,39 @@ public class PlayList extends JScrollPane
     	list.repaint(getViewport().getViewRect());
     }
     
+    /**
+     * Sets wheter a DropTarget has to listen
+     * @param isActive
+     */
     public void setDropTargetActive(boolean isActive)
     {
     	dropTarget.setActive(isActive);
     }
     
-    
+    /**
+     * returns the index of the chosen Song
+     * @return the index of the current Song
+     */
     public int getCurrent()
     {
         return current;
     }
     
+    /**
+     * returns the size of the PlayList, 
+     * not named size() because of possibility of confusion with getSize() 
+     * from JComponent
+     * @return number of songs in the PlayList
+     */
     public int getNumberOfSongs()
     {
     	return model.getSize();
     }
     
+    /**
+     * Checks wheter the chosen Song is correct
+     * @param xCurrent the index of the Song that should be the current Song
+     */
     public void checkCurrent(int xCurrent)
     {
     	System.out.println("checking Current");
@@ -220,6 +257,9 @@ public class PlayList extends JScrollPane
     	}
     }
     
+    /**
+     * checks wheter the index of the current song isn't negative
+     */
     public void checkCurrentNegative()
     {
     	if(current == -1 && model.getSize() > 0)
@@ -228,6 +268,9 @@ public class PlayList extends JScrollPane
     	}
     }
     
+    /**
+     * @return the current Song
+     */
     public Song getCurrentSong()
     {
     	if(model.getSize() > 0)
@@ -237,70 +280,10 @@ public class PlayList extends JScrollPane
     	return null;
     }
     
-    public String getArtist()
-    {
-    	if(model.getSize() > 0)
-    	{
-	        if(model.get(current)!=null)
-	        {
-	            return ((Song)model.get(current)).getArtist();
-	        }
-	        else
-	        {
-	            return "";
-	        }
-    	}
-    	return "";
-    }
-    
-    public String getTitle()
-    {
-    	if(model.getSize() > 0)
-    	{
-	        if(model.get(current)!=null)
-	        {
-	            return ((Song)model.get(current)).getTitle();
-	        }
-	        else
-	        {
-	            return "";
-	        }
-    	}
-    	return "";
-    }
-    
-    public String getAlbum()
-    {
-    	if(model.getSize() > 0)
-    	{
-	        if(model.get(current)!=null)
-	        {
-	            return ((Song)model.get(current)).getAlbum();
-	        }
-	        else
-	        {
-	            return "";
-	        }
-    	}
-    	return "";
-    }
-    
-    public String getLength()
-    {
-    	if(model.getSize() > 0)
-    	{
-	        if(model.get(current)!=null)
-	        {
-	            return ((Song)model.get(current)).getLength();
-	        }
-	        else
-	        {
-	            return "";
-	        }
-    	}
-    	return "";
-    }
-    
+    /**
+     * adds a Song at the end
+     * @param song
+     */
     public void addSong(Song song)
     {
     	System.out.println(song.getSource().toString());
@@ -311,6 +294,11 @@ public class PlayList extends JScrollPane
     	}
     }
     
+    /**
+     * Adds Song at the specified position
+     * @param song
+     * @param position
+     */
     public void addSongAt(Song song, int position)
     {
     	System.out.println(song.getSource().toString() + " at " + position);
@@ -321,16 +309,17 @@ public class PlayList extends JScrollPane
     	}
     }
     
+    /**
+     * 
+     */
     public void revalidateList()
     {
     	list.revalidate();
     }
     
-    public void setValueIsAdjusting(boolean isAdjusting)
-    {
-    	list.setValueIsAdjusting(isAdjusting);
-    }
-    
+    /**
+     * Clears the PlayList from all Songs
+     */
     public void removeAllElements()
     {
     	model.removeAllElements();
@@ -338,19 +327,21 @@ public class PlayList extends JScrollPane
     	current = -1;
     }
     
+    /**
+     * returns the Model of the JList in the PlayList
+     * @return the Model of the JList
+     */
     public DefaultListModel getModel()
     {
     	return model;
     }
     
+    /**
+     * 
+     * @return the JList in PlayList
+     */
     public JList getList()
     {
     	return list;
     }
-    
-    public int getModelSize()
-    {
-    	return model.getSize();
-    }
-    
 }
