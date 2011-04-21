@@ -43,21 +43,15 @@ public class FileCrawler
 	{
 		if(file != null)
 		{
-			//Only a single File?
 			if(!file.isDirectory())
 			{
-				//Is the File a mp3?
 				if(file.getPath().endsWith(".mp3")||file.getPath().endsWith(".MP3"))
 				{
-					//Then add it to the PlayList
 					Global.playList.addSong(new Song(file));
 				}
 			}
-			//Or a Directory?
 			else
 			{
-				//Create a Filter for determining wheter to use the files/Directories or not
-				//and then let him return the array of files we want
 				final File [] files = file.listFiles(new FilenameFilter()
 				{
 					public boolean accept(File dir, String name)
@@ -74,7 +68,6 @@ public class FileCrawler
 		    		{
 		    			addToPlayList2(files[i]);
 		    		}
-		    		//or just add normally
 		    		else
 		    		{
 		    			//Lets do that by using the EDT (Event Dispatch Thread) to prevent Crashing

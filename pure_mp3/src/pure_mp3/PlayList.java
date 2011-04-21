@@ -310,7 +310,7 @@ public class PlayList extends JScrollPane
     }
     
     /**
-     * 
+     * Revalidates the list in PlayList
      */
     public void revalidateList()
     {
