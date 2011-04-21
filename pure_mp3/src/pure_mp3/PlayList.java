@@ -41,7 +41,7 @@ public class PlayList extends JScrollPane
     private int current;
     
     /**
-     * BAsic Constructor
+     * Basic Constructor
      */
     public PlayList()
     {
@@ -51,7 +51,6 @@ public class PlayList extends JScrollPane
         Global.setPlayList(this);
         current = 0;        
         list = new JList();
-//        list.setLocation(0,0);
         model = new DefaultListModel();
         
         list.setModel(model);
@@ -100,14 +99,6 @@ public class PlayList extends JScrollPane
 	        			if(selected[i] == current && Global.player.isPlaying())
 	        			{
 	        				prev();
-	//        				boolean paused = Global.player.isPaused();
-	//        				Global.player.stop();
-	//        				next();
-	//        				Global.player.playpause();
-	//        				if(paused)
-	//        				{
-	//        					Global.player.playpause();
-	//        				}
 	        			}
 	        			if(selected[i] != -1)
 	        			{
