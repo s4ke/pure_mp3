@@ -1,7 +1,5 @@
- /**
- * @author Martin Braun
- *   
- * This file is part of pure.mp3.
+/*
+ *  This file is part of pure.mp3.
  *
  *  pure.mp3 is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,20 +14,22 @@
  *  You should have received a copy of the GNU General Public License
  *  along with pure.mp3.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package pure_mp3;
 
 import javax.swing.JPanel;
 import javax.swing.JSlider;
-
 import net.miginfocom.swing.MigLayout;
+
+/**
+ * The MainPanel for the Player
+ * @author Martin Braun
+*/
 public class MainPanel extends JPanel
 {
 	private static final long serialVersionUID = 2385007980763532219L;
     private PlayerMenu playerMenu;
     private Info info;
     private PlayList playList;
-    private Player player;
     private JSlider progress;
     private Media media;
     
@@ -52,15 +52,5 @@ public class MainPanel extends JPanel
         media = new Media();
         add(media,"pos 5 (progress.y2 + 5) (playList.x - 5) (100% - 5), id media");
         repaint();
-    }
-    
-    public PlayList getPlayList()
-    {
-    	return playList;
-    }
-    
-    public Player getPlayer()
-    {
-    	return player;
     }
 }

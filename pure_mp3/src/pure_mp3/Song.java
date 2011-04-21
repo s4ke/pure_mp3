@@ -1,7 +1,5 @@
- /**
- * @author Martin Braun
- *   
- * This file is part of pure.mp3.
+/*
+ *  This file is part of pure.mp3.
  *
  *  pure.mp3 is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with pure.mp3.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package pure_mp3;
 
 import java.awt.datatransfer.DataFlavor;
@@ -26,10 +23,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map;
-
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioSystem;
 
+/**
+ * The Song Class. Representation of the Song Files
+ * @author Martin Braun
+*/
 public class Song implements Serializable, Transferable
 {
    private static final long serialVersionUID = 20100125;

@@ -1,11 +1,4 @@
-/**
- *  @author Martin Braun
- *  MusicPlayer inspired by Matthias Pfisterer's examples on JavaSound
- *  (jsresources.org). Because of the fact, that this Software is meant 
- *  to be Open-Source and I don't want to get anybody angry about me 
- *  using parts of his intelligence without mentioning it, I hereby 
- *  mention him as inspiration, because his code helped me to write this class.
- * 
+/*
  *  This file is part of pure.mp3.
  *
  *  pure.mp3 is free software: you can redistribute it and/or modify
@@ -21,10 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with pure.mp3.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package pure_mp3;
 
-//import java.net.URL;
 import java.io.File;
 import java.io.IOException;
 import javax.sound.sampled.AudioFormat;
@@ -35,10 +26,16 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.FloatControl;
 
-
+/**
+ * MusicPlayer inspired by Matthias Pfisterer's examples on JavaSound
+ *  (jsresources.org). Because of the fact, that this Software is meant 
+ *  to be Open-Source and I don't want to get anybody angry about me 
+ *  using parts of his intelligence without mentioning it, I hereby 
+ *  mention him as inspiration, because his code helped me to write this class.
+ *  @author Martin Braun
+ */
 public class StreamMusicPlayer extends Thread implements MusicPlayer
 {
-	
 	private static final int	EXTERNAL_BUFFER_SIZE = 128000;
 	private AudioInputStream audioInputStream;
 	private SourceDataLine line;
@@ -49,17 +46,12 @@ public class StreamMusicPlayer extends Thread implements MusicPlayer
 	private boolean playing;
 	private long skippedDurationInMicroSeconds;
 	private int skippedFrames;
-//	private long position;
-//	private boolean skippingAllowed;
-//	private boolean running = false;
 	private boolean pause = false;
 	private boolean stop = false;
-//	private static boolean lineAvailable = true;
 	
 	public StreamMusicPlayer(Song xSong, Player xPlayer)
 	{
 		super();
-//		position = 0;
 		player = xPlayer;
 		song = xSong;
 		try
@@ -69,7 +61,6 @@ public class StreamMusicPlayer extends Thread implements MusicPlayer
 		catch(Exception e)
 		{
 			System.out.println("Error while inserting the file");
-//			player.next();
 		}
 		
 	}
@@ -83,9 +74,6 @@ public class StreamMusicPlayer extends Thread implements MusicPlayer
 		catch (Exception e)
 		{
 			System.out.println("Error while parsing URL to File/Stream");
-//			stop = true;
-//			player.stop();
-//			player.next();
 		}		
 		if (audioInputStream != null)
 		{
@@ -139,7 +127,7 @@ public class StreamMusicPlayer extends Thread implements MusicPlayer
 		
 		if(line != null)
 		{
-			setVolume(Global.VOLUME);
+			setVolume(Global.volume);
 		}
 		while (nBytesRead != -1 && !stop && line != null)
 		{
@@ -232,7 +220,7 @@ public class StreamMusicPlayer extends Thread implements MusicPlayer
             FloatControl volume = (FloatControl) line.getControl( FloatControl.Type.MASTER_GAIN);
             double minGainDB = volume.getMinimum();
             double ampGainDB = ((10.0f/20.0f)*volume.getMaximum())-volume.getMinimum(); 
-            double valueDB = minGainDB + (1/Global.LINEARSCALAR)*Math.log(1+(Math.exp(Global.LINEARSCALAR*ampGainDB)-1)*xVolume);
+            double valueDB = minGainDB + (1/Global.linearscalar)*Math.log(1+(Math.exp(Global.linearscalar*ampGainDB)-1)*xVolume);
             volume.setValue((float) valueDB); 			
 		}
 		else if( line.isControlSupported(FloatControl.Type.VOLUME)) 

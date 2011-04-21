@@ -1,11 +1,4 @@
-/**
- *  @author Martin Braun
- *  SlideUpdater inspired by Matthias Pfisterer's examples on JavaSound
- *  (jsresources.org). Because of the fact, that this Software is meant 
- *  to be Open-Source and I don't want to get anybody angry about me 
- *  using parts of his intelligence without mentioning it, I hereby 
- *  mention him as inspiration, because his code helped me to write this class.
- * 
+/*
  *  This file is part of pure.mp3.
  *
  *  pure.mp3 is free software: you can redistribute it and/or modify
@@ -21,25 +14,14 @@
  *  You should have received a copy of the GNU General Public License
  *  along with pure.mp3.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package pure_mp3;
 
 import javax.swing.SwingUtilities;
 
-//import java.io.File;
-//import java.io.FileNotFoundException;
-////import java.io.FileInputStream;
-//import java.io.IOException;
-////import java.net.URL;
-//import java.util.Map;
-
-//import javax.swing.*;
-//import javax.sound.sampled.AudioFormat;
-//import javax.sound.sampled.AudioFileFormat;
-//import javax.sound.sampled.AudioSystem;
-//import javax.sound.sampled.UnsupportedAudioFileException;
-//import org.tritonus.share.sampled.file.TAudioFileFormat;
-
+/**
+ * Thread used for updating Progress
+ * @author Martin Braun
+*/
 public class SlideUpdater extends Thread
 {
 	private MusicPlayer musicPlayer;

@@ -1,7 +1,5 @@
- /**
- * @author Martin Braun
- *   
- * This file is part of pure.mp3.
+/*
+ *  This file is part of pure.mp3.
  *
  *  pure.mp3 is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,12 +14,15 @@
  *  You should have received a copy of the GNU General Public License
  *  along with pure.mp3.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package pure_mp3;
 
+/**
+ * Some Global Vars and Constants
+ * @author Martin Braun
+*/
 public class Global {
-	public static float VOLUME = 100;
-	public static final double LINEARSCALAR = Math.log(10.0)/20;
+	public static float volume = 100;
+	public static final double linearscalar = Math.log(10.0)/20;
 	public static FileCrawler fileCrawler = new FileCrawler();
 	public static final Player player = new Player(0);
 	public static PlayList playList = null;
@@ -30,7 +31,7 @@ public class Global {
 	
 	public static void setVolume(float xVolume)
 	{
-		VOLUME = xVolume;
+		volume = xVolume;
 	}
 	
 	public static void setPlayList(PlayList xPlayList)

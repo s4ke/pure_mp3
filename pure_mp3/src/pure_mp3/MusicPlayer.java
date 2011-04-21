@@ -1,7 +1,5 @@
- /**
- * @author Martin Braun
- *   
- * This file is part of pure.mp3.
+/*
+ *  This file is part of pure.mp3.
  *
  *  pure.mp3 is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,11 +14,14 @@
  *  You should have received a copy of the GNU General Public License
  *  along with pure.mp3.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package pure_mp3;
 
 import javax.sound.sampled.AudioFormat;
 
+/**
+ * Interface for a Player.
+ * @author Martin Braun
+*/
 public interface MusicPlayer {
 	public void start();
 	public void pause();
@@ -33,6 +34,5 @@ public interface MusicPlayer {
 	public int getFramePosition();
 	public int getFrameLength();
 	public int getDurationInSeconds();
-//	public long getPosition();
 	public Song getCurrentSong();
 }

@@ -1,7 +1,5 @@
- /**
- * @author Martin Braun
- *   
- * This file is part of pure.mp3.
+/*
+ *  This file is part of pure.mp3.
  *
  *  pure.mp3 is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,19 +14,22 @@
  *  You should have received a copy of the GNU General Public License
  *  along with pure.mp3.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package pure_mp3;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSeparator;
+
+/**
+ * The MenuBar for the Player
+ * @author Martin Braun
+*/
 public class Menu extends JMenuBar
 {
 	private static final long serialVersionUID = 2385007980763532219L;
@@ -130,7 +131,7 @@ public class Menu extends JMenuBar
 				{
 					public void run()
 					{
-						Global.fileCrawler.add2(new File((String)answer));
+						Global.fileCrawler.addToPlayList(new File((String)answer));
 					}
 				}.start();
 			}
@@ -152,7 +153,7 @@ public class Menu extends JMenuBar
 				{
 					public void run()
 					{
-						Global.fileCrawler.add2(new File((String)answer));
+						Global.fileCrawler.addToPlayList(new File((String)answer));
 					}
 				}.start();        				
 			}
@@ -183,19 +184,4 @@ public class Menu extends JMenuBar
 				"Some Parts are under different Licences \n" +
 				"See readme.txt for further information");
     }
-    
-//    public void updatePlayModes()
-//	{
-//		switch(Global.player.getPlayMode())
-//		{
-//		case 0:
-//			editSetNormalPlayMode.setText("[x] Normal Playback");
-//			editSetRandosmPlayMode.setText("[]  Random Playback");
-//			break;
-//		case 1:
-//			editSetNormalPlayMode.setText("[]  Normal Playback");
-//			editSetRandosmPlayMode.setText("[x] Random Playback");
-//			break;
-//		}
-//	}
 }

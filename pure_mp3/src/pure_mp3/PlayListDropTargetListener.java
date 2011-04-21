@@ -1,7 +1,5 @@
- /**
- * @author Martin Braun
- *   
- * This file is part of pure.mp3.
+/*
+ *  This file is part of pure.mp3.
  *
  *  pure.mp3 is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,26 +14,18 @@
  *  You should have received a copy of the GNU General Public License
  *  along with pure.mp3.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package pure_mp3;
 
 import java.awt.dnd.*;
 import java.awt.datatransfer.*;
-//import java.util.List;
-//import java.io.BufferedReader;
-//import java.io.InputStream;
-//import java.io.InputStreamReader;
-//import java.io.Reader;
-//import java.io.StringWriter;
-//import java.io.Writer;
-//import java.net.URL;
-//import java.util.*;
 import java.io.File;
 import java.net.URL;
 import java.util.List;
 
-//import javax.swing.JList;
-
+/**
+ * Listens for Drops of Music Files
+ * @author Martin Braun
+*/
 public class PlayListDropTargetListener  implements DropTargetListener {
 
 
@@ -81,7 +71,7 @@ public class PlayListDropTargetListener  implements DropTargetListener {
 		    			  {
 		    				  try
 		    				  {
-		    					  Global.fileCrawler.add2((File)list.get(j));
+		    					  Global.fileCrawler.addToPlayList((File)list.get(j));
 		    				  }
 		    				  catch(Exception e)
 		    				  {
@@ -93,7 +83,6 @@ public class PlayListDropTargetListener  implements DropTargetListener {
     			  dropTargetDropEvent.dropComplete(true);
     			  return;
 	    	  }
-	//    	   Check for file lists specifically
 	    	  if (flavors[i].equals(java.awt.datatransfer.DataFlavor.stringFlavor))
 	    	  {
 	    		  dropTargetDropEvent.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
@@ -106,7 +95,6 @@ public class PlayListDropTargetListener  implements DropTargetListener {
 	    			  {
 	    				  strings[strings.length-1] = strings[strings.length-1].substring(0,strings[strings.length-1].length()-1);
 	    			  }
-//	    			  int position = Global.playList.getList().locationToIndex(dropTargetDropEvent.getLocation());
 					  new Thread()
 					  {
 						  public void run()
@@ -115,13 +103,8 @@ public class PlayListDropTargetListener  implements DropTargetListener {
 			    			  {
 			    				  try
 			    				  {	    					  
-		//	    	    					  if(position >= 0)
-		//	    	    					  {
-		//	    	    						  position = Global.fileCrawler.addFileAt(new File(new URL(strings[j]).toURI().getPath()),position);
-		//	    	    					  }
-		//	    	    					  else
 			    					  {
-			    						  Global.fileCrawler.add2(new File(new URL(strings[j]).toURI().getPath()));
+			    						  Global.fileCrawler.addToPlayList(new File(new URL(strings[j]).toURI().getPath()));
 			    					  }
 			    				  }
 			    				  catch(Exception e)

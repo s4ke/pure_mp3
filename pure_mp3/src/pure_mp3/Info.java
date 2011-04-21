@@ -1,7 +1,5 @@
- /**
- * @author Martin Braun
- *   
- * This file is part of pure.mp3.
+/*
+ *  This file is part of pure.mp3.
  *
  *  pure.mp3 is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,21 +14,17 @@
  *  You should have received a copy of the GNU General Public License
  *  along with pure.mp3.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package pure_mp3;
 
-//import java.awt.Color;
-//import java.awt.Component;
 import java.awt.dnd.DropTarget;
-//import java.awt.event.ComponentAdapter;
-//import java.awt.event.ComponentEvent;
-
-//import javax.swing.JLabel;
 import javax.swing.JPanel;
-//import javax.swing.JTextArea;
 import javax.swing.JTextField;
-
 import net.miginfocom.swing.MigLayout;
+
+/**
+ * The Info for displaying which song is being played
+ * @author Martin Braun
+*/
 public class Info extends JPanel
 {
    private static final long serialVersionUID = 2385007980763532219L;
@@ -47,8 +41,6 @@ public class Info extends JPanel
    public Info()
    {
        super();
-//       setBackground(Color.WHITE);
-//       setLayout(new MigLayout("","[][fill,grow]",""));  
        setLayout(new MigLayout("nogrid, nocache"));
        Global.setInfo(this);
        
@@ -91,22 +83,16 @@ public class Info extends JPanel
    {
        artist_r.setText(Global.playList.getArtist());
        artist_r.setCaretPosition(0);
-//       artist_r.repaint(artist_r.getVisibleRect());
        title_r.setText(Global.playList.getTitle());
        title_r.setCaretPosition(0);
-//       title_r.repaint(title_r.getVisibleRect());
        album_r.setText(Global.playList.getAlbum());
        album_r.setCaretPosition(0);
-//       album_r.repaint(album_r.getVisibleRect());
-//       length_r.setText(Global.playList.getLength());
-//       length_r.setCaretPosition(0);
        length = Global.playList.getLength();
        updatePlayedTime(0);
    }
    
    public void updatePlayedTime(int seconds)
    {
-//	   String parts[] = text.split("/");
 	   int minutes = seconds / 60;
 	   String seconds_ = "" + seconds % 60;
 	   if(seconds_.length() < 2)
@@ -122,7 +108,6 @@ public class Info extends JPanel
 		   length_r.setText("");
 	   }
 	   length_r.setCaretPosition(0);
-//	   length_r.repaint(length_r.getVisibleRect());
    }
    
 }
