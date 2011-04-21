@@ -13,7 +13,6 @@ import javax.sound.sampled.SourceDataLine;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
-import javax.swing.plaf.metal.MetalLookAndFeel;
 
 public class Launch 
 {
