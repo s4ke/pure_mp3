@@ -21,10 +21,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Line;
@@ -40,6 +36,7 @@ import javax.swing.UIManager.LookAndFeelInfo;
 */
 public class Launch 
 {
+	@SuppressWarnings("unused")
 	private static GUI gui;
 	
 	/**
@@ -175,7 +172,7 @@ public class Launch
 //		 		}
 //		 		URLClassLoader ucl = new URLClassLoader(url.toArray(new URL[0]));
 //	 		}
-//	 		gui = new GUI();
+	 		gui = new GUI();
 		}
 	}
 

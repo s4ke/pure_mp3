@@ -27,6 +27,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.DropMode;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 
 /**
  * PlayList for the Player. Is not a JList but a JScrollPane
@@ -180,11 +181,11 @@ public class PlayList extends JScrollPane
      * sets the chosen Song
      * @param xCurrent
      */
-    public void setCurrent(int xCurrent)
+    public void setCurrent(final int xCurrent)
     {
     	if(model.getSize() > 0)
     	{
-	        if(xCurrent < 0)
+	    	if(xCurrent < 0)
 	        {
 	            current = model.getSize()-1;
 	        }
@@ -196,13 +197,23 @@ public class PlayList extends JScrollPane
 	        {
 	            current = 0;
 	        }
-	        if(model.get(current)!=null)
-	        {
-	            list.setSelectedIndex(current);
-	            list.ensureIndexIsVisible(current);	
-	        }
+	    	SwingUtilities.invokeLater(new Runnable()
+	    	{
+	    		public void run()
+	    		{
+	    			if(model.getSize() > 0)
+	    			{
+				        if(model.get(current)!=null)
+				        {
+				            list.setSelectedIndex(current);
+				            list.ensureIndexIsVisible(current);	
+				        }
+		    			repaint(getViewport().getViewRect());
+	    			}
+	    		}
+	    	});   
     	}
-    	list.repaint(getViewport().getViewRect());
+    	
     }
     
     /**
@@ -275,14 +286,20 @@ public class PlayList extends JScrollPane
      * adds a Song at the end
      * @param song
      */
-    public void addSong(Song song)
+    public void addSong(final Song song)
     {
-    	System.out.println(song.getSource().toString());
-    	model.ensureCapacity(model.getSize()+1);
-    	if(song != null)
-    	{
-    		model.addElement(song);
-    	}
+    	SwingUtilities.invokeLater(new Runnable()
+		{
+		    public void run()
+		    {
+		    	System.out.println(song.getSource().toString());
+		    	model.ensureCapacity(model.getSize()+1);
+		    	if(song != null)
+		    	{
+		    		model.addElement(song);
+		    	}
+		    }
+		});
     }
     
     /**
@@ -290,14 +307,20 @@ public class PlayList extends JScrollPane
      * @param song
      * @param position
      */
-    public void addSongAt(Song song, int position)
+    public void addSongAt(final Song song, final int position)
     {
-    	System.out.println(song.getSource().toString() + " at " + position);
-    	model.ensureCapacity(model.getSize()+1);
-    	if(song != null)
-    	{
-    		model.add(position,song);
-    	}
+    	SwingUtilities.invokeLater(new Runnable()
+		{
+		    public void run()
+		    {
+		    	System.out.println(song.getSource().toString() + " at " + position);
+		    	model.ensureCapacity(model.getSize()+1);
+		    	if(song != null)
+		    	{
+		    		model.add(position,song);
+		    	}
+		    }
+		});
     }
     
     /**
@@ -313,9 +336,16 @@ public class PlayList extends JScrollPane
      */
     public void removeAllElements()
     {
-    	model.removeAllElements();
-    	model.trimToSize();
-    	current = -1;
+    	SwingUtilities.invokeLater(new Runnable()
+    	{
+    		public void run()
+    		{
+    			model.removeAllElements();
+    	    	model.trimToSize();
+    	    	current = -1;
+       	    	list.revalidate();
+    		}
+    	});    	
     }
     
     /**

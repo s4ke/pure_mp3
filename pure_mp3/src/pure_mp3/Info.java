@@ -19,6 +19,8 @@ package pure_mp3;
 import java.awt.dnd.DropTarget;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+
 import net.miginfocom.swing.MigLayout;
 
 /**
@@ -81,33 +83,50 @@ public class Info extends JPanel
    
    public void update()
    {
-       artist_r.setText(Global.playList.getCurrentSong().getArtist());
-       artist_r.setCaretPosition(0);
-       title_r.setText(Global.playList.getCurrentSong().getTitle());
-       title_r.setCaretPosition(0);
-       album_r.setText(Global.playList.getCurrentSong().getAlbum());
-       album_r.setCaretPosition(0);
-       length = Global.playList.getCurrentSong().getLength();
-       updatePlayedTime(0);
+	   SwingUtilities.invokeLater(new Runnable()
+	   {
+		   public void run()
+		   {
+			   Song currentSong = Global.playList.getCurrentSong();
+			   if(currentSong != null)
+			   {
+				   artist_r.setText(currentSong.getArtist());
+			       artist_r.setCaretPosition(0);
+			       title_r.setText(currentSong.getTitle());
+			       title_r.setCaretPosition(0);
+			       album_r.setText(currentSong.getAlbum());
+			       album_r.setCaretPosition(0);
+			       length = currentSong.getLength();
+			       updatePlayedTime(0);
+			   }
+		   }
+	   });       
    }
    
-   public void updatePlayedTime(int seconds)
+   public void updatePlayedTime(final int seconds)
    {
-	   int minutes = seconds / 60;
-	   String seconds_ = "" + seconds % 60;
-	   if(seconds_.length() < 2)
+	   SwingUtilities.invokeLater(new Runnable()
 	   {
-		   seconds_ = "0" + seconds_;
-	   }
-	   if(length.length() > 0)
-	   {
-		   length_r.setText(minutes + ":" + seconds_ + "/" + length);
-	   }
-	   else
-	   {
-		   length_r.setText("");
-	   }
-	   length_r.setCaretPosition(0);
+		   public void run()
+		   {
+			   int minutes = seconds / 60;
+			   String seconds_ = "" + seconds % 60;
+			   if(seconds_.length() < 2)
+			   {
+				   seconds_ = "0" + seconds_;
+			   }
+			   if(length.length() > 0)
+			   {
+				   length_r.setText(minutes + ":" + seconds_ + "/" + length);
+			   }
+			   else
+			   {
+				   length_r.setText("");
+			   }
+			   length_r.setCaretPosition(0);
+			   repaint();
+		   }
+	   });		   
    }
    
 }

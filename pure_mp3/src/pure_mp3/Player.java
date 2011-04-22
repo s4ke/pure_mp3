@@ -78,7 +78,7 @@ public class Player
     	Global.info.update();
         System.out.println("Next Title: " + Global.playList.getCurrent());
         stop();
-        playpause(false);    	
+        playpause(false);    
     }
     
     public void next()
@@ -106,13 +106,14 @@ public class Player
     }
     
 	public synchronized void playpause(boolean byUser)
-    {		
+    {	
 		if(musicPlayer == null && (Global.playList.getNumberOfSongs() > 0))
 		{
 			//if player hasn't started playing yet and and the playmode is random and 
 			//the user himself clicked on play and not another method invoked playpause(byUser)
 			if(playMode == 1 && !playing && byUser)
 			{
+				paused = false;
 				next();
 			}
 			//same but for playMode == 0
@@ -131,7 +132,7 @@ public class Player
 			//now start the playback
 			playing = true;
 			//create and start the musicplayer
-			musicPlayer = new StreamMusicPlayer(Global.playList.getCurrentSong(),this);
+			musicPlayer = new StreamMusicPlayer();
 			musicPlayer.start();
 			//and the SlideUpdater
 			slideUpdater = new SlideUpdater(musicPlayer,progress);			
@@ -143,7 +144,7 @@ public class Player
 		else
 		{
 			//pause everything
-			paused = true;
+			paused = !paused;
 			if(musicPlayer != null)
 			{
 				musicPlayer.pause();
@@ -152,7 +153,6 @@ public class Player
 			{
 				slideUpdater.pause();
 			}
-			
 		}
 		notify();
 	}

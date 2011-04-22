@@ -70,23 +70,7 @@ public class FileCrawler
 		    		}
 		    		else
 		    		{
-		    			//Lets do that by using the EDT (Event Dispatch Thread) to prevent Crashing
-				    	try
-				    	{		
-				    		final int j = i;
-				    		javax.swing.SwingUtilities.invokeLater(new Runnable()
-				    		{
-				    		    public void run()
-				    		    {
-				    		    	Global.playList.addSong(new Song(files[j]));
-				    		    }
-				    		});
-				    		
-				    	}
-				    	catch(Exception e)
-				    	{
-				    		e.printStackTrace();
-				    	}
+				    	Global.playList.addSong(new Song(files[i]));
 		    		}
 		    	}
 		    }			

@@ -41,7 +41,6 @@ public class StreamMusicPlayer extends Thread implements MusicPlayer
 	private SourceDataLine line;
 	private AudioFormat audioFormat;
 	private DataLine.Info info;
-	private Player player;
 	private Song song;
 	private boolean playing;
 	private long skippedDurationInMicroSeconds;
@@ -49,11 +48,10 @@ public class StreamMusicPlayer extends Thread implements MusicPlayer
 	private boolean pause = false;
 	private boolean stop = false;
 	
-	public StreamMusicPlayer(Song xSong, Player xPlayer)
+	public StreamMusicPlayer()
 	{
 		super();
-		player = xPlayer;
-		song = xSong;
+		song = Global.playList.getCurrentSong();
 		try
 		{
 			insert(song);
@@ -124,7 +122,6 @@ public class StreamMusicPlayer extends Thread implements MusicPlayer
 		}
 		byte[]	abData = new byte[bufferSize];
 		System.out.println("Buffer Size: " + bufferSize);
-		
 		if(line != null)
 		{
 			setVolume(Global.volume);
@@ -177,9 +174,9 @@ public class StreamMusicPlayer extends Thread implements MusicPlayer
 			line.close();
 		}
 //		running = false;
-		if(!stop)
+		if(!stop && !pause)
 		{
-			player.playNext();
+			Global.player.playNext();
 		}
 	}
 	

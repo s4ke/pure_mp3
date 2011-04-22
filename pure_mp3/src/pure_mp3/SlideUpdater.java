@@ -16,8 +16,6 @@
  */
 package pure_mp3;
 
-import javax.swing.SwingUtilities;
-
 /**
  * Thread used for updating Progress
  * @author Martin Braun
@@ -80,18 +78,11 @@ public class SlideUpdater extends Thread
 				{
 					final double percentage_ = (double)musicPlayer.getFramePosition()/frameLength*100;
 					final int percentage = (int) percentage_;
-					//The EDT Thread has to set everything that nothing breaks
-					SwingUtilities.invokeLater(new Runnable()
+					progress.setValue2(percentage);
+					if(durationInSeconds_ > 0)
 					{
-						public void run()
-						{
-							progress.setValue2(percentage);
-							if(durationInSeconds_ > 0)
-							{
-								Global.info.updatePlayedTime((int)(durationInSeconds_*percentage_/100));
-							}
-						}
-					});
+						Global.info.updatePlayedTime((int)(durationInSeconds_*percentage_/100));
+					}
 				}
 				else
 				{

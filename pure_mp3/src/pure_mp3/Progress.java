@@ -17,6 +17,7 @@
 package pure_mp3;
 
 import javax.swing.JSlider;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -63,15 +64,22 @@ public class Progress extends JSlider
 	 * Method that sets the value without making a Listener use the Chang
 	 * @param x new Value
 	 */
-	public synchronized void setValue2(int x)
+	public synchronized void setValue2(final int x)
 	{
-		if(!getValueIsAdjusting())
+		SwingUtilities.invokeLater(new Runnable()
 		{
-			userChanged = false;
-			setValue(x);
-			lastValue = x;
-			userChanged = true;	
-		}
+			public void run()
+			{
+				if(!getValueIsAdjusting())
+				{
+					userChanged = false;
+					setValue(x);
+					repaint();
+					lastValue = x;
+					userChanged = true;	
+				}
+			}
+		});
 		notify();
 	}
 	
