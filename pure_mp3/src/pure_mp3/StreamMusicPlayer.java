@@ -251,11 +251,6 @@ public class StreamMusicPlayer extends Thread implements MusicPlayer
 		return audioFormat;
 	}
 	
-//	public long getPosition()
-//	{
-//		return position;
-//	}
-	
 	public AudioInputStream getAudioInputStream()
 	{
 		return audioInputStream;
@@ -310,10 +305,6 @@ public class StreamMusicPlayer extends Thread implements MusicPlayer
 	
 	public int getFrameLength()
 	{
-//		if(stop)
-//		{
-//			return -1;
-//		}
 		try
 		{
 			int durationInSeconds = getDurationInSeconds();

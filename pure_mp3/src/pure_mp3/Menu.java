@@ -165,13 +165,13 @@ public class Menu extends JMenuBar
     
     private void switchPlayMode()
     {
-    	if(Global.player.getPlayMode()==0)
+    	if(Global.player.getPlayMode()==Player.normalPlayback)
 		{
-			Global.player.setPlayMode(1);
+			Global.player.setPlayMode(Player.randomPlayback);
 		}
 		else
 		{
-			Global.player.setPlayMode(0);
+			Global.player.setPlayMode(Player.normalPlayback);
 		}
     }
     

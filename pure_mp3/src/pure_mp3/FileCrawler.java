@@ -32,7 +32,8 @@ public class FileCrawler
 	public void addToPlayList(File file)
 	{
 		addToPlayList2(file);
-		Global.playList.revalidateList();
+		Global.playList.getList().invalidate();
+		Global.playList.getList().revalidate();
 	}
 	
 	/**

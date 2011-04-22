@@ -23,6 +23,8 @@ package pure_mp3;
 public class Player
 {
 	private static final long serialVersionUID = 20100125;
+	public static final int randomPlayback = 1;
+	public static final int normalPlayback = 0;
     private MusicPlayer musicPlayer;
     private SlideUpdater slideUpdater;
     private Progress progress;
@@ -30,6 +32,10 @@ public class Player
     private boolean playing;
     private boolean paused;
     
+    /**
+     * Basic Constructor
+     * @param xPlayMode the PlayMode -> static vars
+     */
     public Player(int xPlayMode)
     {
     	playMode = xPlayMode;
@@ -38,6 +44,9 @@ public class Player
         paused = false;
     }
     
+    /**
+     * Plays the previous Song
+     */
     public void playPrev()
     {
     	prev();
@@ -47,16 +56,19 @@ public class Player
         playpause(false);
     }
     
+    /**
+     * sets the current song in the PlayList to the previous one
+     */
     public void prev()
     {
     	switch(playMode)
     	{
-	    	case 0:
+	    	case normalPlayback:
 	    		//normal playmode:
 	    		Global.playList.prev();
 	    		
 	    		break;    		
-	    	case 1:
+	    	case randomPlayback:
 	    		//random playmode
 	    		int current = Global.playList.getCurrent();
 	    		Global.playList.random();
@@ -72,6 +84,9 @@ public class Player
 		}
     }
     
+    /**
+     * plays the next Song
+     */
     public void playNext()
     {
     	next();
@@ -81,15 +96,18 @@ public class Player
         playpause(false);    
     }
     
+    /**
+     * sets the current song in the PlayList to the next one
+     */
     public void next()
     {
     	switch(playMode)
     	{
-	    	case 0:
+	    	case normalPlayback:
 	    		//normal playmode:
 	    		Global.playList.next();
 	    		break;    		
-	    	case 1:
+	    	case randomPlayback:
 	    		//random playmode
 	    		int current = Global.playList.getCurrent();
 	    		Global.playList.random();
@@ -105,6 +123,10 @@ public class Player
 		}
     }
     
+    /**
+     * Method for controlling playback and pausing
+     * @param byUser invoked by User?
+     */
 	public synchronized void playpause(boolean byUser)
     {	
 		if(musicPlayer == null && (Global.playList.getNumberOfSongs() > 0))
@@ -157,6 +179,9 @@ public class Player
 		notify();
 	}
 	
+	/**
+	 * stops the playback
+	 */
 	public void stop()
 	{
 		//stop everything
@@ -174,6 +199,9 @@ public class Player
 		slideUpdater = null;
 	}
 	
+	/**
+	 * @param percentage the position in % where to skip to
+	 */
 	public void seek(int percentage)
 	{
 //		if(musicPlayer!=null)
@@ -187,6 +215,9 @@ public class Player
 //		}
 	}
     
+	/**
+	 * @param xVolume percentage of loudness 0-100
+	 */
     public void changeVolume(int xVolume)
     {
     	//if there is a player set his volume and the global vars
@@ -201,37 +232,49 @@ public class Player
         }
     }
     
+    /**    
+     * Sets the Progressbar
+     * @param xProgress the progressbar
+     */
     public void setProgress(Progress xProgress)
     {
     	progress = xProgress;
     }
     
+    /**
+     * @param xPlayMode variable that can be 1 or 0. -> static vars
+     */
     public void setPlayMode(int xPlayMode)
     {
     	playMode = xPlayMode;
     }
     
+    /**
+     * @return the playmode in integers
+     */
     public int getPlayMode()
     {
     	return playMode;
     }
     
-    public Progress getProgress()
-    {
-    	return progress;
-    }
-    
+    /**
+     * @return variable that says if the Player is playing
+     */
     public boolean isPlaying()
     {
     	return playing;
     }
     
+    /**
+     * @return variable that says if the Player is paused
+     */
     public boolean isPaused()
     {
     	return paused;
     }
-    /*
-     * 
+    
+    /**
+     * @return reference to the current Song
      */
     public Song getCurrentSong()
     {

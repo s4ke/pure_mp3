@@ -138,6 +138,7 @@ public class PlayList extends JScrollPane
         setViewportView(list);
     }    
     
+    //Methods that control the oder of Playback
     /**
      * chooses the next Song
      */
@@ -165,6 +166,7 @@ public class PlayList extends JScrollPane
     		setCurrent(random.nextInt(model.getSize())-1);
     	}
     }
+    //End of the Playback Control Methods
     
     /**
      * Method used by a Internal Class for Playing the current Song    
@@ -176,7 +178,103 @@ public class PlayList extends JScrollPane
         Global.player.stop();
         Global.player.playpause(false);
     }
+        
+    //Methods that check if the current Song is correct
+    /**
+     * Checks wheter the chosen Song is correct
+     * @param xCurrent the index of the Song that should be the current Song
+     */
+    public void checkCurrent(int xCurrent)
+    {
+    	System.out.println("checking Current");
+    	Song currentSong = Global.player.getCurrentSong();
+    	if(this.getCurrentSong().getSource()!=currentSong.getSource() && Global.player.isPlaying())
+    	{
+    		setCurrent(xCurrent);
+    	}
+    }
     
+    /**
+     * checks wheter the index of the current song isn't negative
+     */
+    public void checkCurrentNegative()
+    {
+    	if(current == -1 && model.getSize() > 0)
+    	{
+    		next();
+    	}
+    }    
+    //End of checking Methods
+    
+    //Methods for adding or removing Songs
+    /**
+     * adds a Song at the end. After adding the List has to be validated
+     * @param song
+     */
+    public void addSong(final Song song)
+    {
+    	SwingUtilities.invokeLater(new Runnable()
+		{
+		    public void run()
+		    {
+		    	System.out.println(song.getSource().toString());
+		    	model.ensureCapacity(model.getSize()+1);
+		    	if(song != null)
+		    	{
+		    		model.addElement(song);
+		    	}
+		    }
+		});
+    }
+    
+    /**
+     * Adds Song at the specified position. After adding, the list has to be validated
+     * @param song
+     * @param position
+     */
+    public void addSongAt(final Song song, final int position)
+    {
+    	SwingUtilities.invokeLater(new Runnable()
+		{
+		    public void run()
+		    {
+		    	System.out.println(song.getSource().toString() + " at " + position);
+		    	model.ensureCapacity(model.getSize()+1);
+		    	if(song != null)
+		    	{
+		    		model.add(position,song);
+		    	}
+		    }
+		});
+    }
+    
+    /**
+     * Clears the PlayList from all Songs
+     */
+    public void removeAllElements()
+    {
+    	SwingUtilities.invokeLater(new Runnable()
+    	{
+    		public void run()
+    		{
+    			model.removeAllElements();
+    	    	model.trimToSize();
+    	    	current = -1; 
+    	    	repaint(getViewport().getViewRect());
+    		}
+    	});    	
+    }   
+    //End of the Adding/Removing Methods
+    
+    //The Setter Methods:
+    /**
+     * Sets wheter a DropTarget has to listen
+     * @param isActive
+     */
+    public void setDropTargetActive(boolean isActive)
+    {
+    	dropTarget.setActive(isActive);
+    }
     /**
      * sets the chosen Song
      * @param xCurrent
@@ -215,59 +313,23 @@ public class PlayList extends JScrollPane
     	}
     	
     }
+    //End of the Setter Methods
     
+    //The Getter Methods:
     /**
-     * Sets wheter a DropTarget has to listen
-     * @param isActive
+     * @return the JList in PlayList
      */
-    public void setDropTargetActive(boolean isActive)
+    public JList getList()
     {
-    	dropTarget.setActive(isActive);
+    	return list;
     }
     
     /**
-     * returns the index of the chosen Song
-     * @return the index of the current Song
+     * @return the Model of the JList
      */
-    public int getCurrent()
+    public DefaultListModel getModel()
     {
-        return current;
-    }
-    
-    /**
-     * returns the size of the PlayList, 
-     * not named size() because of possibility of confusion with getSize() 
-     * from JComponent
-     * @return number of songs in the PlayList
-     */
-    public int getNumberOfSongs()
-    {
-    	return model.getSize();
-    }
-    
-    /**
-     * Checks wheter the chosen Song is correct
-     * @param xCurrent the index of the Song that should be the current Song
-     */
-    public void checkCurrent(int xCurrent)
-    {
-    	System.out.println("checking Current");
-    	Song currentSong = Global.player.getCurrentSong();
-    	if(this.getCurrentSong().getSource()!=currentSong.getSource() && Global.player.isPlaying())
-    	{
-    		setCurrent(xCurrent);
-    	}
-    }
-    
-    /**
-     * checks wheter the index of the current song isn't negative
-     */
-    public void checkCurrentNegative()
-    {
-    	if(current == -1 && model.getSize() > 0)
-    	{
-    		next();
-    	}
+    	return model;
     }
     
     /**
@@ -283,87 +345,23 @@ public class PlayList extends JScrollPane
     }
     
     /**
-     * adds a Song at the end
-     * @param song
+     * returns the size of the PlayList, 
+     * not named size() because of possibility of confusion with getSize() 
+     * from JComponent
+     * @return number of songs in the PlayList
      */
-    public void addSong(final Song song)
+    public int getNumberOfSongs()
     {
-    	SwingUtilities.invokeLater(new Runnable()
-		{
-		    public void run()
-		    {
-		    	System.out.println(song.getSource().toString());
-		    	model.ensureCapacity(model.getSize()+1);
-		    	if(song != null)
-		    	{
-		    		model.addElement(song);
-		    	}
-		    }
-		});
+    	return model.getSize();
     }
     
     /**
-     * Adds Song at the specified position
-     * @param song
-     * @param position
+     * returns the index of the chosen Song
+     * @return the index of the current Song
      */
-    public void addSongAt(final Song song, final int position)
+    public int getCurrent()
     {
-    	SwingUtilities.invokeLater(new Runnable()
-		{
-		    public void run()
-		    {
-		    	System.out.println(song.getSource().toString() + " at " + position);
-		    	model.ensureCapacity(model.getSize()+1);
-		    	if(song != null)
-		    	{
-		    		model.add(position,song);
-		    	}
-		    }
-		});
+        return current;
     }
-    
-    /**
-     * Revalidates the list in PlayList
-     */
-    public void revalidateList()
-    {
-    	list.invalidate();
-    	list.revalidate();
-    }
-    
-    /**
-     * Clears the PlayList from all Songs
-     */
-    public void removeAllElements()
-    {
-    	SwingUtilities.invokeLater(new Runnable()
-    	{
-    		public void run()
-    		{
-    			model.removeAllElements();
-    	    	model.trimToSize();
-    	    	current = -1; 
-    	    	repaint(getViewport().getViewRect());
-    		}
-    	});    	
-    }
-    
-    /**
-     * returns the Model of the JList in the PlayList
-     * @return the Model of the JList
-     */
-    public DefaultListModel getModel()
-    {
-    	return model;
-    }
-    
-    /**
-     * 
-     * @return the JList in PlayList
-     */
-    public JList getList()
-    {
-    	return list;
-    }
+    //End of the Getter Methods
 }

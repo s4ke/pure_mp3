@@ -22,7 +22,8 @@ import javax.sound.sampled.AudioFormat;
  * Interface for a Player.
  * @author Martin Braun
 */
-public interface MusicPlayer {
+public interface MusicPlayer 
+{
 	public void start();
 	public void pause();
 	public void stop_();
