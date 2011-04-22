@@ -187,10 +187,10 @@ public class PlayList extends JScrollPane
     public void checkCurrent(int xCurrent)
     {
     	System.out.println("checking Current");
-    	Song currentSong = Global.player.getCurrentSong();
+    	Song currentSong = (Song) model.get(xCurrent);
     	if(this.getCurrentSong().getSource()!=currentSong.getSource() && Global.player.isPlaying())
     	{
-    		setCurrent(xCurrent);
+    		current = xCurrent;
     	}
     }
     
@@ -306,6 +306,8 @@ public class PlayList extends JScrollPane
 				            list.setSelectedIndex(current);
 				            list.ensureIndexIsVisible(current);	
 				        }
+				        invalidate();
+				        validate();
 		    			repaint(getViewport().getViewRect());
 	    			}
 	    		}

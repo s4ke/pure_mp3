@@ -1,16 +1,5 @@
 package pure_mp3;
 /* Copyright 2009 Sebastian Haufe
- * 
- * This is an extension made by Martin Braun:
- * 
-   Global.playList.checkCurrent(insertAt-1);
-   
-   Global.playList.setDropTarget(null);
-   Global.playList.getList().setTransferHandler(new ListMoveTransferHandler());
-   
-   Global.playList.setDropTarget(new DropTarget(Global.playList.getList(),new PlayListDropTargetListener()));
-
- 
  * Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
@@ -73,8 +62,10 @@ public class ListMoveTransferHandler extends TransferHandler {
     @Override
     protected Transferable createTransferable(JComponent c) {
       final JList list = (JList) c;
+      //Martin Braun
       Global.playList.getList().setDropTarget(null);
       Global.playList.getList().setTransferHandler(new ListMoveTransferHandler());
+      //...
       final int[] selectedIndices = list.getSelectedIndices();
       return new ListMoveTransferable(new ListMoveTransferData(
             (DefaultListModel) list.getModel(), selectedIndices));
@@ -100,6 +91,10 @@ public class ListMoveTransferHandler extends TransferHandler {
  
       final Transferable transferable = info.getTransferable();
       try {
+    	//Martin Braun
+    	Song currentSong = Global.playList.getCurrentSong();  
+    	//...
+    	  
         final ListMoveTransferData data =
               (ListMoveTransferData) transferable.getTransferData(flavor);
  
@@ -129,12 +124,19 @@ public class ListMoveTransferHandler extends TransferHandler {
           sm.setValueIsAdjusting(true);
           sm.clearSelection();
           final int anchor = insertAt;
+          Object object = null;
           while (!elements.isEmpty()) {
         	System.out.println(elements.peek());
-            listModel.insertElementAt(elements.pop(), insertAt);
+        	//Changes by Martin Braun
+        	object = elements.pop();
+        	if(object == currentSong)
+        	{
+        		Global.playList.checkCurrent(insertAt);
+        	}
+        	//End of Changes by Martin Braun
+            listModel.insertElementAt(object, insertAt);
             sm.addSelectionInterval(insertAt, insertAt++);
           }
-          Global.playList.checkCurrent(insertAt-1);
           final int lead = insertAt - 1;
           if (!sm.isSelectionEmpty()) {
             sm.setAnchorSelectionIndex(anchor);
@@ -142,7 +144,9 @@ public class ListMoveTransferHandler extends TransferHandler {
           }
         } finally {
           sm.setValueIsAdjusting(false);
+          //by Martin Braun
           Global.playList.setDropTarget(new DropTarget(Global.playList.getList(),new PlayListDropTargetListener()));
+          //...
         }
         return true;
       } catch (UnsupportedFlavorException ex) {
