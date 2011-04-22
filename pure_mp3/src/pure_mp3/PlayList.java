@@ -328,6 +328,7 @@ public class PlayList extends JScrollPane
      */
     public void revalidateList()
     {
+    	list.invalidate();
     	list.revalidate();
     }
     
@@ -342,8 +343,8 @@ public class PlayList extends JScrollPane
     		{
     			model.removeAllElements();
     	    	model.trimToSize();
-    	    	current = -1;
-       	    	list.revalidate();
+    	    	current = -1; 
+    	    	repaint(getViewport().getViewRect());
     		}
     	});    	
     }
