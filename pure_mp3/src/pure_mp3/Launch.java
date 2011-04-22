@@ -21,6 +21,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Line;
@@ -147,8 +151,31 @@ public class Launch
 	        	{
 	        		JOptionPane.showMessageDialog(null,"The Default LaF has been chosen, because your System doesn't support your choice.\nPlease update your config.txt");
 	        	}
-    	    } 
-	 		gui = new GUI();
+    	    }
+//	 		/*
+//	 		 * Load some User specified .jars 
+//	 		 */
+//	 		File pluginDirectory = new File("puremp3","plugins");
+//	 		if(pluginDirectory.exists())
+//	 		{
+//		 		List<URL> url = new ArrayList<URL>();
+//		 		for(String plugin: pluginDirectory.list())
+//		 		{
+//			 		if (plugin.contains(".jar")) {
+//			 		url.add(new URL("file", "localhost",
+//			 		pluginDirectory.getCanonicalPath() + File.separator
+//			 		+ plugin));
+//		 		} 
+//			 	else 
+//			 	{
+//			 		url.add(new URL("file", "localhost",
+//			 		pluginDirectory.getCanonicalPath() + File.separator
+//			 		+ plugin + File.separator));
+//		 		}
+//		 		}
+//		 		URLClassLoader ucl = new URLClassLoader(url.toArray(new URL[0]));
+//	 		}
+//	 		gui = new GUI();
 		}
 	}
 

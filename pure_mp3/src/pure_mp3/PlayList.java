@@ -47,7 +47,7 @@ public class PlayList extends JScrollPane
     {
         super();
         setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        
+
         Global.setPlayList(this);
         current = 0;        
         list = new JList();
