@@ -124,7 +124,7 @@ public class Info extends JPanel
 				   length_r.setText("");
 			   }
 			   length_r.setCaretPosition(0);
-			   repaint();
+			   length_r.repaint();
 		   }
 	   });		   
    }
