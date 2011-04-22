@@ -125,13 +125,15 @@ public class ListMoveTransferHandler extends TransferHandler {
           sm.clearSelection();
           final int anchor = insertAt;
           Object object = null;
+          boolean help = false;
           while (!elements.isEmpty()) {
         	System.out.println(elements.peek());
         	//Changes by Martin Braun
         	object = elements.pop();
         	if(object == currentSong)
         	{
-        		Global.playList.checkCurrent(insertAt);
+        		Global.playList.setCurrent(insertAt);
+        		help = true;
         	}
         	//End of Changes by Martin Braun
             listModel.insertElementAt(object, insertAt);
@@ -142,6 +144,28 @@ public class ListMoveTransferHandler extends TransferHandler {
             sm.setAnchorSelectionIndex(anchor);
             sm.setLeadSelectionIndex(lead);
           }
+          if(!help)
+          {
+        	  int current = Global.playList.getCurrent();
+	          for(int i = 0; i < indices.length; i++)
+	          {
+	        	  if(anchor <= current)
+	        	  {
+	        		  if(indices[i] >= current)
+	        		  {
+	        			  current++;
+	        		  }
+	        	  }
+	        	  else
+	        	  {
+	        		  if(indices[i] < current)
+	        		  {
+	        			  current--;
+	        		  }
+	        	  }
+	          }
+	          Global.playList.setCurrent(current);
+          }         
         } finally {
           sm.setValueIsAdjusting(false);
           //by Martin Braun

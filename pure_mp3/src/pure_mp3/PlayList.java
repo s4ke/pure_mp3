@@ -144,7 +144,7 @@ public class PlayList extends JScrollPane
      */
     public void next()
     {
-        setCurrent(current+1);
+        setCurrentAndDisplay(current+1);
     }
     
     /**
@@ -152,7 +152,7 @@ public class PlayList extends JScrollPane
      */
     public void prev()
     {
-        setCurrent(current-1);
+        setCurrentAndDisplay(current-1);
     }
     
     /**
@@ -163,7 +163,7 @@ public class PlayList extends JScrollPane
     	Random random = new Random();
     	if(model.getSize() > 0)
     	{
-    		setCurrent(random.nextInt(model.getSize())-1);
+    		setCurrentAndDisplay(random.nextInt(model.getSize())-1);
     	}
     }
     //End of the Playback Control Methods
@@ -174,26 +174,12 @@ public class PlayList extends JScrollPane
      */
     private void playSelected(int index)
     {
-        setCurrent(index);
+        setCurrentAndDisplay(index);
         Global.player.stop();
         Global.player.playpause(false);
     }
         
-    //Methods that check if the current Song is correct
-    /**
-     * Checks wheter the chosen Song is correct
-     * @param xCurrent the index of the Song that should be the current Song
-     */
-    public void checkCurrent(int xCurrent)
-    {
-    	System.out.println("checking Current");
-    	Song currentSong = (Song) model.get(xCurrent);
-    	if(this.getCurrentSong().getSource()!=currentSong.getSource() && Global.player.isPlaying())
-    	{
-    		current = xCurrent;
-    	}
-    }
-    
+    //Methods that check if the current Song is correct    
     /**
      * checks wheter the index of the current song isn't negative
      */
@@ -268,6 +254,17 @@ public class PlayList extends JScrollPane
     
     //The Setter Methods:
     /**
+     * @param xCurrent the index of the Song that the currentSong will be set to
+     */
+    public void setCurrent(int xCurrent)
+    {
+    	if(Global.player.isPlaying())
+    	{
+    		current = xCurrent;
+    	}
+    }
+    
+    /**
      * Sets wheter a DropTarget has to listen
      * @param isActive
      */
@@ -279,7 +276,7 @@ public class PlayList extends JScrollPane
      * sets the chosen Song
      * @param xCurrent
      */
-    public void setCurrent(final int xCurrent)
+    public void setCurrentAndDisplay(final int xCurrent)
     {
     	if(model.getSize() > 0)
     	{

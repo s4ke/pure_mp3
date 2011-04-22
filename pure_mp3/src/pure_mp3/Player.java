@@ -141,7 +141,7 @@ public class Player
 			//same but for playMode == 0
 			else if(playMode == 0 && !playing && byUser)
 			{
-				Global.playList.setCurrent(0);
+				Global.playList.setCurrentAndDisplay(0);
 			}
 			//normal playmode; the value for the current song could be negative because of
 			//deleting the whole playList. So it has to be checked and fixed.
