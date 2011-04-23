@@ -272,6 +272,7 @@ public class PlayList extends JScrollPane
     {
     	dropTarget.setActive(isActive);
     }
+    
     /**
      * sets the chosen Song
      * @param xCurrent

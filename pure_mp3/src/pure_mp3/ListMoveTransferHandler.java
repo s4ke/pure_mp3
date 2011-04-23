@@ -92,7 +92,9 @@ public class ListMoveTransferHandler extends TransferHandler {
       final Transferable transferable = info.getTransferable();
       try {
     	//Martin Braun
-    	Song currentSong = Global.playList.getCurrentSong();  
+    	Song currentSong = Global.playList.getCurrentSong();
+    	int current = Global.playList.getCurrent();
+    	int current_ = current;
     	//...
     	  
         final ListMoveTransferData data =
@@ -113,6 +115,12 @@ public class ListMoveTransferHandler extends TransferHandler {
           final int index = indices[i];
           if (index < insertAt) {
             shift--;
+            //Martin Braun
+            if(index < current)
+            {
+            	current_--;
+            }
+            //...
           }
           elements.push(listModel.remove(index));
         }
@@ -144,28 +152,16 @@ public class ListMoveTransferHandler extends TransferHandler {
             sm.setAnchorSelectionIndex(anchor);
             sm.setLeadSelectionIndex(lead);
           }
+          //Martin Braun
           if(!help)
-          {
-        	  int current = Global.playList.getCurrent();
-	          for(int i = 0; i < indices.length; i++)
-	          {
-	        	  if(anchor <= current)
-	        	  {
-	        		  if(indices[i] >= current)
-	        		  {
-	        			  current++;
-	        		  }
-	        	  }
-	        	  else
-	        	  {
-	        		  if(indices[i] < current)
-	        		  {
-	        			  current--;
-	        		  }
-	        	  }
-	          }
-	          Global.playList.setCurrent(current);
-          }         
+          {        	  
+        	  if(anchor <= current_)
+        	  {
+        		  current_ =  current_ + indices.length;
+        	  }
+        	  Global.playList.setCurrent(current_);
+          }  
+          //...
         } finally {
           sm.setValueIsAdjusting(false);
           //by Martin Braun
