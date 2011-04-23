@@ -137,7 +137,7 @@ public class Launch
 	    		        if (laf.equals(info.getName())) 
 	    		        {
 	    		            UIManager.setLookAndFeel(info.getClassName());
-	    		            writer.println("Metal");
+	    		            writer.println(laf);
 		    	        	writer.flush();
 		    	        	writer.close();
 	    		            break;
