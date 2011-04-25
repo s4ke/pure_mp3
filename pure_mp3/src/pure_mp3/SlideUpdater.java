@@ -40,7 +40,7 @@ public class SlideUpdater extends Thread
 	 */
 	public void run()
 	{
-			int frameLength = 0;
+			long frameLength = 0;
 			int durationInSeconds = 0;
 			synchronized(this)
 			{

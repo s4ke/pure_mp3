@@ -24,7 +24,7 @@ package pure_mp3;
     private final ListMoveTransferData data;
  
     public ListMoveTransferable(ListMoveTransferData data) {
-      this.data = data;
+    	this.data = data;
     }
  
     public DataFlavor[] getTransferDataFlavors() {

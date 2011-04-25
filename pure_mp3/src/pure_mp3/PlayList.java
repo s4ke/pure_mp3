@@ -131,7 +131,8 @@ public class PlayList extends JScrollPane
         	}
         });
         
-        list.setDropTarget(new DropTarget(list,new PlayListDropTargetListener()));
+        dropTarget = new DropTarget(list, new PlayListDropTargetListener());
+        list.setDropTarget(dropTarget);
 
         list.setSelectedIndex(current);
         add(list);        
@@ -270,7 +271,14 @@ public class PlayList extends JScrollPane
      */
     public void setDropTargetActive(boolean isActive)
     {
-    	dropTarget.setActive(isActive);
+    	if(isActive)
+    	{
+    		list.setDropTarget(dropTarget);
+    	}
+    	else
+    	{
+    		list.setDropTarget(null);
+    	}
     }
     
     /**
@@ -337,7 +345,7 @@ public class PlayList extends JScrollPane
      */
     public Song getCurrentSong()
     {
-    	if(model.getSize() > 0)
+    	if(model.getSize() > 0 && current > 0)
     	{
     		return (Song)model.get(current);
     	}

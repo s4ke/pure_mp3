@@ -28,6 +28,7 @@ import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.TransferHandler;
 
 public class ListMoveTransferHandler extends TransferHandler {
@@ -63,8 +64,8 @@ public class ListMoveTransferHandler extends TransferHandler {
     protected Transferable createTransferable(JComponent c) {
       final JList list = (JList) c;
       //Martin Braun
-      Global.playList.getList().setDropTarget(null);
-      Global.playList.getList().setTransferHandler(new ListMoveTransferHandler());
+      Global.playList.setDropTargetActive(false);
+      Global.playList.getList().setTransferHandler(new ListMoveTransferHandler()); 
       //...
       final int[] selectedIndices = list.getSelectedIndices();
       return new ListMoveTransferable(new ListMoveTransferData(
@@ -75,6 +76,7 @@ public class ListMoveTransferHandler extends TransferHandler {
     public boolean importData(TransferHandler.TransferSupport info) {
       final Component comp = info.getComponent();
       if (!info.isDrop() || !(comp instanceof JList)) {
+      	System.out.println("Data not supported");
         return false;
       }
       final JList list = (JList) comp;
@@ -82,11 +84,10 @@ public class ListMoveTransferHandler extends TransferHandler {
       if (!(lm instanceof DefaultListModel)) {
         return false;
       }
- 
       final DefaultListModel listModel = (DefaultListModel) lm;
       final DataFlavor flavor = new ListMoveDataFlavor(listModel);
       if (!info.isDataFlavorSupported(flavor)) {
-        return false;
+        return false;        
       }
  
       final Transferable transferable = info.getTransferable();
@@ -159,13 +160,16 @@ public class ListMoveTransferHandler extends TransferHandler {
         	  {
         		  current_ =  current_ + indices.length;
         	  }
-        	  Global.playList.setCurrent(current_);
+        	  if(Global.playList.getCurrent() != -1)
+        	  {
+        		  Global.playList.setCurrent(current_);
+        	  }
           }  
           //...
         } finally {
           sm.setValueIsAdjusting(false);
           //by Martin Braun
-          Global.playList.setDropTarget(new DropTarget(Global.playList.getList(),new PlayListDropTargetListener()));
+          Global.playList.setDropTargetActive(true);
           //...
         }
         return true;

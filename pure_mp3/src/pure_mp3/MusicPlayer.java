@@ -33,7 +33,7 @@ public interface MusicPlayer
 	public void setVolume(float xVolume);
 	public AudioFormat getAudioFormat();
 	public int getFramePosition();
-	public int getFrameLength();
+	public long getFrameLength();
 	public int getDurationInSeconds();
 	public Song getCurrentSong();
 }

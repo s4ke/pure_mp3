@@ -303,14 +303,14 @@ public class StreamMusicPlayer extends Thread implements MusicPlayer
 			pause();
 	}
 	
-	public int getFrameLength()
+	public long getFrameLength()
 	{
 		try
 		{
 			int durationInSeconds = getDurationInSeconds();
 			if(durationInSeconds > 0)
 			{
-				return (int)(durationInSeconds)*((int)audioFormat.getSampleRate());
+				return (long)(durationInSeconds)*((long)audioFormat.getSampleRate());
 			}
 			return -1;
 		}

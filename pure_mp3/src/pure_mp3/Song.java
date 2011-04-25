@@ -117,30 +117,8 @@ public class Song implements Serializable, Transferable
    {
 	   length = xLength;
    }
-
-	@Override
-	public Object getTransferData(DataFlavor arg0)
-		throws UnsupportedFlavorException, IOException 
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public DataFlavor[] getTransferDataFlavors() 
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean isDataFlavorSupported(DataFlavor arg0) 
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
-	
-	public int getDurationInSeconds()
+   
+   public int getDurationInSeconds()
 	{
 		try
 		{
@@ -176,5 +154,27 @@ public class Song implements Serializable, Transferable
 			return -1; 
 		}
 		return -1;
+	}
+
+	@Override
+	public Object getTransferData(DataFlavor arg0)
+		throws UnsupportedFlavorException, IOException 
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public DataFlavor[] getTransferDataFlavors() 
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isDataFlavorSupported(DataFlavor arg0) 
+	{
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

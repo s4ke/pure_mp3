@@ -18,6 +18,9 @@ package pure_mp3;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.lang.reflect.InvocationTargetException;
+
+import javax.swing.SwingUtilities;
 
 /**
  * The FileCrawler which adds Songs to the PlayList and to Media
@@ -32,8 +35,15 @@ public class FileCrawler
 	public void addToPlayList(File file)
 	{
 		addToPlayList2(file);
-		Global.playList.getList().invalidate();
-		Global.playList.getList().revalidate();
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			public void run()
+			{
+				Global.playList.getList().invalidate();
+				Global.playList.getList().validate();
+			}
+			
+		});
 	}
 	
 	/**
@@ -46,7 +56,7 @@ public class FileCrawler
 		{
 			if(!file.isDirectory())
 			{
-				if(file.getPath().endsWith(".mp3")||file.getPath().endsWith(".MP3"))
+				if(file.getPath().endsWith(".mp3")||file.getPath().endsWith(".MP3")||file.getPath().endsWith(".wav")||file.getPath().endsWith(".WAV"))
 				{
 					Global.playList.addSong(new Song(file));
 				}
@@ -58,7 +68,7 @@ public class FileCrawler
 					public boolean accept(File dir, String name)
 					{
 						File help = new File(dir, name);
-				    	return name.endsWith(".mp3")||name.endsWith(".MP3")||help.isDirectory();
+				    	return name.endsWith(".mp3")||name.endsWith(".MP3")||name.endsWith(".wav")||name.endsWith(".WAV")||help.isDirectory();
 				    }
 				});
 				//iterate through the array and add everything
@@ -77,4 +87,49 @@ public class FileCrawler
 		    }			
 		}
 	}
+	
+	public void addToDatabase(File file)
+	{
+		
+	}
+	
+//	public Song[] addToDatabase2(File file)
+//	{
+//		if(file != null)
+//		{
+//			if(!file.isDirectory())
+//			{
+//				if(file.getPath().endsWith(".mp3")||file.getPath().endsWith(".MP3"))
+//				{
+//					return new Song[] {new Song(file)};
+//				}
+//			}
+//			else
+//			{
+//				final File [] files = file.listFiles(new FilenameFilter()
+//				{
+//					public boolean accept(File dir, String name)
+//					{
+//						File help = new File(dir, name);
+//				    	return name.endsWith(".mp3")||name.endsWith(".MP3")||help.isDirectory();
+//				    }
+//				});
+//				//iterate through the array and add everything
+//				Song [] songs = new Song[files.length];
+//		    	for(int i = 0; i  < files.length; i++)
+//		    	{
+//		    		//and recursively add again if a directory was provided
+//		    		if(files[i].isDirectory())
+//		    		{
+//		    			songs + addToDatabase2(files[i]);
+//		    		}
+//		    		else
+//		    		{
+//				    	Global.database.addSong(new Song(files[i]));
+//		    		}
+//		    	}
+//		    }			
+//		}
+//		return null;
+//	}
 }

@@ -25,6 +25,7 @@ public class Global {
 	public static final double linearscalar = Math.log(10.0)/20;
 	public static FileCrawler fileCrawler = new FileCrawler();
 	public static final Player player = new Player(0);
+	public static final Database database = new Database();
 	public static PlayList playList = null;
 	public static Info info = null;
 	public static GUI GUI = null;
