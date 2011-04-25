@@ -345,7 +345,7 @@ public class PlayList extends JScrollPane
      */
     public Song getCurrentSong()
     {
-    	if(model.getSize() > 0 && current > 0)
+    	if(model.getSize() > 0 && current >= 0)
     	{
     		return (Song)model.get(current);
     	}
