@@ -98,6 +98,8 @@ public class Launch
 	        	if(!success)
 	            {
 	        		JOptionPane.showMessageDialog(null,"The Default LaF has been chosen, because your System doesn't support your choice.\nPlease update your config.txt");
+	        		UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+
 	        	}
 	 		}
 	 		else
@@ -147,6 +149,7 @@ public class Launch
 	        	else
 	        	{
 	        		JOptionPane.showMessageDialog(null,"The Default LaF has been chosen, because your System doesn't support your choice.\nPlease update your config.txt");
+	        		UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 	        	}
     	    }
 //	 		/*
