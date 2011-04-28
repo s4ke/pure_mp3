@@ -16,8 +16,17 @@
  */
 package pure_mp3;
 
+//import java.awt.event.KeyEvent;
+//import java.io.File;
+//import java.io.IOException;
+
+//import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+
+//import jxgrabkey.HotkeyConflictException;
+//import jxgrabkey.HotkeyListener;
+//import jxgrabkey.JXGrabKey;
 import net.miginfocom.swing.MigLayout;
 
 /**
@@ -32,6 +41,7 @@ public class MainPanel extends JPanel
     private PlayList playList;
     private JSlider progress;
     private Media media;
+//    private static final int MY_HOTKEY_INDEX = 1;
     
     public MainPanel()
     {

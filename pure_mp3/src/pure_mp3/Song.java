@@ -118,11 +118,33 @@ public class Song implements Serializable, Transferable
 	   length = xLength;
    }
    
-   public int getDurationInSeconds()
+	@Override
+	public Object getTransferData(DataFlavor arg0)
+		throws UnsupportedFlavorException, IOException 
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public DataFlavor[] getTransferDataFlavors() 
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isDataFlavorSupported(DataFlavor arg0) 
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	public int getDurationInSeconds() 
 	{
 		try
 		{
-			if(source != null)
+			if(getSource() != null)
 			{
 				AudioFileFormat audioFileFormat = null;
 				try
@@ -150,31 +172,10 @@ public class Song implements Serializable, Transferable
 		}
 		catch(Exception e)
 		{
-			System.out.println("Some other Bug!");
+			e.printStackTrace();
+			System.out.println("Some other Bug in Song.java!");
 			return -1; 
 		}
 		return -1;
-	}
-
-	@Override
-	public Object getTransferData(DataFlavor arg0)
-		throws UnsupportedFlavorException, IOException 
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public DataFlavor[] getTransferDataFlavors() 
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean isDataFlavorSupported(DataFlavor arg0) 
-	{
-		// TODO Auto-generated method stub
-		return false;
 	}
 }

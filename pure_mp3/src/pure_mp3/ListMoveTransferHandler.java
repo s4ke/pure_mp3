@@ -18,7 +18,7 @@ import java.awt.Component;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.dnd.DropTarget;
+//import java.awt.dnd.DropTarget;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Stack;
@@ -28,7 +28,7 @@ import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
+//import javax.swing.SwingUtilities;
 import javax.swing.TransferHandler;
 
 public class ListMoveTransferHandler extends TransferHandler {

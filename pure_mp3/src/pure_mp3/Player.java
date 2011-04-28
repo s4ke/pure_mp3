@@ -207,11 +207,11 @@ public class Player
 //		if(musicPlayer!=null)
 //		{
 //			stop();
-//			musicPlayer = new StreamMusicPlayer(playList.getCurrentSong(),this);
+//			musicPlayer = new StreamMusicPlayer();
+//			musicPlayer.seek(percentage);
 //			musicPlayer.start();
 //			slideUpdater = new SlideUpdater(musicPlayer,progress);
-//			slideUpdater.start();
-//			musicPlayer.seek(percentage);
+//			slideUpdater.start();			
 //		}
 	}
     

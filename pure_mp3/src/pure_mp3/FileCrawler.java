@@ -18,7 +18,7 @@ package pure_mp3;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.lang.reflect.InvocationTargetException;
+//import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.SwingUtilities;
 

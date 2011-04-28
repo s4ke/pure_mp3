@@ -102,6 +102,6 @@ public class Database
 	
 	public static void main(String args[])
 	{
-		new Database().addSong(new Song(new File("/multimedia/groovewalrusmusik/test.mp3")));
+//		new Database().addSong(new Song(new File("/multimedia/groovewalrusmusik/test.mp3")));
 	}
 }
