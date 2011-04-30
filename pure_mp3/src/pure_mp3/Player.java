@@ -211,7 +211,8 @@ public class Player
 //			musicPlayer.seek(percentage);
 //			musicPlayer.start();
 //			slideUpdater = new SlideUpdater(musicPlayer,progress);
-//			slideUpdater.start();			
+//			slideUpdater.start();	
+//			
 //		}
 	}
     

@@ -45,7 +45,7 @@ public class StreamMusicPlayer extends Thread implements MusicPlayer
 	private Song song;
 	private boolean playing;
 	private long skippedDurationInMicroSeconds;
-	private int skippedFrames;
+	private long skippedFrames;
 	private boolean pause = false;
 	private boolean stop = false;
 	
@@ -236,7 +236,7 @@ public class StreamMusicPlayer extends Thread implements MusicPlayer
         return line.getMicrosecondPosition() + (skippedDurationInMicroSeconds/1000);
     }
 	
-	public int getFramePosition()
+	public long getFramePosition()
 	{
 		if(line != null)
 		{
@@ -274,13 +274,20 @@ public class StreamMusicPlayer extends Thread implements MusicPlayer
 				{
 					long durationInSeconds = getDurationInSeconds();	
 					double skippedPercentage = (double)percentage/100;
-					long skippedDurationInSeconds = (long) (durationInSeconds * skippedPercentage);
-					long bytesToSkip = skippedDurationInSeconds * (long) realFormat.getSampleRate() * realFormat.getChannels() * 4; 
-					System.out.println("Skipped Duration in Seconds " + skippedDurationInSeconds);
-					System.out.println("Sample Rate " + realFormat.getSampleRate());
-					System.out.println("Channels " + realFormat.getChannels());
-					System.out.println("Sample Size in Bits/8 " + realFormat.getSampleSizeInBits()/8);
-					System.out.println(audioInputStream.skip(bytesToSkip));
+//					long skippedDurationInSeconds = (long) (durationInSeconds * skippedPercentage);
+//					long bytesOneSec = 1 * (long) realFormat.getSampleRate() * realFormat.getChannels() * 4; 
+//					long bytesToSkip = bytesOneSec * skippedDurationInSeconds;
+					System.out.println("Percentage to skip " + skippedPercentage);
+					long framesToSkip = (long) (getFrameLength() * skippedPercentage);
+					System.out.println("We have to Skip " + framesToSkip + " frames with " + getFrameLength() + " available");
+					long bytesSkipped = 0;
+					while(bytesSkipped <= framesToSkip*audioFormat.getFrameSize())
+					{
+						System.out.println(bytesSkipped/audioFormat.getFrameSize());
+						bytesSkipped += audioInputStream.skip(framesToSkip*audioFormat.getFrameSize()-bytesSkipped);
+					}
+					skippedFrames += bytesSkipped/audioFormat.getFrameSize();
+					System.out.println("Skipped Frames: " + bytesSkipped/audioFormat.getFrameSize());
 				}
 			} 
 			catch (IOException e) 
@@ -297,6 +304,10 @@ public class StreamMusicPlayer extends Thread implements MusicPlayer
 	
 	public long getFrameLength()
 	{
+		if(audioInputStream.getFrameLength() != -1)
+		{
+			return audioInputStream.getFrameLength();
+		}
 		try
 		{
 			int durationInSeconds = getDurationInSeconds();
