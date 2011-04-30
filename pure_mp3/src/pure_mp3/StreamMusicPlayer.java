@@ -270,19 +270,15 @@ public class StreamMusicPlayer extends Thread implements MusicPlayer
 			try 
 			{
 				File file = song.getSource();
-				if(file != null)
-				{
-					long durationInSeconds = getDurationInSeconds();	
+				if(file != null && getFrameLength() != -1)
+				{	
 					double skippedPercentage = (double)percentage/100;
-//					long skippedDurationInSeconds = (long) (durationInSeconds * skippedPercentage);
-//					long bytesOneSec = 1 * (long) realFormat.getSampleRate() * realFormat.getChannels() * 4; 
-//					long bytesToSkip = bytesOneSec * skippedDurationInSeconds;
 					System.out.println("Percentage to skip " + skippedPercentage);
 					long framesToSkip = (long) (getFrameLength() * skippedPercentage);
-					System.out.println("We have to Skip " + framesToSkip + " frames with " + getFrameLength() + " available");
+					System.out.println("Skipping " + framesToSkip + " frames with " + getFrameLength() + " available");
 					long bytesSkipped = 0;
 					byte[] garbage = new byte[4096];
-					int bytesDropped = 0;
+					long bytesDropped = 0;
 					while(bytesSkipped <= framesToSkip*audioFormat.getFrameSize() && bytesDropped != -1)
 					{
 //						System.out.println(bytesSkipped/audioFormat.getFrameSize());

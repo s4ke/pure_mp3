@@ -172,7 +172,7 @@ public class Song implements Serializable, Transferable
 		}
 		catch(Exception e)
 		{
-//			e.printStackTrace();
+			e.printStackTrace();
 			System.out.println("Some other Bug in Song.java!");
 			return -1; 
 		}
