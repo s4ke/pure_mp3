@@ -204,16 +204,17 @@ public class Player
 	 */
 	public void seek(int percentage)
 	{
-//		if(musicPlayer!=null)
-//		{
-//			stop();
-//			musicPlayer = new StreamMusicPlayer();
-//			musicPlayer.seek(percentage);
-//			musicPlayer.start();
-//			slideUpdater = new SlideUpdater(musicPlayer,progress);
-//			slideUpdater.start();	
-//			
-//		}
+		if(musicPlayer!=null)
+		{
+			musicPlayer.pause();
+			slideUpdater.pause();
+			stop();
+			musicPlayer = new StreamMusicPlayer();
+			musicPlayer.seek(percentage);
+			musicPlayer.start();
+			slideUpdater = new SlideUpdater(musicPlayer,progress);
+			slideUpdater.start();		
+		}
 	}
     
 	/**

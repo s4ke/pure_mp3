@@ -74,7 +74,7 @@ public class SlideUpdater extends Thread
 	                notify();
 	            }
 				//update if everything is ok
-				if(musicPlayer != null && frameLength > 0)
+				if(musicPlayer != null && frameLength > 0 && !stop)
 				{
 					final double percentage_ = (double)musicPlayer.getFramePosition()/frameLength*100;
 					final int percentage = (int) percentage_;
@@ -97,8 +97,10 @@ public class SlideUpdater extends Thread
 				{
 				}
 			}
-		
-		progress.setValue2(0);	
+		if(!stop)
+		{
+			progress.setValue2(0);	
+		}
 	}
 	
 	/**

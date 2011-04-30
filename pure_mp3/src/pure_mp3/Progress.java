@@ -16,6 +16,9 @@
  */
 package pure_mp3;
 
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
 import javax.swing.JSlider;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
@@ -52,11 +55,43 @@ public class Progress extends JSlider
         			Progress source = (Progress) e.getSource();
         			if (!source.getValueIsAdjusting())
         			{
-        				seek(source.getValue()-lastValue);
+        				seek(source.getValue());
         			}
         		}
         	}
         	
+        });
+        addMouseListener(new MouseListener()
+        {
+
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}       	
         });
 	}	
 	
