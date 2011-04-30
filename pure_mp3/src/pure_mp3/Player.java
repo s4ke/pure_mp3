@@ -206,14 +206,22 @@ public class Player
 	{
 		if(musicPlayer!=null)
 		{
-			musicPlayer.pause();
-			slideUpdater.pause();
+			if(!paused)
+			{
+				musicPlayer.pause();
+				slideUpdater.pause();
+			}
 			stop();
 			musicPlayer = new StreamMusicPlayer();
+			slideUpdater = new SlideUpdater(musicPlayer,progress);	
+			if(paused)
+			{
+				musicPlayer.pause();
+				slideUpdater.pause();
+			}
 			musicPlayer.seek(percentage);
 			musicPlayer.start();
-			slideUpdater = new SlideUpdater(musicPlayer,progress);
-			slideUpdater.start();		
+			slideUpdater.start();					
 		}
 	}
     
