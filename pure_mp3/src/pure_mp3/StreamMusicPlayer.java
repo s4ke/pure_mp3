@@ -303,26 +303,30 @@ public class StreamMusicPlayer extends Thread implements MusicPlayer
 	
 	public long getFrameLength()
 	{
-		if(audioInputStream.getFrameLength() != -1)
+		if(audioInputStream != null)
 		{
-			return audioInputStream.getFrameLength();
-		}
-		try
-		{
-			int durationInSeconds = getDurationInSeconds();
-			System.out.println(durationInSeconds);
-			System.out.println(audioFormat.getSampleRate());
-			if(durationInSeconds > 0)
+			if(audioInputStream.getFrameLength() != -1)
 			{
-				return (long)(durationInSeconds)*((long)audioFormat.getSampleRate());
+				return audioInputStream.getFrameLength();
 			}
-			return -1;
+			try
+			{
+				int durationInSeconds = getDurationInSeconds();
+				System.out.println(durationInSeconds);
+				System.out.println(audioFormat.getSampleRate());
+				if(durationInSeconds > 0)
+				{
+					return (long)(durationInSeconds)*((long)audioFormat.getSampleRate());
+				}
+				return -1;
+			}
+			catch(Exception e)
+			{
+				System.out.println("Some other bug while getting the FrameLength!");
+				return -1;
+			}
 		}
-		catch(Exception e)
-		{
-			System.out.println("Some other bug while getting the FrameLength!");
-			return -1;
-		}
+		return -1;
 	}
 	
 	public int getDurationInSeconds()

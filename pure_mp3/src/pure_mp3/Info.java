@@ -91,13 +91,10 @@ public class Info extends JPanel
 			   if(currentSong != null)
 			   {
 				   artist_r.setText(currentSong.getArtist());
-				   artist_r.repaint();
 			       artist_r.setCaretPosition(0);
 			       title_r.setText(currentSong.getTitle());
-			       title_r.repaint();
 			       title_r.setCaretPosition(0);
 			       album_r.setText(currentSong.getAlbum());
-			       album_r.repaint();
 			       album_r.setCaretPosition(0);
 			       length = currentSong.getLength();
 			       updatePlayedTime(0);
