@@ -16,7 +16,14 @@
  */
 package pure_mp3;
 
+import java.awt.AWTException;
 import java.awt.Dimension;
+import java.awt.SystemTray;
+import java.awt.TrayIcon;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
@@ -28,6 +35,7 @@ public class GUI extends JFrame
 {
 	private static final long serialVersionUID = 2385007980763532219L;
     private MainPanel mainPanel;
+    private TrayIcon trayIcon;
     
     public GUI()
     {
@@ -53,6 +61,20 @@ public class GUI extends JFrame
                     setSize(800,600); //Has to be done after the Window has been layouted to prevent a bug under Windows
                     setLocationRelativeTo(null);
                     setVisible(true); 
+//                    if(SystemTray.isSupported())
+//                    {
+//                    	SystemTray systemTray = SystemTray.getSystemTray();
+//                    	try
+//                    	{
+//                    		systemTray.add(new TrayIcon(ImageIO.read(new File("logo.png"))));      
+//                    	}
+//                    	catch(IOException e)
+//                    	{
+//                    	} 
+//                    	catch (AWTException e) 
+//                    	{
+//						}
+//                    }
             }
         });
     }

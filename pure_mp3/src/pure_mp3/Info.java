@@ -99,6 +99,14 @@ public class Info extends JPanel
 			       length = currentSong.getLength();
 			       updatePlayedTime(0);
 			   }
+			   else
+			   {
+				   artist_r.setText("");
+			       title_r.setText("");
+			       album_r.setText("");
+			       length = "0:00";
+			       updatePlayedTime(0);
+			   }
 		   }
 	   });       
    }

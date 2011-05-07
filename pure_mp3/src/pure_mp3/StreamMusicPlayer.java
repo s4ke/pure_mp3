@@ -283,6 +283,8 @@ public class StreamMusicPlayer extends Thread implements MusicPlayer
 					{
 //						System.out.println(bytesSkipped/audioFormat.getFrameSize());
 						bytesDropped = audioInputStream.read(garbage, 0, garbage.length);
+//						bytesDropped = audioInputStream.skip(4096);
+//						System.out.println("Dropped " + bytesDropped + " bytes");
 						bytesSkipped += bytesDropped;
 					}
 					skippedFrames += bytesSkipped/audioFormat.getFrameSize();
