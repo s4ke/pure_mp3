@@ -36,8 +36,6 @@ import javax.swing.UIManager.LookAndFeelInfo;
 */
 public class Launch 
 {
-	@SuppressWarnings("unused")
-	private static GUI gui;
 	
 	/**
 	 * Main Method for pure.mp3. Looks wheter there are mixers that are supported
@@ -175,7 +173,7 @@ public class Launch
 //		 		}
 //		 		URLClassLoader ucl = new URLClassLoader(url.toArray(new URL[0]));
 //	 		}
-	 		gui = new GUI();
+	 		new GUI();
 		}
 	}
 

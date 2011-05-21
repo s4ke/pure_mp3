@@ -194,7 +194,7 @@ public class Player
 			slideUpdater.stop_();
 		}
 		
-		//destroy the objects. let the garbage collector his work
+		//destroy the objects. let the garbage collector do his work
 		musicPlayer = null;		
 		slideUpdater = null;
 	}
