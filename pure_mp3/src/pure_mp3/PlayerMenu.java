@@ -23,19 +23,25 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
 import net.miginfocom.swing.MigLayout;
 
 /**
  * PlayerMenu for the Player
  * @author Martin Braun
  */
+@Singleton
 public class PlayerMenu extends JPanel
 {
 	private static final long serialVersionUID = 2385007980763532219L;
-    private JButton prev;
-    private JButton play;
-    private JButton next;
-    private JSlider volume;
+	private WiringControl wiringControl;
+    private final JButton prev;
+    private final JButton play;
+    private final JButton next;
+    private final JSlider volume;
     
     public PlayerMenu()
     {
@@ -91,9 +97,14 @@ public class PlayerMenu extends JPanel
         add(volume,"h 75!, dock center");
     }
     
+    public void setWiringControl(WiringControl xWiringControl)
+    {
+    	wiringControl = xWiringControl;
+    }
+    
     public void playPrev()
     {
-    	Global.player.playPrev();
+    	wiringControl.playerPlayPrev();
     }
     
     public void play()
@@ -102,18 +113,18 @@ public class PlayerMenu extends JPanel
     	{
     		public void run()
     		{
-    			Global.player.playpause(true);
+    			wiringControl.playerPlaypause(true);
     		}
     	}.start();        
     }
     
     public void playNext()
     {
-    	Global.player.playNext();        
+    	wiringControl.playerPlayNext();        
     }
     
     public void changeVolume(int xVolume)
     {
-    	Global.player.changeVolume(xVolume);
+    	wiringControl.playerChangeVolume(xVolume);
     }
 }

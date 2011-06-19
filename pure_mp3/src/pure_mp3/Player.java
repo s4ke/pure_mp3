@@ -16,32 +16,41 @@
  */
 package pure_mp3;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
 /**
  * The Player. Manages The SlideUpdater and the MusicPlayer
  * @author Martin Braun
 */
+@Singleton
 public class Player
 {
 	private static final long serialVersionUID = 20100125;
 	public static final int randomPlayback = 1;
 	public static final int normalPlayback = 0;
     private MusicPlayer musicPlayer;
-    private SlideUpdater slideUpdater;
-    private Progress progress;
+    private SlideUpdater slideUpdater;    
+    private WiringControl wiringControl;
     private int playMode;
     private boolean playing;
     private boolean paused;
-    
     /**
      * Basic Constructor
      * @param xPlayMode the PlayMode -> static vars
      */
-    public Player(int xPlayMode)
+    @Inject
+    public Player()
     {
-    	playMode = xPlayMode;
+    	playMode = normalPlayback;
         musicPlayer = null;
         playing = false;
         paused = false;
+    }
+    
+    public void setWiringControl(WiringControl xWiringControl)
+    {
+    	wiringControl = xWiringControl;
     }
     
     /**
@@ -50,8 +59,8 @@ public class Player
     public void playPrev()
     {
     	prev();
-    	Global.info.update();
-        System.out.println("Previous Title: " + Global.playList.getCurrent());
+    	wiringControl.infoUpdate();
+        System.out.println("Previous Title: " + wiringControl.playListGetCurrent());
         stop();
         playpause(false);
     }
@@ -65,20 +74,20 @@ public class Player
     	{
 	    	case normalPlayback:
 	    		//normal playmode:
-	    		Global.playList.prev();
+	    		wiringControl.playListPrev();
 	    		
 	    		break;    		
 	    	case randomPlayback:
 	    		//random playmode
-	    		int current = Global.playList.getCurrent();
-	    		Global.playList.random();
-	    		if(current == Global.playList.getCurrent() && (Global.playList.getModel().getSize() > 1))
+	    		int current = wiringControl.playListGetCurrent();
+	    		wiringControl.playListRandom();
+	    		if(current == wiringControl.playListGetCurrent() && (wiringControl.getPlayListSize() > 1))
 	    		{
 	    			prev();
 	    		}
 	    		break;
     	}
-    	if(Global.playList.getNumberOfSongs() == 0)
+    	if(wiringControl.playListGetNumberOfSongs() == 0)
 		{
 			playing = false;
 		}
@@ -90,8 +99,8 @@ public class Player
     public void playNext()
     {
     	next();
-    	Global.info.update();
-        System.out.println("Next Title: " + Global.playList.getCurrent());
+    	wiringControl.infoUpdate();
+        System.out.println("Next Title: " + wiringControl.playListGetCurrent());
         stop();
         playpause(false);    
     }
@@ -105,19 +114,19 @@ public class Player
     	{
 	    	case normalPlayback:
 	    		//normal playmode:
-	    		Global.playList.next();
+	    		wiringControl.playListNext();
 	    		break;    		
 	    	case randomPlayback:
 	    		//random playmode
-	    		int current = Global.playList.getCurrent();
-	    		Global.playList.random();
-	    		if(current == Global.playList.getCurrent() && (Global.playList.getNumberOfSongs() > 1))
+	    		int current = wiringControl.playListGetCurrent();
+	    		wiringControl.playListRandom();
+	    		if(current == wiringControl.playListGetCurrent() && (wiringControl.playListGetNumberOfSongs() > 1))
 	    		{
 	    			next();
 	    		}
 	    		break;
     	}
-    	if(Global.playList.getNumberOfSongs() == 0)
+    	if(wiringControl.playListGetNumberOfSongs() == 0)
 		{
 			playing = false;
 		}
@@ -129,7 +138,7 @@ public class Player
      */
 	public synchronized void playpause(boolean byUser)
     {	
-		if(musicPlayer == null && (Global.playList.getNumberOfSongs() > 0))
+		if(musicPlayer == null && (wiringControl.playListGetNumberOfSongs() > 0))
 		{
 			//if player hasn't started playing yet and and the playmode is random and 
 			//the user himself clicked on play and not another method invoked playpause(byUser)
@@ -141,7 +150,7 @@ public class Player
 			//same but for playMode == 0
 			else if(playMode == 0 && !playing && byUser)
 			{
-				Global.playList.setCurrentAndDisplay(0);
+				wiringControl.playListSetCurrentAndDisplay(0);
 			}
 			//normal playmode; the value for the current song could be negative because of
 			//deleting the whole playList. So it has to be checked and fixed.
@@ -149,19 +158,20 @@ public class Player
 			//be selected and played
 			else
 			{
-				Global.playList.checkCurrentNegative();
+				wiringControl.playListCheckCurrentNegative();
 			}
 			//now start the playback
 			playing = true;
 			//create and start the musicplayer
-			musicPlayer = new StreamMusicPlayer();
+			musicPlayer = new StreamMusicPlayer(this,wiringControl.playListGetCurrentSong());
 			musicPlayer.start();
 			//and the SlideUpdater
-			slideUpdater = new SlideUpdater(musicPlayer,progress);			
+			slideUpdater = Global.injector.getInstance(SlideUpdater.class);		
+			slideUpdater.setMusicPlayer(musicPlayer);
 			slideUpdater.start();	
-			System.out.println("Play: " + Global.playList.getCurrent());
+			System.out.println("Play: " + wiringControl.playListGetCurrent());
 			//but first update the Info about the song
-			Global.info.update();
+			wiringControl.infoUpdate();
 		}
 		else
 		{
@@ -212,8 +222,9 @@ public class Player
 				slideUpdater.pause();
 			}
 			stop();
-			musicPlayer = new StreamMusicPlayer();
-			slideUpdater = new SlideUpdater(musicPlayer,progress);	
+			musicPlayer = new StreamMusicPlayer(this,wiringControl.playListGetCurrentSong());
+			slideUpdater = Global.injector.getInstance(SlideUpdater.class);		
+			slideUpdater.setMusicPlayer(musicPlayer);	
 			if(paused)
 			{
 				musicPlayer.pause();
@@ -240,15 +251,6 @@ public class Player
         {
         	Global.setVolume(xVolume);
         }
-    }
-    
-    /**    
-     * Sets the Progressbar
-     * @param xProgress the progressbar
-     */
-    public void setProgress(Progress xProgress)
-    {
-    	progress = xProgress;
     }
     
     /**

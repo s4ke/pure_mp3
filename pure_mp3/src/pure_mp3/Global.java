@@ -16,38 +16,21 @@
  */
 package pure_mp3;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+
 /**
  * Some Global Vars and Constants
  * @author Martin Braun
 */
-public class Global {
+public class Global 
+{
 	public static float volume = 100;
 	public static final double linearscalar = Math.log(10.0)/20;
-	public static FileCrawler fileCrawler = new FileCrawler();
-	public static final Player player = new Player(0);
-	public static final Database database = new Database();
-	public static PlayList playList = null;
-	public static Info info = null;
-	public static GUI GUI = null;
+	public static final Injector injector = Guice.createInjector();
 	
 	public static void setVolume(float xVolume)
 	{
 		volume = xVolume;
 	}
-	
-	public static void setPlayList(PlayList xPlayList)
-	{
-		playList = xPlayList;
-	}
-	
-	public static void setInfo(Info xInfo)
-	{
-		info = xInfo;
-	}
-	
-	public static void setGUI(GUI xGUI)
-	{
-		GUI = xGUI;
-	}
-
 }

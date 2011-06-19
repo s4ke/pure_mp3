@@ -24,28 +24,31 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
 /**
  * The Slider which displays the current position in the song
  * @author Martin Braun
 */
+@Singleton
 public class Progress extends JSlider
 {
 	private static final long serialVersionUID = 2385007980763532219L;
+	private final Player player;
 	private boolean userChanged;
 	private int lastValue;
 	
-	/**
-	 * Basic Constructor
-	 */
-	public Progress()
+    @Inject
+	public Progress(Player xPlayer)
 	{
 		super();
+		player = xPlayer;
 		userChanged = true;
 		setPaintTrack(true);
 		setMinimum(0);
         setMaximum(100);
-        setValue(0);
-        Global.player.setProgress(this);                
+        setValue(0);               
         addChangeListener(new ChangeListener()
         {
         	public void stateChanged(ChangeEvent e)
@@ -133,6 +136,6 @@ public class Progress extends JSlider
 	 */
 	public synchronized void seek(int value)
 	{
-		Global.player.seek(value);
+		player.seek(value);
 	}
 }

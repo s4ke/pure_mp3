@@ -17,17 +17,21 @@
 package pure_mp3;
 
 import javax.swing.JPanel;
+
+import com.google.inject.Singleton;
+
 import net.miginfocom.swing.MigLayout;
 
 /**
  * Media consists of the MediaBar and the MediaTable
  * @author Martin Braun
 */
+@Singleton
 public class Media extends JPanel
 {
 	private static final long serialVersionUID = 2385007980763532219L;
-    private MediaBar mediaBar;
-    private MediaTable mediatable;
+    private final MediaBar mediaBar;
+    private final MediaTable mediatable;
     public Media()
     {
         super();

@@ -16,6 +16,8 @@
  */
 package pure_mp3;
 
+import com.google.inject.Inject;
+
 /**
  * Thread used for updating Progress
  * @author Martin Braun
@@ -23,15 +25,17 @@ package pure_mp3;
 public class SlideUpdater extends Thread
 {
 	private MusicPlayer musicPlayer;
-	private Progress progress;
+	private final Progress progress;
+	private final Info info;
 	private boolean paused;
 	private boolean stop;
 	
-	public SlideUpdater(MusicPlayer xMusicPlayer, Progress xProgress)
+	@Inject
+	public SlideUpdater(Progress xProgress, Info xInfo)
 	{
 		super();
-		musicPlayer = xMusicPlayer;
 		progress = xProgress;
+		info = xInfo;
 		paused = false;
 	}
 	
@@ -81,7 +85,7 @@ public class SlideUpdater extends Thread
 					progress.setValue2(percentage);
 					if(durationInSeconds_ > 0)
 					{
-						Global.info.updatePlayedTime((int)(durationInSeconds_*percentage_/100));
+						info.updatePlayedTime((int)(durationInSeconds_*percentage_/100));
 					}
 				}
 				else
@@ -127,6 +131,11 @@ public class SlideUpdater extends Thread
 	public synchronized boolean isStopped()
 	{
 		return stop;
+	}
+	
+	public void setMusicPlayer(MusicPlayer xMusicPlayer)
+	{
+		musicPlayer = xMusicPlayer;
 	}
 
 }

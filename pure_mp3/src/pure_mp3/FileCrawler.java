@@ -22,12 +22,28 @@ import java.io.FilenameFilter;
 
 import javax.swing.SwingUtilities;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
 /**
  * The FileCrawler which adds Songs to the PlayList and to Media
  * @author Martin Braun
 */
+@Singleton
 public class FileCrawler
 {		
+	private WiringControl wiringControl;
+	
+	@Inject
+	public FileCrawler()
+	{
+	}
+	
+	 public void setWiringControl(WiringControl xWiringControl)
+	 {
+		 wiringControl = xWiringControl;
+	 }
+	
 	/**
 	 * Adds files or Directories to the PlayList
 	 * @param file The files or Directories to add
@@ -39,8 +55,8 @@ public class FileCrawler
 		{
 			public void run()
 			{
-				Global.playList.getList().invalidate();
-				Global.playList.getList().validate();
+				wiringControl.playListGetList().invalidate();
+				wiringControl.playListGetList().validate();
 			}
 			
 		});
@@ -58,7 +74,7 @@ public class FileCrawler
 			{
 				if(file.getPath().endsWith(".mp3")||file.getPath().endsWith(".MP3")||file.getPath().endsWith(".wav")||file.getPath().endsWith(".WAV"))
 				{
-					Global.playList.addSong(new Song(file));
+					wiringControl.playListAddSong(new Song(file));
 				}
 			}
 			else
@@ -81,7 +97,7 @@ public class FileCrawler
 		    		}
 		    		else
 		    		{
-				    	Global.playList.addSong(new Song(files[i]));
+				    	wiringControl.playListAddSong(new Song(files[i]));
 		    		}
 		    	}
 		    }			

@@ -173,7 +173,7 @@ public class Launch
 //		 		}
 //		 		URLClassLoader ucl = new URLClassLoader(url.toArray(new URL[0]));
 //	 		}
-	 		new GUI();
+	 		Global.injector.getInstance(GUI.class);
 		}
 	}
 

@@ -22,18 +22,20 @@ import java.io.File;
 import java.net.URL;
 import java.util.List;
 
+import com.google.inject.Inject;
+
 /**
  * Listens for Drops of Music Files
  * @author Martin Braun
 */
 public class PlayListDropTargetListener  implements DropTargetListener {
 
-
-  /**
-   * Basic Constructor
-   */
-  public PlayListDropTargetListener() 
+  private final FileCrawler fileCrawler;
+  
+  @Inject
+  public PlayListDropTargetListener(FileCrawler xFileCrawler) 
   {
+	  fileCrawler = xFileCrawler;
   }
 
   public void dragEnter(DropTargetDragEvent dtde) {
@@ -74,7 +76,7 @@ public class PlayListDropTargetListener  implements DropTargetListener {
 		    			  {
 		    				  try
 		    				  {
-		    					  Global.fileCrawler.addToPlayList((File)list.get(j));
+		    					  fileCrawler.addToPlayList((File)list.get(j));
 		    				  }
 		    				  catch(Exception e)
 		    				  {
@@ -107,7 +109,7 @@ public class PlayListDropTargetListener  implements DropTargetListener {
 			    				  try
 			    				  {	    					  
 			    					  {
-			    						  Global.fileCrawler.addToPlayList(new File(new URL(strings[j]).toURI().getPath()));
+			    						  fileCrawler.addToPlayList(new File(new URL(strings[j]).toURI().getPath()));
 			    					  }
 			    				  }
 			    				  catch(Exception e)

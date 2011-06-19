@@ -16,16 +16,11 @@
  */
 package pure_mp3;
 
-import java.awt.AWTException;
 import java.awt.Dimension;
-import java.awt.SystemTray;
-import java.awt.TrayIcon;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+
+import com.google.inject.Inject;
 
 /**
  * The GUI for the Player
@@ -34,13 +29,16 @@ import javax.swing.SwingUtilities;
 public class GUI extends JFrame
 {
 	private static final long serialVersionUID = 2385007980763532219L;
-    private MainPanel mainPanel;
-    private TrayIcon trayIcon;
+    private final MainPanel mainPanel;
+    private final WiringControl wiringControl;
+//    private final TrayIcon trayIcon;
     
-    public GUI()
+    @Inject
+    public GUI(MainPanel xMainPanel, WiringControl xWiringControl)
     {
         super("pure.mp3");
-        Global.setGUI(this);
+        mainPanel = xMainPanel;
+        wiringControl = xWiringControl;
         init();
     }
     
@@ -50,9 +48,8 @@ public class GUI extends JFrame
              public void run() 
              {
             	 	setMinimumSize(new Dimension(420,300));
-                    mainPanel = new MainPanel();
                     setContentPane(mainPanel);
-                    setJMenuBar(new Menu());
+                    setJMenuBar(Global.injector.getInstance(Menu.class));
                     System.setProperty("apple.laf.useScreenMenuBar", "true");
                     System.setProperty("com.apple.mrj.application.apple.menu.about.name", "pure.mp3");
                     setDefaultCloseOperation(EXIT_ON_CLOSE);   

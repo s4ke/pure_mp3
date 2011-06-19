@@ -21,15 +21,20 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
 import net.miginfocom.swing.MigLayout;
 
 /**
  * The Info for displaying which song is being played
  * @author Martin Braun
 */
+@Singleton
 public class Info extends JPanel
 {
    private static final long serialVersionUID = 2385007980763532219L;
+   private WiringControl wiringControl;
    private final JTextField artist_l;
    private final JTextField artist_r;
    private final JTextField title_l;
@@ -40,11 +45,11 @@ public class Info extends JPanel
    private final JTextField length_r;
    private String length;
    
+   @Inject
    public Info()
    {
        super();
        setLayout(new MigLayout("nogrid, nocache"));
-       Global.setInfo(this);
        
        artist_l = new JTextField("Artist:");
        artist_l.setEditable(false);
@@ -78,7 +83,9 @@ public class Info extends JPanel
        length_r.setEditable(false);
        add(length_r,"id length_r, pos (length_l.x2 + 5) length_l.y 100% length_l.y2");
        
-       setDropTarget(new DropTarget(this,new PlayListDropTargetListener()));
+       PlayListDropTargetListener abc = Global.injector.getInstance(PlayListDropTargetListener.class);
+       Global.injector.injectMembers(abc);
+       setDropTarget(new DropTarget(this,abc));
    }
    
    public void update()
@@ -87,7 +94,7 @@ public class Info extends JPanel
 	   {
 		   public void run()
 		   {
-			   Song currentSong = Global.playList.getCurrentSong();
+			   Song currentSong = wiringControl.playListGetCurrentSong();
 			   if(currentSong != null)
 			   {
 				   artist_r.setText(currentSong.getArtist());
@@ -135,6 +142,11 @@ public class Info extends JPanel
 			   length_r.repaint();
 		   }
 	   });		   
+   }
+   
+   public void setWiringControl(WiringControl xWiringControl)
+   {
+   		wiringControl = xWiringControl;
    }
    
 }

@@ -26,6 +26,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSeparator;
 
+import com.google.inject.Inject;
+
 /**
  * The MenuBar for the Player
  * @author Martin Braun
@@ -33,20 +35,26 @@ import javax.swing.JSeparator;
 public class Menu extends JMenuBar
 {
 	private static final long serialVersionUID = 2385007980763532219L;
-	private JMenu file;
-    private JMenuItem fileAddFilePlayList;
-    private JMenuItem fileAddFolderPlayList;
-    private JMenuItem fileRemoveAllFilesPlayList;
-    private JMenuItem exit;
-    private JMenu edit;
-    private JRadioButtonMenuItem editSetRandomPlayMode;
-    private JMenu help;
-    private JMenuItem helpAbout;
+	private final PlayList playList;
+	private final FileCrawler fileCrawler;
+	private final Player player;
+	private final JMenu file;
+    private final JMenuItem fileAddFilePlayList;
+    private final JMenuItem fileAddFolderPlayList;
+    private final JMenuItem fileRemoveAllFilesPlayList;
+    private final JMenuItem exit;
+    private final JMenu edit;
+    private final JRadioButtonMenuItem editSetRandomPlayMode;
+    private final JMenu help;
+    private final JMenuItem helpAbout;
     
-    public Menu()
+    @Inject
+    public Menu(Player xPlayer, PlayList xPlayList, FileCrawler xFileCrawler)
     {
         super();
-        
+        playList = xPlayList;
+        fileCrawler = xFileCrawler;
+        player = xPlayer;
         //File Menu
         file = new JMenu("File");
         fileAddFilePlayList = new JMenuItem("Add File to Playlist...");
@@ -74,7 +82,7 @@ public class Menu extends JMenuBar
         {
         	public void actionPerformed(ActionEvent event)
         	{
-        		Global.playList.removeAllElements();
+        		playList.removeAllElements();
         	}
         });
         
@@ -131,7 +139,7 @@ public class Menu extends JMenuBar
 				{
 					public void run()
 					{
-						Global.fileCrawler.addToPlayList(new File((String)answer));
+						fileCrawler.addToPlayList(new File((String)answer));
 					}
 				}.start();
 			}
@@ -153,7 +161,7 @@ public class Menu extends JMenuBar
 				{
 					public void run()
 					{
-						Global.fileCrawler.addToPlayList(new File((String)answer));
+						fileCrawler.addToPlayList(new File((String)answer));
 					}
 				}.start();        				
 			}
@@ -165,13 +173,13 @@ public class Menu extends JMenuBar
     
     private void switchPlayMode()
     {
-    	if(Global.player.getPlayMode()==Player.normalPlayback)
+    	if(player.getPlayMode()==Player.normalPlayback)
 		{
-			Global.player.setPlayMode(Player.randomPlayback);
+			player.setPlayMode(Player.randomPlayback);
 		}
 		else
 		{
-			Global.player.setPlayMode(Player.normalPlayback);
+			player.setPlayMode(Player.normalPlayback);
 		}
     }
     

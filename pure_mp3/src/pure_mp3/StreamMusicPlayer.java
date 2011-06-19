@@ -26,6 +26,8 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.FloatControl;
 
+import com.google.inject.Inject;
+
 /**
  * MusicPlayer inspired by Matthias Pfisterer's examples on JavaSound
  *  (jsresources.org). Because of the fact, that this Software is meant 
@@ -46,13 +48,16 @@ public class StreamMusicPlayer extends Thread implements MusicPlayer
 	private boolean playing;
 	private long skippedDurationInMicroSeconds;
 	private long skippedFrames;
-	private boolean pause = false;
-	private boolean stop = false;
+	private boolean pause;
+	private boolean stop;
+	private final Player player;
 	
-	public StreamMusicPlayer()
+	@Inject
+	public StreamMusicPlayer(Player xPlayer, Song xSong)
 	{
 		super();
-		song = Global.playList.getCurrentSong();
+		player = xPlayer;
+		song = xSong;
 		try
 		{
 			insert(song);
@@ -61,6 +66,8 @@ public class StreamMusicPlayer extends Thread implements MusicPlayer
 		{
 			System.out.println("Error while inserting the file");
 		}
+		pause = false;
+		stop = false;
 		
 	}
 
@@ -178,7 +185,7 @@ public class StreamMusicPlayer extends Thread implements MusicPlayer
 //		running = false;
 		if(!stop && !pause)
 		{
-			Global.player.playNext();
+			player.playNext();
 		}
 	}
 	

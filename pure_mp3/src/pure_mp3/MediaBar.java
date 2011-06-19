@@ -28,8 +28,8 @@ import net.miginfocom.swing.MigLayout;
 public class MediaBar extends JPanel
 {
 	private static final long serialVersionUID = 2385007980763532219L;
-    private JTextField input;
-    private JButton search;
+    private final JTextField input;
+    private final JButton search;
     public MediaBar()
     {
         super();

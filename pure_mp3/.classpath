@@ -10,5 +10,8 @@
 	<classpathentry kind="lib" path="lib/sqljet-1.0.5.jar"/>
 	<classpathentry kind="lib" path="lib/sqljet-browser-1.0.5.jar"/>
 	<classpathentry kind="lib" path="lib/jl1.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/aopalliance.jar"/>
+	<classpathentry kind="lib" path="lib/guice-3.0.jar"/>
+	<classpathentry kind="lib" path="lib/javax.inject.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

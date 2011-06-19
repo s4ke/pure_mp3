@@ -28,7 +28,8 @@ import javax.swing.table.DefaultTableModel;
 public class MediaTable extends JScrollPane
 {
 	private static final long serialVersionUID = 2385007980763532219L;
-    private JTable table;
+    private final JTable table;
+    
     public MediaTable()
     {
         super();

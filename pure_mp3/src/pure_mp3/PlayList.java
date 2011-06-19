@@ -29,35 +29,37 @@ import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
 /**
  * PlayList for the Player. Is not a JList but a JScrollPane
  * @author Martin Braun
 */
+@Singleton
 public class PlayList extends JScrollPane
 {
 	private static final long serialVersionUID = 2385007980763532219L;
-    private JList list;
-    private DropTarget dropTarget;
-    private DefaultListModel model;
-    private int current;
+	private WiringControl wiringControl;
+    private final JList list;
+    private final MyListModel model;
     
     /**
      * Basic Constructor
      */
-    public PlayList()
+    @Inject
+    public PlayList(PlayListDropTargetListener playListDropTargetListener, MyListModel xModel)
     {
         super();
         setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-
-        Global.setPlayList(this);
-        current = 0;        
+        
         list = new JList();
-        model = new DefaultListModel();
+        model = xModel;
         
         list.setModel(model);
         list.setDragEnabled(true);
         list.setDropMode(DropMode.INSERT);
-        list.setTransferHandler(new ListMoveTransferHandler());
+        list.setTransferHandler(Global.injector.getInstance(ListMoveTransferHandler.class));
         list.setBackground(Color.WHITE);
         list.setCellRenderer(new PlayListRenderer());
         
@@ -97,7 +99,7 @@ public class PlayList extends JScrollPane
         			int killCount = 0;
         			for(int i = 0; i < selected.length; i++)
         			{
-	        			if(selected[i] == current && Global.player.isPlaying())
+	        			if(selected[i] == model.getCurrent() )
 	        			{
 	        				prev();
 	        			}
@@ -113,9 +115,9 @@ public class PlayList extends JScrollPane
         				list.setSelectedIndex(0);
         			}
         			list.ensureIndexIsVisible(list.getSelectedIndex());
-        			if(current > selected[selected.length-1])
+        			if(model.getCurrent() > selected[selected.length-1])
         			{
-        				current = current - selected[selected.length-1];
+        				model.setCurrent(model.getCurrent() - selected[selected.length-1]);
         			}
         		}
         	}  
@@ -131,10 +133,9 @@ public class PlayList extends JScrollPane
         	}
         });
         
-        dropTarget = new DropTarget(list, new PlayListDropTargetListener());
-        list.setDropTarget(dropTarget);
+        list.setDropTarget(new DropTarget(list, playListDropTargetListener));
 
-        list.setSelectedIndex(current);
+        list.setSelectedIndex(model.getCurrent());
         add(list);        
         setViewportView(list);
     }    
@@ -145,7 +146,7 @@ public class PlayList extends JScrollPane
      */
     public void next()
     {
-        setCurrentAndDisplay(current+1);
+        setCurrentAndDisplay(model.getCurrent()+1);
     }
     
     /**
@@ -153,7 +154,7 @@ public class PlayList extends JScrollPane
      */
     public void prev()
     {
-        setCurrentAndDisplay(current-1);
+        setCurrentAndDisplay(model.getCurrent()-1);
     }
     
     /**
@@ -176,8 +177,8 @@ public class PlayList extends JScrollPane
     private void playSelected(int index)
     {
         setCurrentAndDisplay(index);
-        Global.player.stop();
-        Global.player.playpause(false);
+        wiringControl.playerStop();
+        wiringControl.playerPlaypause(false);
     }
         
     //Methods that check if the current Song is correct    
@@ -186,7 +187,7 @@ public class PlayList extends JScrollPane
      */
     public void checkCurrentNegative()
     {
-    	if(current == -1 && model.getSize() > 0)
+    	if(model.getCurrent() == -1 && model.getSize() > 0)
     	{
     		next();
     	}
@@ -246,7 +247,7 @@ public class PlayList extends JScrollPane
     		{
     			model.removeAllElements();
     	    	model.trimToSize();
-    	    	current = -1; 
+    	    	model.setCurrent(-1);
     	    	repaint(getViewport().getViewRect());
     		}
     	});    	
@@ -259,25 +260,9 @@ public class PlayList extends JScrollPane
      */
     public void setCurrent(int xCurrent)
     {
-    	if(Global.player.isPlaying())
+    	if(wiringControl.playerIsPlaying())
     	{
-    		current = xCurrent;
-    	}
-    }
-    
-    /**
-     * Sets wheter a DropTarget has to listen
-     * @param isActive
-     */
-    public void setDropTargetActive(boolean isActive)
-    {
-    	if(isActive)
-    	{
-    		list.setDropTarget(dropTarget);
-    	}
-    	else
-    	{
-    		list.setDropTarget(null);
+    		model.setCurrent(xCurrent);
     	}
     }
     
@@ -291,15 +276,15 @@ public class PlayList extends JScrollPane
     	{
 	    	if(xCurrent < 0)
 	        {
-	            current = model.getSize()-1;
+	           model.setCurrent(model.getSize()-1);
 	        }
 	        else if(xCurrent+1 <= model.getSize() && xCurrent > 0)
 	        {
-	            current = xCurrent;
+	            model.setCurrent(xCurrent);
 	        }
 	        else
 	        {
-	            current = 0;
+	            model.setCurrent(0);
 	        }
 	    	SwingUtilities.invokeLater(new Runnable()
 	    	{
@@ -307,10 +292,10 @@ public class PlayList extends JScrollPane
 	    		{
 	    			if(model.getSize() > 0)
 	    			{
-				        if(model.get(current)!=null)
+				        if(model.get(model.getCurrent())!=null)
 				        {
-				            list.setSelectedIndex(current);
-				            list.ensureIndexIsVisible(current);	
+				            list.setSelectedIndex(model.getCurrent());
+				            list.ensureIndexIsVisible(model.getCurrent());	
 				        }
 				        invalidate();
 				        validate();
@@ -319,7 +304,11 @@ public class PlayList extends JScrollPane
 	    		}
 	    	});   
     	}
-    	
+    }
+    
+    public void setWiringControl(WiringControl xWiringControl)
+    {
+    	wiringControl = xWiringControl;
     }
     //End of the Setter Methods
     
@@ -345,11 +334,7 @@ public class PlayList extends JScrollPane
      */
     public Song getCurrentSong()
     {
-    	if(model.getSize() > 0 && current >= 0)
-    	{
-    		return (Song)model.get(current);
-    	}
-    	return null;
+    	return model.getCurrentSong();
     }
     
     /**
@@ -369,7 +354,7 @@ public class PlayList extends JScrollPane
      */
     public int getCurrent()
     {
-        return current;
+        return model.getCurrent();
     }
     //End of the Getter Methods
 }
