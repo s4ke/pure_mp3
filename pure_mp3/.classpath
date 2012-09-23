@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="lib/antlr-runtime-3.1.3.jar"/>
-	<classpathentry kind="lib" path="lib/jid3lib-0.5.4.jar"/>
-	<classpathentry kind="lib" path="lib/miglayout-3.7-swing.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/mp3spi1.9.5.jar"/>
-	<classpathentry kind="lib" path="lib/tritonus_share.jar"/>
-	<classpathentry kind="lib" path="lib/sqljet-1.0.5.jar"/>
-	<classpathentry kind="lib" path="lib/sqljet-browser-1.0.5.jar"/>
-	<classpathentry kind="lib" path="lib/jl1.0.1.jar"/>
-	<classpathentry kind="lib" path="lib/aopalliance.jar"/>
-	<classpathentry kind="lib" path="lib/guice-3.0.jar"/>
-	<classpathentry kind="lib" path="lib/javax.inject.jar"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="src" path="/HotSound"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
