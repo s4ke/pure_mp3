@@ -23,6 +23,7 @@ package de.hotware.puremp3.console;
 public interface ICommand {
 	
 	public String usage();
+	
 	/**
 	 * @param pArgs 0-element is always the command key itself (like in the main method)
 	 * @throws UsageException if used in a wrong way
