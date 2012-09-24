@@ -15,8 +15,6 @@ import java.util.regex.Pattern;
 import javax.sound.sampled.FloatControl;
 
 import de.hotware.hotsound.audio.player.BaseSong;
-import de.hotware.hotsound.audio.player.IListMusicPlayer;
-import de.hotware.hotsound.audio.player.ListStreamMusicPlayer;
 import de.hotware.hotsound.audio.player.IMusicPlayer.SongInsertionException;
 import de.hotware.hotsound.audio.player.StreamPlayerRunnable.IPlayerRunnableListener;
 import de.hotware.hotsound.audio.playlist.IPlaylistParser;
