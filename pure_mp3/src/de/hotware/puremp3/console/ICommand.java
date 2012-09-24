@@ -10,6 +10,8 @@ public interface ICommand {
 	 */
 	public void execute(String... pArgs) throws UsageException, ExecutionException;
 	
+	public String[] getKeys();
+	
 	public static class UsageException extends Exception {
 		
 		private static final long serialVersionUID = -8849053578967497194L;
@@ -47,7 +49,7 @@ public interface ICommand {
 		
 	}
 	
-	public static class ExecutionException extends Exception {
+	public static class ExecutionException extends RuntimeException {
 		
 		private static final long serialVersionUID = 4749622113667250487L;
 		private ICommand mCommand;

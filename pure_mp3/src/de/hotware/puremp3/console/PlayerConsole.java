@@ -1,5 +1,6 @@
 package de.hotware.puremp3.console;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.net.MalformedURLException;
@@ -7,37 +8,56 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.regex.Pattern;
 
 import javax.sound.sampled.FloatControl;
 
-import de.hotware.hotmisc.audio.player.BaseSong;
-import de.hotware.hotmisc.audio.player.IMusicPlayer;
-import de.hotware.hotmisc.audio.player.IMusicPlayer.SongInsertionException;
-import de.hotware.hotmisc.audio.player.StreamMusicPlayer;
+import de.hotware.hotsound.audio.player.BaseSong;
+import de.hotware.hotsound.audio.player.IListMusicPlayer;
+import de.hotware.hotsound.audio.player.ListStreamMusicPlayer;
+import de.hotware.hotsound.audio.player.IMusicPlayer.SongInsertionException;
+import de.hotware.hotsound.audio.player.StreamPlayerRunnable.IPlayerRunnableListener;
+import de.hotware.hotsound.audio.playlist.IPlaylistParser;
+import de.hotware.hotsound.audio.playlist.StockParser;
 import de.hotware.puremp3.console.ICommand.ExecutionException;
 import de.hotware.puremp3.console.ICommand.UsageException;
 
 public class PlayerConsole implements Runnable {
 
-	private IMusicPlayer mMusicPlayer;
+	private IListMusicPlayer mMusicPlayer;
 	private PrintStream mPrintStream;
 	private Map<String, ICommand> mCommands;
+	private Map<String, IPlaylistParser> mPlaylistParsers;
 	private Scanner mScanner;
 	private Pattern mSplitPattern;
+	private ExecutorService mExecService;
 
-	public PlayerConsole(PrintStream pPrintStream, InputStream pInputStream) {
+	public PlayerConsole(ExecutorService pExecutorService,
+			PrintStream pPrintStream,
+			InputStream pInputStream) {
+		this.mExecService = pExecutorService;
 		this.mPrintStream = pPrintStream;
 		this.mCommands = new HashMap<String, ICommand>();
+		this.mPlaylistParsers = new HashMap<String, IPlaylistParser>();
 		this.mScanner = new Scanner(pInputStream);
 		for(BasicCommand cmd : BasicCommand.values()) {
-			for(String key : cmd.mKeys) {
+			for(String key : cmd.getKeys()) {
 				if(this.mCommands.containsKey(key)) {
 					throw new IllegalStateException("command key was being used twice");
 				}
 				this.mCommands.put(key, cmd);
 			}
 			cmd.setConsole(this);
+		}
+		for(IPlaylistParser parser : StockParser.values()) {
+			for(String key : parser.getKeys()) {
+				if(this.mPlaylistParsers.containsKey(key)) {
+					throw new IllegalStateException("parser key was being used twice");
+				}
+				this.mPlaylistParsers.put(key, parser);
+			}
 		}
 		this.mSplitPattern = Pattern.compile("\\s");
 	}
@@ -56,10 +76,58 @@ public class PlayerConsole implements Runnable {
 				}
 			} catch(UsageException e) {
 				this.mPrintStream.println(e.getCommand().usage());
-			} catch(ExecutionException | RuntimeException e) {
+			} catch(RuntimeException e) {
 				e.printStackTrace(this.mPrintStream);
 			}
 		}
+	}
+
+	public void runOnConsoleThread(Runnable pRunnable) {
+		try {
+			this.mExecService.execute(pRunnable);
+		} catch(ExecutionException e) {
+			e.printStackTrace(this.mPrintStream);
+		}
+	}
+	
+	private void initPlayer() {
+		this.mMusicPlayer = new ListStreamMusicPlayer(new IPlayerRunnableListener() {
+
+			@Override
+			public void onEnd(PlaybackEndEvent pEvent) {
+				try {
+					if(PlayerConsole.this.mMusicPlayer.size() > 1) {
+						PlayerConsole.this.mMusicPlayer.next();
+					}
+				} catch(SongInsertionException e) {
+					PlayerConsole.this.runOnConsoleThread(new Runnable() {
+						
+						@Override
+						public void run() {
+							IListMusicPlayer player = PlayerConsole.this.mMusicPlayer;
+							boolean fail = true;
+							while(player.size() > 0 && fail) {
+								player.removeAt(player.getCurrent());
+								try {
+									player.next();
+									fail = false;
+								} catch(SongInsertionException e) {
+									e.printStackTrace(PlayerConsole.this.mPrintStream);
+								}
+							}
+						}
+						
+					});
+				}
+			}
+
+		});
+	}
+	
+	public static interface ConsoleRunnable extends Runnable {
+		
+		public void run() throws ExecutionException;
+		
 	}
 
 	/**
@@ -71,33 +139,63 @@ public class PlayerConsole implements Runnable {
 			@Override
 			public void execute(String... pArgs) throws UsageException,
 					ExecutionException {
-				if(pArgs.length < 1) {
+				int length = pArgs.length;
+				if(length < 1) {
 					throw new UsageException("play was used in a wrong way",
 							this);
 				}
 				if(this.mConsole.mMusicPlayer == null) {
-					this.mConsole.mMusicPlayer = new StreamMusicPlayer();
+					this.mConsole.initPlayer();
 				}
-				if(pArgs.length == 1) {
+				if(length == 1) {
 					this.mConsole.mMusicPlayer.unpausePlayback();
 				} else {
-					String insertionString = "";
-					if(pArgs[1].equals("-url")) {
-						if(pArgs.length < 3) {
-							throw new UsageException("play was used in a wrong way",
-									this);
+					String first = pArgs[1];
+					boolean error = false;
+					if(first.equals("-list")) {
+						error = length < 4;
+						if(!error) {
+							String playlistType = pArgs[2];
+							String playlistLocation = pArgs[3];
+							IPlaylistParser parser = this.mConsole.mPlaylistParsers.get(playlistType);
+							if(parser == null) {
+								throw new IllegalArgumentException("playlist type " + playlistType + " not supported");
+							}
+							try {
+								this.mConsole.mMusicPlayer.setPlaylist(parser.parse(new URL(playlistLocation)));
+							} catch(SongInsertionException
+									| IOException e) {
+								throw new ExecutionException(e, this);
+							}
+							if(this.mConsole.mMusicPlayer.size() == 0) {
+								this.mConsole.mPrintStream.println("No songs to play!");
+							} else if(this.mConsole.mMusicPlayer.isStopped()) {
+								this.mConsole.mMusicPlayer.startPlayback();
+							}
 						}
-						insertionString = pArgs[2];
 					} else {
-						insertionString = "file:" + pArgs[1];
+						String insertionString = "";
+						if(first.equals("-url")) {
+							error = length < 3;
+							if(!error);
+							insertionString = pArgs[2];
+						} else {
+							insertionString = "file:" + pArgs[1];
+						}
+						try {
+							this.mConsole.mMusicPlayer
+									.insert(new BaseSong(new URL(insertionString)));
+						} catch(MalformedURLException | SongInsertionException e) {
+							throw new ExecutionException(e, this);
+						}
+						if(this.mConsole.mMusicPlayer.isStopped()) {
+							this.mConsole.mMusicPlayer.startPlayback();
+						}
 					}
-					try {
-						this.mConsole.mMusicPlayer
-								.insert(new BaseSong(new URL(insertionString)));
-					} catch(MalformedURLException | SongInsertionException e) {
-						throw new ExecutionException(e, this);
+					if(error) {
+						throw new UsageException("play was used in a wrong way",
+								this);
 					}
-					this.mConsole.mMusicPlayer.startPlayback();
 				}
 			}
 
@@ -184,11 +282,17 @@ public class PlayerConsole implements Runnable {
 		public String usage() {
 			return "lol";
 		}
+		
+		@Override
+		public String[] getKeys() {
+			return this.mKeys;
+		}
 
 	}
 
 	public static void main(String args[]) {
-		PlayerConsole console = new PlayerConsole(System.out, System.in);
+		ExecutorService exec = Executors.newSingleThreadExecutor();
+		PlayerConsole console = new PlayerConsole(exec, System.out, System.in);
 		console.run();
 	}
 
