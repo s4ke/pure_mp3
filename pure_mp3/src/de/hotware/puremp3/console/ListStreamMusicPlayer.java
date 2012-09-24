@@ -4,11 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
-import de.hotware.hotsound.audio.player.IMusicPlayer;
 import de.hotware.hotsound.audio.player.ISong;
 import de.hotware.hotsound.audio.player.StreamMusicPlayer;
-import de.hotware.hotsound.audio.player.StreamPlayerRunnable;
-import de.hotware.hotsound.audio.player.IMusicPlayer.SongInsertionException;
 import de.hotware.hotsound.audio.player.StreamPlayerRunnable.IPlayerRunnableListener;
 
 public class ListStreamMusicPlayer extends StreamMusicPlayer implements

@@ -4,7 +4,6 @@ import java.util.List;
 
 import de.hotware.hotsound.audio.player.IMusicPlayer;
 import de.hotware.hotsound.audio.player.ISong;
-import de.hotware.hotsound.audio.player.IMusicPlayer.SongInsertionException;
 
 public interface IListMusicPlayer extends IMusicPlayer {
 
