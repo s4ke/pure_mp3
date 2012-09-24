@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
+import javax.sound.sampled.FloatControl;
+
 import de.hotware.hotmisc.audio.player.BaseSong;
 import de.hotware.hotmisc.audio.player.IMusicPlayer;
 import de.hotware.hotmisc.audio.player.IMusicPlayer.SongInsertionException;
@@ -16,15 +18,14 @@ import de.hotware.hotmisc.audio.player.StreamMusicPlayer;
 import de.hotware.puremp3.console.ICommand.ExecutionException;
 import de.hotware.puremp3.console.ICommand.UsageException;
 
-
 public class PlayerConsole implements Runnable {
-	
+
 	private IMusicPlayer mMusicPlayer;
 	private PrintStream mPrintStream;
 	private Map<String, ICommand> mCommands;
 	private Scanner mScanner;
 	private Pattern mSplitPattern;
-	
+
 	public PlayerConsole(PrintStream pPrintStream, InputStream pInputStream) {
 		this.mPrintStream = pPrintStream;
 		this.mCommands = new HashMap<String, ICommand>();
@@ -40,7 +41,7 @@ public class PlayerConsole implements Runnable {
 		}
 		this.mSplitPattern = Pattern.compile("\\s");
 	}
-	
+
 	@Override
 	public void run() {
 		while(true) {
@@ -51,7 +52,7 @@ public class PlayerConsole implements Runnable {
 				if(cmd != null) {
 					cmd.execute(args);
 				} else {
-					BasicCommand.HELP.execute(new String[]{});
+					BasicCommand.HELP.execute(new String[] {});
 				}
 			} catch(UsageException e) {
 				this.mPrintStream.println(e.getCommand().usage());
@@ -60,17 +61,19 @@ public class PlayerConsole implements Runnable {
 			}
 		}
 	}
-	
+
 	/**
 	 * TODO: usage
 	 */
 	public enum BasicCommand implements ICommand {
 		PLAY("play") {
-			
+
 			@Override
-			public void execute(String... pArgs) throws UsageException, ExecutionException {
+			public void execute(String... pArgs) throws UsageException,
+					ExecutionException {
 				if(pArgs.length < 1) {
-					throw new UsageException("play was used in a wrong way", this);
+					throw new UsageException("play was used in a wrong way",
+							this);
 				}
 				if(this.mConsole.mMusicPlayer == null) {
 					this.mConsole.mMusicPlayer = new StreamMusicPlayer();
@@ -81,81 +84,109 @@ public class PlayerConsole implements Runnable {
 					String insertionString = "";
 					if(pArgs[1].equals("-url")) {
 						if(pArgs.length < 3) {
-							throw new UsageException("play was used in a wrong way", this);
+							throw new UsageException("play was used in a wrong way",
+									this);
 						}
 						insertionString = pArgs[2];
 					} else {
 						insertionString = "file:" + pArgs[1];
 					}
 					try {
-						this.mConsole.mMusicPlayer.insert(new BaseSong(new URL(insertionString)));
+						this.mConsole.mMusicPlayer
+								.insert(new BaseSong(new URL(insertionString)));
 					} catch(MalformedURLException | SongInsertionException e) {
 						throw new ExecutionException(e, this);
 					}
 					this.mConsole.mMusicPlayer.startPlayback();
 				}
 			}
-			
+
 		},
 		PAUSE("pause") {
-			
+
 			@Override
 			public void execute(String... pArgs) {
 				this.mConsole.mMusicPlayer.pausePlayback();
 			}
-			
+
 		},
 		STOP("stop") {
-			
+
 			@Override
 			public void execute(String... pArgs) {
 				this.mConsole.mMusicPlayer.stopPlayback();
 			}
-			
+
 		},
 		EXIT("exit") {
-			
+
 			@Override
 			public void execute(String... pArgs) {
 				System.exit(1);
 			}
-			
+
 		},
 		EMPTY("") {
-			
+
 			@Override
 			public void execute(String... pArgs) {
-				
+
 			}
-			
+
 		},
 		HELP("help") {
-			
+
 			@Override
 			public void execute(String... pArgs) {
-				
+
 			}
-			
+
+		},
+		VOLUME("volume", "vol") {
+
+			@Override
+			public void execute(String... pArgs) throws UsageException {
+				int length = pArgs.length;
+				FloatControl floatControl = (FloatControl) this.mConsole.mMusicPlayer
+						.getControl(FloatControl.Type.MASTER_GAIN);
+				if(length == 1) {
+					this.mConsole.mPrintStream.println("Volume: " +
+							floatControl.getValue() + ", Min: " +
+							floatControl.getMinimum() + ", Max: " +
+							floatControl.getMaximum());
+				} else if(length == 2) {
+					float min = floatControl.getMinimum();
+					float max = floatControl.getMaximum();
+					float val = Integer.parseInt(pArgs[1]);
+					if(val < min) {
+						val = min;
+					} else if(val > max) {
+						val = max;
+					}
+					floatControl.setValue(val);
+				}
+			}
+
 		};
-		
+
 		protected String[] mKeys;
 		protected PlayerConsole mConsole;
-		
+
 		private BasicCommand(String... pKeys) {
 			this.mKeys = pKeys;
 		}
-		
+
 		public void setConsole(PlayerConsole pConsole) {
 			this.mConsole = pConsole;
 		}
-		
+
 		@Override
 		public String usage() {
 			return "lol";
 		}
-		
+
 	}
-	
+
 	public static void main(String args[]) {
 		PlayerConsole console = new PlayerConsole(System.out, System.in);
 		console.run();
