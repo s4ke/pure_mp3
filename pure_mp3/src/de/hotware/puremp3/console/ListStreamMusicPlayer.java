@@ -32,6 +32,9 @@ import de.hotware.hotsound.audio.player.StreamMusicPlayer;
 public class ListStreamMusicPlayer extends StreamMusicPlayer implements
 		IListMusicPlayer {
 
+	/**
+	 * may never be null
+	 */
 	protected List<ISong> mSongs;
 	protected int mCurrent;
 	private ReentrantLock mLock;
@@ -45,6 +48,8 @@ public class ListStreamMusicPlayer extends StreamMusicPlayer implements
 		super(pPlaybackListener, pExecutorService);
 		this.mLock = new ReentrantLock();
 		this.mPlaybackListener = pPlaybackListener;
+		this.mSongs = new ArrayList<ISong>();
+		this.mCurrent = 0;
 	}
 
 	@Override
