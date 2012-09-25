@@ -24,9 +24,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
+import de.hotware.hotsound.audio.player.IPlaybackListener;
 import de.hotware.hotsound.audio.player.ISong;
 import de.hotware.hotsound.audio.player.StreamMusicPlayer;
-import de.hotware.hotsound.audio.player.StreamPlayerRunnable.IPlayerRunnableListener;
 
 public class ListStreamMusicPlayer extends StreamMusicPlayer implements
 		IListMusicPlayer {
@@ -35,7 +35,7 @@ public class ListStreamMusicPlayer extends StreamMusicPlayer implements
 	protected int mCurrent;
 	private ReentrantLock mLock;
 
-	public ListStreamMusicPlayer(IPlayerRunnableListener pPlayerThreadListener) {
+	public ListStreamMusicPlayer(IPlaybackListener pPlayerThreadListener) {
 		super(pPlayerThreadListener);
 		this.mSongs = new ArrayList<ISong>();
 		this.mCurrent = 0;

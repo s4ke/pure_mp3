@@ -37,7 +37,7 @@ import javax.sound.sampled.FloatControl;
 
 import de.hotware.hotsound.audio.player.BasicSong;
 import de.hotware.hotsound.audio.player.IMusicPlayer.SongInsertionException;
-import de.hotware.hotsound.audio.player.StreamPlayerRunnable.IPlayerRunnableListener;
+import de.hotware.hotsound.audio.player.IPlaybackListener;
 import de.hotware.hotsound.audio.playlist.IPlaylistParser;
 import de.hotware.hotsound.audio.playlist.StockParser;
 import de.hotware.puremp3.console.ICommand.ExecutionException;
@@ -110,7 +110,7 @@ public class PlayerConsole implements Runnable {
 	}
 	
 	private void initPlayer() {
-		this.mMusicPlayer = new ListStreamMusicPlayer(new IPlayerRunnableListener() {
+		this.mMusicPlayer = new ListStreamMusicPlayer(new IPlaybackListener() {
 
 			@Override
 			public void onEnd(PlaybackEndEvent pEvent) {
