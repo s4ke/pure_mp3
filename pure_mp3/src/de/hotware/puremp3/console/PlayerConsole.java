@@ -140,7 +140,7 @@ public class PlayerConsole implements Runnable {
 				}
 			}
 
-		});
+		}, Executors.newSingleThreadExecutor());
 	}
 	
 	public static interface ConsoleRunnable extends Runnable {

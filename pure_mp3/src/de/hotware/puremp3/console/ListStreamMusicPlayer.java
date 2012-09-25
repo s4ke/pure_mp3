@@ -22,6 +22,7 @@ package de.hotware.puremp3.console;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.locks.ReentrantLock;
 
 import de.hotware.hotsound.audio.player.IPlaybackListener;
@@ -35,11 +36,15 @@ public class ListStreamMusicPlayer extends StreamMusicPlayer implements
 	protected int mCurrent;
 	private ReentrantLock mLock;
 
-	public ListStreamMusicPlayer(IPlaybackListener pPlayerThreadListener) {
-		super(pPlayerThreadListener);
-		this.mSongs = new ArrayList<ISong>();
-		this.mCurrent = 0;
+	public ListStreamMusicPlayer(IPlaybackListener pPlaybackListener) {
+		this(pPlaybackListener, null);
+	}
+	
+	public ListStreamMusicPlayer(IPlaybackListener pPlaybackListener,
+			ExecutorService pExecutorService) {
+		super(pPlaybackListener, pExecutorService);
 		this.mLock = new ReentrantLock();
+		this.mPlaybackListener = pPlaybackListener;
 	}
 
 	@Override
