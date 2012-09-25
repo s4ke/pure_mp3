@@ -35,7 +35,7 @@ import java.util.regex.Pattern;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.FloatControl;
 
-import de.hotware.hotsound.audio.player.BaseSong;
+import de.hotware.hotsound.audio.player.BasicSong;
 import de.hotware.hotsound.audio.player.IMusicPlayer.SongInsertionException;
 import de.hotware.hotsound.audio.player.StreamPlayerRunnable.IPlayerRunnableListener;
 import de.hotware.hotsound.audio.playlist.IPlaylistParser;
@@ -203,7 +203,7 @@ public class PlayerConsole implements Runnable {
 						}
 						try {
 							this.mConsole.mMusicPlayer
-									.insert(new BaseSong(new URL(insertionString)));
+									.insert(new BasicSong(new URL(insertionString)));
 						} catch(MalformedURLException | SongInsertionException e) {
 							throw new ExecutionException(e, this);
 						}
