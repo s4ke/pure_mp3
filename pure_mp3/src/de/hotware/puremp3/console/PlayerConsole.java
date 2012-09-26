@@ -38,6 +38,7 @@ import javax.sound.sampled.FloatControl;
 import de.hotware.hotsound.audio.player.BasicSong;
 import de.hotware.hotsound.audio.player.IMusicPlayer.SongInsertionException;
 import de.hotware.hotsound.audio.player.IPlaybackListener;
+import de.hotware.hotsound.audio.player.IPlaybackListener.PlaybackEndEvent.Type;
 import de.hotware.hotsound.audio.playlist.IPlaylistParser;
 import de.hotware.hotsound.audio.playlist.StockParser;
 import de.hotware.puremp3.console.ICommand.ExecutionException;
@@ -114,6 +115,12 @@ public class PlayerConsole implements Runnable {
 
 			@Override
 			public void onEnd(PlaybackEndEvent pEvent) {
+				if(pEvent.getType() == Type.FAILURE) {
+					String message = pEvent.getThrowable().getMessage();
+					if(message != null) {
+						PlayerConsole.this.mPrintStream.println();
+					}
+				}
 				try {
 					if(PlayerConsole.this.mMusicPlayer.size() > 1) {
 						PlayerConsole.this.mMusicPlayer.next();
