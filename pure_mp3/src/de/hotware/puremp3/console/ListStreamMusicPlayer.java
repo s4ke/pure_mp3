@@ -20,7 +20,6 @@
  */
 package de.hotware.puremp3.console;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -28,6 +27,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import de.hotware.hotsound.audio.player.IPlaybackListener;
 import de.hotware.hotsound.audio.player.ISong;
+import de.hotware.hotsound.audio.player.MusicPlayerException;
 import de.hotware.hotsound.audio.player.StreamMusicPlayer;
 
 public class ListStreamMusicPlayer extends StreamMusicPlayer implements
@@ -54,7 +54,7 @@ public class ListStreamMusicPlayer extends StreamMusicPlayer implements
 	}
 
 	@Override
-	public void setPlaylist(List<ISong> pPlaylist) throws SongInsertionException {
+	public void setPlaylist(List<ISong> pPlaylist) throws MusicPlayerException {
 		this.mLock.lock();
 		try {
 			this.mSongs = pPlaylist;
@@ -77,7 +77,7 @@ public class ListStreamMusicPlayer extends StreamMusicPlayer implements
 	}
 
 	@Override
-	public void insert(ISong pSong) throws SongInsertionException {
+	public void insert(ISong pSong) throws MusicPlayerException {
 		this.mLock.lock();
 		try {
 			if(this.mPlayerRunnable == null || this.mPlayerRunnable.isStopped()) {
@@ -90,7 +90,7 @@ public class ListStreamMusicPlayer extends StreamMusicPlayer implements
 	}
 
 	@Override
-	public void stopPlayback() {
+	public void stopPlayback() throws MusicPlayerException {
 		this.mLock.lock();
 		try {
 			super.stopPlayback();
@@ -101,7 +101,7 @@ public class ListStreamMusicPlayer extends StreamMusicPlayer implements
 	}
 
 	@Override
-	public void next() throws SongInsertionException {
+	public void next() throws MusicPlayerException {
 		this.mLock.lock();
 		try {
 			if(this.mCurrent == this.mSongs.size() - 1) {
@@ -116,7 +116,7 @@ public class ListStreamMusicPlayer extends StreamMusicPlayer implements
 	}
 
 	@Override
-	public void previous() throws SongInsertionException {
+	public void previous() throws MusicPlayerException {
 		this.mLock.lock();
 		try {
 			if(this.mCurrent == 0) {
@@ -131,7 +131,7 @@ public class ListStreamMusicPlayer extends StreamMusicPlayer implements
 	}
 
 	@Override
-	public void play(int pX) throws SongInsertionException, IOException {
+	public void play(int pX) throws MusicPlayerException {
 		this.mLock.lock();
 		try {
 			int size = this.mSongs.size();

@@ -20,23 +20,23 @@
  */
 package de.hotware.puremp3.console;
 
-import java.io.IOException;
 import java.util.List;
 
 import de.hotware.hotsound.audio.player.IMusicPlayer;
 import de.hotware.hotsound.audio.player.ISong;
+import de.hotware.hotsound.audio.player.MusicPlayerException;
 
 public interface IListMusicPlayer extends IMusicPlayer {
 
-	public void setPlaylist(List<ISong> pPlaylist) throws SongInsertionException;
+	public void setPlaylist(List<ISong> pPlaylist) throws MusicPlayerException;
 
-	public void next() throws SongInsertionException;
+	public void next() throws MusicPlayerException;
 
-	public void previous() throws SongInsertionException;
+	public void previous() throws MusicPlayerException;
 
-	public void play(int pX) throws SongInsertionException, IOException;
+	public void play(int pX) throws MusicPlayerException;
 
-	public void insertAt(int pX) throws SongInsertionException;
+	public void insertAt(int pX) throws MusicPlayerException;
 
 	public void removeAt(int pX);
 

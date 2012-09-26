@@ -22,6 +22,8 @@ package de.hotware.puremp3.console;
 
 import java.io.IOException;
 
+import de.hotware.hotsound.audio.player.MusicPlayerException;
+
 public interface ICommand {
 
 	public String usage();
@@ -32,10 +34,11 @@ public interface ICommand {
 	 *            method)
 	 * @throws UsageException
 	 *             if used in a wrong way
+	 * @throws MusicPlayerException 
 	 */
 	public void execute(String... pArgs) throws UsageException,
 			ExecutionException,
-			IOException;
+			IOException, MusicPlayerException;
 
 	public String[] getKeys();
 

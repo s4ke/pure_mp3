@@ -20,6 +20,7 @@
  */
 package de.hotware.puremp3.console;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -35,10 +36,13 @@ import java.util.regex.Pattern;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.FloatControl;
 
+import de.hotware.hotsound.audio.data.IAudioDevice;
+import de.hotware.hotsound.audio.data.SavingAudioDevice;
 import de.hotware.hotsound.audio.player.BasicSong;
 import de.hotware.hotsound.audio.player.IMusicPlayer.SongInsertionException;
 import de.hotware.hotsound.audio.player.IPlaybackListener;
 import de.hotware.hotsound.audio.player.IPlaybackListener.PlaybackEndEvent.Type;
+import de.hotware.hotsound.audio.player.MusicPlayerException;
 import de.hotware.hotsound.audio.playlist.IPlaylistParser;
 import de.hotware.hotsound.audio.playlist.StockParser;
 import de.hotware.puremp3.console.ICommand.ExecutionException;
@@ -96,7 +100,7 @@ public class PlayerConsole implements Runnable {
 				}
 			} catch(UsageException e) {
 				this.mPrintStream.println(e.getCommand().usage());
-			} catch(IOException | RuntimeException e) {
+			} catch(MusicPlayerException | IOException | RuntimeException e) {
 				e.printStackTrace(this.mPrintStream);
 			}
 		}
@@ -110,7 +114,7 @@ public class PlayerConsole implements Runnable {
 		}
 	}
 	
-	private void initPlayer() {
+	private void initPlayer(final IAudioDevice pAudioDevice) {
 		this.mMusicPlayer = new ListStreamMusicPlayer(new IPlaybackListener() {
 
 			@Override
@@ -125,7 +129,7 @@ public class PlayerConsole implements Runnable {
 					if(PlayerConsole.this.mMusicPlayer.size() > 1) {
 						PlayerConsole.this.mMusicPlayer.next();
 					}
-				} catch(SongInsertionException e) {
+				} catch(MusicPlayerException e) {
 					PlayerConsole.this.runOnConsoleThread(new Runnable() {
 						
 						@Override
@@ -137,7 +141,7 @@ public class PlayerConsole implements Runnable {
 								try {
 									player.next();
 									fail = false;
-								} catch(SongInsertionException e) {
+								} catch(MusicPlayerException e) {
 									e.printStackTrace(PlayerConsole.this.mPrintStream);
 								}
 							}
@@ -164,14 +168,14 @@ public class PlayerConsole implements Runnable {
 
 			@Override
 			public void execute(String... pArgs) throws UsageException,
-					ExecutionException, IOException {
+					ExecutionException, IOException, MusicPlayerException {
 				int length = pArgs.length;
 				if(length < 1) {
 					throw new UsageException("play was used in a wrong way",
 							this);
 				}
 				if(this.mConsole.mMusicPlayer == null) {
-					this.mConsole.initPlayer();
+					this.mConsole.initPlayer(null);
 				}
 				if(length == 1) {
 					this.mConsole.mMusicPlayer.unpausePlayback();
@@ -200,17 +204,27 @@ public class PlayerConsole implements Runnable {
 							}
 						}
 					} else {
+						IAudioDevice audioDevice = null;
 						String insertionString = "";
 						if(first.equals("-url")) {
 							error = length < 3;
-							if(!error);
-							insertionString = pArgs[2];
+							if(!error) {
+								insertionString = pArgs[2];
+							}
+							if(length > 3) {
+								if(pArgs[3].equals("-save")) {
+									error = length < 5;
+									if(!error) {
+										audioDevice = new SavingAudioDevice(new File(pArgs[4]));
+									}
+								}
+							}
 						} else {
 							insertionString = "file:" + pArgs[1];
 						}
 						try {
 							this.mConsole.mMusicPlayer
-									.insert(new BasicSong(new URL(insertionString)));
+									.insert(new BasicSong(new URL(insertionString)), audioDevice);
 						} catch(MalformedURLException | SongInsertionException e) {
 							throw new ExecutionException(e, this);
 						}
@@ -237,7 +251,7 @@ public class PlayerConsole implements Runnable {
 		STOP("stop") {
 
 			@Override
-			public void execute(String... pArgs) {
+			public void execute(String... pArgs) throws MusicPlayerException {
 				this.mConsole.mMusicPlayer.stopPlayback();
 			}
 
