@@ -95,7 +95,7 @@ public class PlayerConsole implements Runnable {
 				}
 			} catch(UsageException e) {
 				this.mPrintStream.println(e.getCommand().usage());
-			} catch(RuntimeException e) {
+			} catch(IOException | RuntimeException e) {
 				e.printStackTrace(this.mPrintStream);
 			}
 		}
@@ -157,7 +157,7 @@ public class PlayerConsole implements Runnable {
 
 			@Override
 			public void execute(String... pArgs) throws UsageException,
-					ExecutionException {
+					ExecutionException, IOException {
 				int length = pArgs.length;
 				if(length < 1) {
 					throw new UsageException("play was used in a wrong way",

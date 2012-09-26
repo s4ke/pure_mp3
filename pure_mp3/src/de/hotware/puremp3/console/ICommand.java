@@ -20,20 +20,27 @@
  */
 package de.hotware.puremp3.console;
 
+import java.io.IOException;
+
 public interface ICommand {
-	
+
 	public String usage();
-	
+
 	/**
-	 * @param pArgs 0-element is always the command key itself (like in the main method)
-	 * @throws UsageException if used in a wrong way
+	 * @param pArgs
+	 *            0-element is always the command key itself (like in the main
+	 *            method)
+	 * @throws UsageException
+	 *             if used in a wrong way
 	 */
-	public void execute(String... pArgs) throws UsageException, ExecutionException;
-	
+	public void execute(String... pArgs) throws UsageException,
+			ExecutionException,
+			IOException;
+
 	public String[] getKeys();
-	
+
 	public static class UsageException extends Exception {
-		
+
 		private static final long serialVersionUID = -8849053578967497194L;
 		private ICommand mCommand;
 
@@ -57,20 +64,20 @@ public interface ICommand {
 			super(pString);
 			this.mCommand = pCommand;
 		}
-		
+
 		public UsageException(Throwable pCause, ICommand pCommand) {
 			super(pCause);
 			this.mCommand = pCommand;
 		}
-		
+
 		public ICommand getCommand() {
 			return this.mCommand;
 		}
-		
+
 	}
-	
+
 	public static class ExecutionException extends RuntimeException {
-		
+
 		private static final long serialVersionUID = 4749622113667250487L;
 		private ICommand mCommand;
 
@@ -94,16 +101,16 @@ public interface ICommand {
 			super(pString);
 			this.mCommand = pCommand;
 		}
-		
+
 		public ExecutionException(Throwable pCause, ICommand pCommand) {
 			super(pCause);
 			this.mCommand = pCommand;
 		}
-		
+
 		public ICommand getCommand() {
 			return this.mCommand;
 		}
-		
+
 	}
 
 }

@@ -20,6 +20,7 @@
  */
 package de.hotware.puremp3.console;
 
+import java.io.IOException;
 import java.util.List;
 
 import de.hotware.hotsound.audio.player.IMusicPlayer;
@@ -33,7 +34,7 @@ public interface IListMusicPlayer extends IMusicPlayer {
 
 	public void previous() throws SongInsertionException;
 
-	public void play(int pX) throws SongInsertionException;
+	public void play(int pX) throws SongInsertionException, IOException;
 
 	public void insertAt(int pX) throws SongInsertionException;
 
