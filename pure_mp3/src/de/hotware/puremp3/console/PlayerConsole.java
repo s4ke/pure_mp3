@@ -264,7 +264,7 @@ public class PlayerConsole implements Runnable {
 			@Override
 			public void execute(String... pArgs) throws UsageException {
 				int length = pArgs.length;
-				DataLine dataLine = this.mConsole.mMusicPlayer.getDataLine();
+				DataLine dataLine = this.mConsole.mMusicPlayer.getAudioDevice().getDataLine();
 				if(dataLine.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
 					FloatControl floatControl = (FloatControl) dataLine
 							.getControl(FloatControl.Type.MASTER_GAIN);
