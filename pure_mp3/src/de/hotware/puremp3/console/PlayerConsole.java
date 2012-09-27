@@ -264,7 +264,10 @@ public class PlayerConsole implements Runnable {
 		EXIT("exit") {
 
 			@Override
-			public void execute(String... pArgs) {
+			public void execute(String... pArgs) throws MusicPlayerException {
+				if(this.mConsole.mMusicPlayer != null && !this.mConsole.mMusicPlayer.isStopped()) {
+					this.mConsole.mMusicPlayer.stopPlayback();
+				}
 				System.exit(1);
 			}
 
