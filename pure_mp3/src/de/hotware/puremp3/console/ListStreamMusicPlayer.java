@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.locks.ReentrantLock;
 
-import de.hotware.hotsound.audio.player.IPlaybackListener;
+import de.hotware.hotsound.audio.player.IMusicListener;
 import de.hotware.hotsound.audio.player.ISong;
 import de.hotware.hotsound.audio.player.MusicPlayerException;
 import de.hotware.hotsound.audio.player.StreamMusicPlayer;
@@ -40,15 +40,15 @@ public class ListStreamMusicPlayer extends StreamMusicPlayer implements
 	protected int mCurrent;
 	private ReentrantLock mLock;
 
-	public ListStreamMusicPlayer(IPlaybackListener pPlaybackListener) {
+	public ListStreamMusicPlayer(IMusicListener pPlaybackListener) {
 		this(pPlaybackListener, null);
 	}
 
-	public ListStreamMusicPlayer(IPlaybackListener pPlaybackListener,
+	public ListStreamMusicPlayer(IMusicListener pPlaybackListener,
 			ExecutorService pExecutorService) {
 		super(pPlaybackListener, pExecutorService);
 		this.mLock = new ReentrantLock();
-		this.mPlaybackListener = pPlaybackListener;
+		this.mMusicListener = pPlaybackListener;
 		this.mSongs = new ArrayList<ISong>();
 		this.mCurrent = 0;
 	}
@@ -90,10 +90,10 @@ public class ListStreamMusicPlayer extends StreamMusicPlayer implements
 	}
 
 	@Override
-	public void stopPlayback() throws MusicPlayerException {
+	public void stop() throws MusicPlayerException {
 		this.mLock.lock();
 		try {
-			super.stopPlayback();
+			super.stop();
 			this.mSongs = new ArrayList<ISong>();
 		} finally {
 			this.mLock.unlock();
@@ -140,7 +140,7 @@ public class ListStreamMusicPlayer extends StreamMusicPlayer implements
 			}
 			this.mCurrent = pX;
 			super.insert(this.mSongs.get(pX));
-			super.startPlayback();
+			super.start();
 		} finally {
 			this.mLock.unlock();
 		}

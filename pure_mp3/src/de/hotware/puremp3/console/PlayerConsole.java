@@ -40,8 +40,8 @@ import de.hotware.hotsound.audio.data.IAudioDevice;
 import de.hotware.hotsound.audio.data.SavingAudioDevice;
 import de.hotware.hotsound.audio.player.BasicSong;
 import de.hotware.hotsound.audio.player.IMusicPlayer.SongInsertionException;
-import de.hotware.hotsound.audio.player.IPlaybackListener;
-import de.hotware.hotsound.audio.player.IPlaybackListener.PlaybackEndEvent.Type;
+import de.hotware.hotsound.audio.player.IMusicListener;
+import de.hotware.hotsound.audio.player.IMusicListener.MusicEvent.Type;
 import de.hotware.hotsound.audio.player.MusicPlayerException;
 import de.hotware.hotsound.audio.playlist.IPlaylistParser;
 import de.hotware.hotsound.audio.playlist.StockParser;
@@ -115,10 +115,10 @@ public class PlayerConsole implements Runnable {
 	}
 	
 	private void initPlayer(final IAudioDevice pAudioDevice) {
-		this.mMusicPlayer = new ListStreamMusicPlayer(new IPlaybackListener() {
+		this.mMusicPlayer = new ListStreamMusicPlayer(new IMusicListener() {
 
 			@Override
-			public void onEnd(PlaybackEndEvent pEvent) {
+			public void onEnd(MusicEvent pEvent) {
 				if(pEvent.getType() == Type.FAILURE) {
 					String message = pEvent.getThrowable().getMessage();
 					if(message != null) {
@@ -178,7 +178,7 @@ public class PlayerConsole implements Runnable {
 					this.mConsole.initPlayer(null);
 				}
 				if(length == 1) {
-					this.mConsole.mMusicPlayer.unpausePlayback();
+					this.mConsole.mMusicPlayer.unpause();
 				} else {
 					String first = pArgs[1];
 					boolean error = false;
@@ -200,7 +200,7 @@ public class PlayerConsole implements Runnable {
 							if(this.mConsole.mMusicPlayer.size() == 0) {
 								this.mConsole.mPrintStream.println("No songs to play!");
 							} else if(this.mConsole.mMusicPlayer.isStopped()) {
-								this.mConsole.mMusicPlayer.startPlayback();
+								this.mConsole.mMusicPlayer.start();
 							}
 						}
 					} else {
@@ -234,7 +234,7 @@ public class PlayerConsole implements Runnable {
 							throw new ExecutionException(e, this);
 						}
 						if(this.mConsole.mMusicPlayer.isStopped()) {
-							this.mConsole.mMusicPlayer.startPlayback();
+							this.mConsole.mMusicPlayer.start();
 						}
 					}
 					if(error) {
@@ -249,7 +249,7 @@ public class PlayerConsole implements Runnable {
 
 			@Override
 			public void execute(String... pArgs) {
-				this.mConsole.mMusicPlayer.pausePlayback();
+				this.mConsole.mMusicPlayer.pause();
 			}
 
 		},
@@ -257,7 +257,7 @@ public class PlayerConsole implements Runnable {
 
 			@Override
 			public void execute(String... pArgs) throws MusicPlayerException {
-				this.mConsole.mMusicPlayer.stopPlayback();
+				this.mConsole.mMusicPlayer.stop();
 			}
 
 		},
@@ -266,7 +266,7 @@ public class PlayerConsole implements Runnable {
 			@Override
 			public void execute(String... pArgs) throws MusicPlayerException {
 				if(this.mConsole.mMusicPlayer != null && !this.mConsole.mMusicPlayer.isStopped()) {
-					this.mConsole.mMusicPlayer.stopPlayback();
+					this.mConsole.mMusicPlayer.stop();
 				}
 				System.exit(1);
 			}
