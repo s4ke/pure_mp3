@@ -223,8 +223,13 @@ public class PlayerConsole implements Runnable {
 							insertionString = "file:" + pArgs[1];
 						}
 						try {
-							this.mConsole.mMusicPlayer
-									.insert(new BasicSong(new URL(insertionString)), audioDevice);
+							if(audioDevice == null) {
+								this.mConsole.mMusicPlayer
+										.insert(new BasicSong(new URL(insertionString)));
+							} else {
+								this.mConsole.mMusicPlayer
+								.insert(new BasicSong(new URL(insertionString)), audioDevice);
+							}
 						} catch(MalformedURLException | SongInsertionException e) {
 							throw new ExecutionException(e, this);
 						}
