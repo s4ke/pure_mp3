@@ -35,10 +35,11 @@ public interface ICommand {
 	 * @throws UsageException
 	 *             if used in a wrong way
 	 * @throws MusicPlayerException 
+	 * @throws InterruptedException 
 	 */
 	public void execute(String... pArgs) throws UsageException,
 			ExecutionException,
-			IOException, MusicPlayerException;
+			IOException, MusicPlayerException, InterruptedException;
 
 	public String[] getKeys();
 

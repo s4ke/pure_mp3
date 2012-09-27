@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import javax.sound.sampled.DataLine;
@@ -101,7 +102,7 @@ public class PlayerConsole implements Runnable {
 				}
 			} catch(UsageException e) {
 				this.mPrintStream.println(e.getCommand().usage());
-			} catch(MusicPlayerException | IOException | RuntimeException e) {
+			} catch(InterruptedException | MusicPlayerException | IOException | RuntimeException e) {
 				e.printStackTrace(this.mPrintStream);
 			}
 		}
@@ -265,9 +266,11 @@ public class PlayerConsole implements Runnable {
 		EXIT("exit") {
 
 			@Override
-			public void execute(String... pArgs) throws MusicPlayerException {
+			public void execute(String... pArgs) throws MusicPlayerException, InterruptedException {
 				if(this.mConsole.mMusicPlayer != null && !this.mConsole.mMusicPlayer.isStopped()) {
 					this.mConsole.mMusicPlayer.stop();
+					this.mConsole.mExecService.shutdown();
+					this.mConsole.mExecService.awaitTermination(1000, TimeUnit.MILLISECONDS);
 				}
 				System.exit(1);
 			}
