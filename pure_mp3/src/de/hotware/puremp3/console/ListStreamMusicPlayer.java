@@ -80,7 +80,7 @@ public class ListStreamMusicPlayer extends StreamMusicPlayer implements
 	public void insert(ISong pSong) throws MusicPlayerException {
 		this.mLock.lock();
 		try {
-			if(this.mPlayerRunnable == null || this.mPlayerRunnable.isStopped()) {
+			if(this.mStreamPlayerCallable == null || this.mStreamPlayerCallable.isStopped()) {
 				super.insert(pSong);
 			}
 			this.mSongs.add(pSong);
