@@ -41,9 +41,7 @@ import de.hotware.hotsound.audio.data.IPlaybackAudioDevice;
 import de.hotware.hotsound.audio.data.SavingAudioDevice;
 import de.hotware.hotsound.audio.player.BasicSong;
 import de.hotware.hotsound.audio.player.SavingSong;
-import de.hotware.hotsound.audio.player.IMusicPlayer.SongInsertionException;
 import de.hotware.hotsound.audio.player.IMusicListener;
-import de.hotware.hotsound.audio.player.IMusicListener.MusicEvent.Type;
 import de.hotware.hotsound.audio.player.MusicPlayerException;
 import de.hotware.hotsound.audio.playlist.IPlaylistParser;
 import de.hotware.hotsound.audio.playlist.StockParser;
@@ -135,13 +133,7 @@ public class PlayerConsole implements Runnable {
 		this.mMusicPlayer = new ListStreamMusicPlayer(new IMusicListener() {
 
 			@Override
-			public void onEnd(MusicEvent pEvent) {
-				if(pEvent.getType() == Type.FAILURE) {
-					String message = pEvent.getThrowable().getMessage();
-					if(message != null) {
-						PlayerConsole.this.mPrintStream.println(message);
-					}
-				}
+			public void onEnd(MusicEndEvent pEvent) {
 				try {
 					if(PlayerConsole.this.mMusicPlayer.size() > 1) {
 						PlayerConsole.this.mMusicPlayer.next();
@@ -166,6 +158,11 @@ public class PlayerConsole implements Runnable {
 
 					});
 				}
+			}
+
+			@Override
+			public void onExeption(MusicExceptionEvent pEvent) {
+					pEvent.getException().printStackTrace(PlayerConsole.this.mPrintStream);
 			}
 
 		},
@@ -223,7 +220,7 @@ public class PlayerConsole implements Runnable {
 							try {
 								this.mConsole.mMusicPlayer.setPlaylist(parser
 										.parse(new URL(playlistLocation)));
-							} catch(SongInsertionException | IOException e) {
+							} catch(MusicPlayerException | IOException e) {
 								throw new ExecutionException(e, this);
 							}
 							if(this.mConsole.mMusicPlayer.size() == 0) {
@@ -264,7 +261,7 @@ public class PlayerConsole implements Runnable {
 								this.mConsole.mMusicPlayer.insert(song,
 										audioDevice);
 							}
-						} catch(SongInsertionException e) {
+						} catch(MusicPlayerException e) {
 							throw new ExecutionException(e, this);
 						}
 						if(this.mConsole.mMusicPlayer.isStopped()) {

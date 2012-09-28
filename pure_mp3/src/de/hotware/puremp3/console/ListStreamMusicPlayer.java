@@ -80,7 +80,7 @@ public class ListStreamMusicPlayer extends StreamMusicPlayer implements
 	public void insert(ISong pSong) throws MusicPlayerException {
 		this.mLock.lock();
 		try {
-			if(this.mStreamPlayerCallable == null || this.mStreamPlayerCallable.isStopped()) {
+			if(this.isStopped()) {
 				super.insert(pSong);
 			}
 			this.mSongs.add(pSong);
@@ -147,7 +147,7 @@ public class ListStreamMusicPlayer extends StreamMusicPlayer implements
 	}
 
 	@Override
-	public void insertAt(int pX) throws SongInsertionException {
+	public void insertAt(int pX) throws MusicPlayerException {
 		throw new UnsupportedOperationException("not implemented, yet");
 	}
 
