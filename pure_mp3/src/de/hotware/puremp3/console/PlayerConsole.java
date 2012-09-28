@@ -114,6 +114,11 @@ public class PlayerConsole implements Runnable {
 				e.printStackTrace(this.mPrintStream);
 			}
 		}
+		try {
+			this.cleanUp();
+		} catch(MusicPlayerException e) {
+			e.printStackTrace(this.mPrintStream);
+		}
 		this.mExecutorService.shutdown();
 		this.mPlayerExecutorService.shutdown();
 	}
@@ -165,6 +170,13 @@ public class PlayerConsole implements Runnable {
 
 		},
 			this.mPlayerExecutorService);
+	}
+	
+
+	private void cleanUp() throws MusicPlayerException {
+		if(this.mMusicPlayer != null) {
+			this.mMusicPlayer.close();
+		}
 	}
 
 	public static interface ConsoleRunnable extends Runnable {
