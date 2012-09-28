@@ -24,7 +24,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,6 +40,7 @@ import de.hotware.hotsound.audio.data.IAudioDevice;
 import de.hotware.hotsound.audio.data.IPlaybackAudioDevice;
 import de.hotware.hotsound.audio.data.SavingAudioDevice;
 import de.hotware.hotsound.audio.player.BasicSong;
+import de.hotware.hotsound.audio.player.SavingSong;
 import de.hotware.hotsound.audio.player.IMusicPlayer.SongInsertionException;
 import de.hotware.hotsound.audio.player.IMusicListener;
 import de.hotware.hotsound.audio.player.IMusicListener.MusicEvent.Type;
@@ -59,6 +59,7 @@ public class PlayerConsole implements Runnable {
 	private Scanner mScanner;
 	private Pattern mSplitPattern;
 	private ExecutorService mExecService;
+	private boolean mStop;
 
 	public PlayerConsole(ExecutorService pExecutorService,
 			PrintStream pPrintStream,
@@ -86,11 +87,12 @@ public class PlayerConsole implements Runnable {
 			}
 		}
 		this.mSplitPattern = Pattern.compile("\\s");
+		this.mStop = false;
 	}
 
 	@Override
 	public void run() {
-		while(true) {
+		while(!this.mStop) {
 			String input = this.mScanner.nextLine();
 			String[] args = this.mSplitPattern.split(input);
 			ICommand cmd = this.mCommands.get(args[0]);
@@ -102,7 +104,10 @@ public class PlayerConsole implements Runnable {
 				}
 			} catch(UsageException e) {
 				this.mPrintStream.println(e.getCommand().usage());
-			} catch(InterruptedException | MusicPlayerException | IOException | RuntimeException e) {
+			} catch(InterruptedException
+					| MusicPlayerException
+					| IOException
+					| RuntimeException e) {
 				e.printStackTrace(this.mPrintStream);
 			}
 		}
@@ -115,7 +120,7 @@ public class PlayerConsole implements Runnable {
 			e.printStackTrace(this.mPrintStream);
 		}
 	}
-	
+
 	private void initPlayer(final IAudioDevice pAudioDevice) {
 		this.mMusicPlayer = new ListStreamMusicPlayer(new IMusicListener() {
 
@@ -124,7 +129,7 @@ public class PlayerConsole implements Runnable {
 				if(pEvent.getType() == Type.FAILURE) {
 					String message = pEvent.getThrowable().getMessage();
 					if(message != null) {
-						PlayerConsole.this.mPrintStream.println();
+						PlayerConsole.this.mPrintStream.println(message);
 					}
 				}
 				try {
@@ -133,7 +138,7 @@ public class PlayerConsole implements Runnable {
 					}
 				} catch(MusicPlayerException e) {
 					PlayerConsole.this.runOnConsoleThread(new Runnable() {
-						
+
 						@Override
 						public void run() {
 							IListMusicPlayer player = PlayerConsole.this.mMusicPlayer;
@@ -148,18 +153,22 @@ public class PlayerConsole implements Runnable {
 								}
 							}
 						}
-						
+
 					});
+				}
+				if(PlayerConsole.this.mStop) {
+					System.exit(1);
 				}
 			}
 
-		}, Executors.newSingleThreadExecutor());
+		},
+				Executors.newSingleThreadExecutor());
 	}
-	
+
 	public static interface ConsoleRunnable extends Runnable {
-		
+
 		public void run() throws ExecutionException;
-		
+
 	}
 
 	/**
@@ -170,7 +179,9 @@ public class PlayerConsole implements Runnable {
 
 			@Override
 			public void execute(String... pArgs) throws UsageException,
-					ExecutionException, IOException, MusicPlayerException {
+					ExecutionException,
+					IOException,
+					MusicPlayerException {
 				int length = pArgs.length;
 				if(length < 1) {
 					throw new UsageException("play was used in a wrong way",
@@ -189,24 +200,28 @@ public class PlayerConsole implements Runnable {
 						if(!error) {
 							String playlistType = pArgs[2];
 							String playlistLocation = pArgs[3];
-							IPlaylistParser parser = this.mConsole.mPlaylistParsers.get(playlistType);
+							IPlaylistParser parser = this.mConsole.mPlaylistParsers
+									.get(playlistType);
 							if(parser == null) {
-								throw new IllegalArgumentException("playlist type " + playlistType + " not supported");
+								throw new IllegalArgumentException("playlist type " +
+										playlistType + " not supported");
 							}
 							try {
-								this.mConsole.mMusicPlayer.setPlaylist(parser.parse(new URL(playlistLocation)));
-							} catch(SongInsertionException
-									| IOException e) {
+								this.mConsole.mMusicPlayer.setPlaylist(parser
+										.parse(new URL(playlistLocation)));
+							} catch(SongInsertionException | IOException e) {
 								throw new ExecutionException(e, this);
 							}
 							if(this.mConsole.mMusicPlayer.size() == 0) {
-								this.mConsole.mPrintStream.println("No songs to play!");
+								this.mConsole.mPrintStream
+										.println("No songs to play!");
 							} else if(this.mConsole.mMusicPlayer.isStopped()) {
 								this.mConsole.mMusicPlayer.start();
 							}
 						}
 					} else {
 						IAudioDevice audioDevice = null;
+						BasicSong song = null;
 						String insertionString = "";
 						if(first.equals("-url")) {
 							error = length < 3;
@@ -220,19 +235,22 @@ public class PlayerConsole implements Runnable {
 										audioDevice = new SavingAudioDevice(new File(pArgs[4]));
 									}
 								}
+								song = new SavingSong(new URL(insertionString));
 							}
 						} else {
 							insertionString = "file:" + pArgs[1];
 						}
+						if(song == null) {
+							song = new BasicSong(new URL(insertionString));
+						}
 						try {
 							if(audioDevice == null) {
-								this.mConsole.mMusicPlayer
-										.insert(new BasicSong(new URL(insertionString)));
+								this.mConsole.mMusicPlayer.insert(song);
 							} else {
-								this.mConsole.mMusicPlayer
-								.insert(new BasicSong(new URL(insertionString)), audioDevice);
+								this.mConsole.mMusicPlayer.insert(song,
+										audioDevice);
 							}
-						} catch(MalformedURLException | SongInsertionException e) {
+						} catch(SongInsertionException e) {
 							throw new ExecutionException(e, this);
 						}
 						if(this.mConsole.mMusicPlayer.isStopped()) {
@@ -266,13 +284,15 @@ public class PlayerConsole implements Runnable {
 		EXIT("exit") {
 
 			@Override
-			public void execute(String... pArgs) throws MusicPlayerException, InterruptedException {
-				if(this.mConsole.mMusicPlayer != null && !this.mConsole.mMusicPlayer.isStopped()) {
+			public void execute(String... pArgs) throws MusicPlayerException,
+					InterruptedException {
+				if(this.mConsole.mMusicPlayer != null &&
+						!this.mConsole.mMusicPlayer.isStopped()) {
 					this.mConsole.mMusicPlayer.stop();
 					this.mConsole.mExecService.shutdown();
-					this.mConsole.mExecService.awaitTermination(1000, TimeUnit.MILLISECONDS);
+					this.mConsole.mExecService.awaitTermination(1000, TimeUnit.MINUTES);
 				}
-				System.exit(1);
+				this.mConsole.mStop = true;
 			}
 
 		},
@@ -297,7 +317,8 @@ public class PlayerConsole implements Runnable {
 			@Override
 			public void execute(String... pArgs) throws UsageException {
 				int length = pArgs.length;
-				DataLine dataLine = ((IPlaybackAudioDevice) this.mConsole.mMusicPlayer.getAudioDevice()).getDataLine();
+				DataLine dataLine = ((IPlaybackAudioDevice) this.mConsole.mMusicPlayer
+						.getAudioDevice()).getDataLine();
 				if(dataLine.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
 					FloatControl floatControl = (FloatControl) dataLine
 							.getControl(FloatControl.Type.MASTER_GAIN);
@@ -318,7 +339,8 @@ public class PlayerConsole implements Runnable {
 						floatControl.setValue(val);
 					}
 				} else {
-					this.mConsole.mPrintStream.println("Volume changes not supported on your platform!");
+					this.mConsole.mPrintStream
+							.println("Volume changes not supported on your platform!");
 				}
 			}
 
@@ -339,7 +361,7 @@ public class PlayerConsole implements Runnable {
 		public String usage() {
 			return "lol";
 		}
-		
+
 		@Override
 		public String[] getKeys() {
 			return this.mKeys;
