@@ -58,13 +58,16 @@ public class PlayerConsole implements Runnable {
 	private Map<String, IPlaylistParser> mPlaylistParsers;
 	private Scanner mScanner;
 	private Pattern mSplitPattern;
-	private ExecutorService mExecService;
+	private ExecutorService mExecutorService;
+	private ExecutorService mPlayerExecutorService;
 	private boolean mStop;
 
 	public PlayerConsole(ExecutorService pExecutorService,
+			ExecutorService pPlayerExecutorService,
 			PrintStream pPrintStream,
 			InputStream pInputStream) {
-		this.mExecService = pExecutorService;
+		this.mExecutorService = pExecutorService;
+		this.mPlayerExecutorService = pPlayerExecutorService;
 		this.mPrintStream = pPrintStream;
 		this.mCommands = new HashMap<String, ICommand>();
 		this.mPlaylistParsers = new HashMap<String, IPlaylistParser>();
@@ -111,11 +114,13 @@ public class PlayerConsole implements Runnable {
 				e.printStackTrace(this.mPrintStream);
 			}
 		}
+		this.mExecutorService.shutdown();
+		this.mPlayerExecutorService.shutdown();
 	}
 
 	public void runOnConsoleThread(Runnable pRunnable) {
 		try {
-			this.mExecService.execute(pRunnable);
+			this.mExecutorService.execute(pRunnable);
 		} catch(ExecutionException e) {
 			e.printStackTrace(this.mPrintStream);
 		}
@@ -156,13 +161,10 @@ public class PlayerConsole implements Runnable {
 
 					});
 				}
-				if(PlayerConsole.this.mStop) {
-					System.exit(1);
-				}
 			}
 
 		},
-				Executors.newSingleThreadExecutor());
+			this.mPlayerExecutorService);
 	}
 
 	public static interface ConsoleRunnable extends Runnable {
@@ -289,8 +291,8 @@ public class PlayerConsole implements Runnable {
 				if(this.mConsole.mMusicPlayer != null &&
 						!this.mConsole.mMusicPlayer.isStopped()) {
 					this.mConsole.mMusicPlayer.stop();
-					this.mConsole.mExecService.shutdown();
-					this.mConsole.mExecService.awaitTermination(1000, TimeUnit.MINUTES);
+					this.mConsole.mExecutorService.shutdown();
+					this.mConsole.mExecutorService.awaitTermination(1000, TimeUnit.MINUTES);
 				}
 				this.mConsole.mStop = true;
 			}
@@ -371,7 +373,8 @@ public class PlayerConsole implements Runnable {
 
 	public static void main(String args[]) {
 		ExecutorService exec = Executors.newSingleThreadExecutor();
-		PlayerConsole console = new PlayerConsole(exec, System.out, System.in);
+		ExecutorService exec2 = Executors.newSingleThreadExecutor();
+		PlayerConsole console = new PlayerConsole(exec, exec2, System.out, System.in);
 		console.run();
 	}
 

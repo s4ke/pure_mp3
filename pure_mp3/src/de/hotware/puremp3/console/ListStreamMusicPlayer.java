@@ -75,7 +75,7 @@ public class ListStreamMusicPlayer extends StreamMusicPlayer implements
 			this.mLock.unlock();
 		}
 	}
-
+	
 	@Override
 	public void insert(ISong pSong) throws MusicPlayerException {
 		this.mLock.lock();
