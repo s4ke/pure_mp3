@@ -47,7 +47,7 @@ public class ListStreamMusicPlayer extends StreamMusicPlayer implements
 	public ListStreamMusicPlayer(IMusicListener pPlaybackListener,
 			ExecutorService pExecutorService) {
 		super(pPlaybackListener, pExecutorService);
-		this.mLock = new ReentrantLock();
+		this.mLock = new ReentrantLock(true);
 		this.mMusicListener = pPlaybackListener;
 		this.mSongs = new ArrayList<ISong>();
 		this.mCurrent = 0;
