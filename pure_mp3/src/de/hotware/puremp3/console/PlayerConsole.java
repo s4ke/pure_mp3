@@ -25,7 +25,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
@@ -36,9 +38,11 @@ import java.util.regex.Pattern;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.FloatControl;
 
+import de.hotware.hotsound.audio.data.BasicAudioDevice;
 import de.hotware.hotsound.audio.data.IAudioDevice;
 import de.hotware.hotsound.audio.data.IPlaybackAudioDevice;
-import de.hotware.hotsound.audio.data.SavingAudioDevice;
+import de.hotware.hotsound.audio.data.MultiAudioDevice;
+import de.hotware.hotsound.audio.data.RecordingAudioDevice;
 import de.hotware.hotsound.audio.player.BasicSong;
 import de.hotware.hotsound.audio.player.SavingSong;
 import de.hotware.hotsound.audio.player.IMusicListener;
@@ -231,7 +235,8 @@ public class PlayerConsole implements Runnable {
 							}
 						}
 					} else {
-						IAudioDevice audioDevice = null;
+						List<IAudioDevice> audioDevices = new ArrayList<>();
+						audioDevices.add(new BasicAudioDevice());
 						BasicSong song = null;
 						String insertionString = "";
 						if(first.equals("-url")) {
@@ -243,7 +248,7 @@ public class PlayerConsole implements Runnable {
 								if(pArgs[3].equals("-save")) {
 									error = length < 5;
 									if(!error) {
-										audioDevice = new SavingAudioDevice(new File(pArgs[4]));
+										audioDevices.add(new RecordingAudioDevice(new File(pArgs[4])));
 									}
 								}
 								song = new SavingSong(new URL(insertionString));
@@ -255,12 +260,8 @@ public class PlayerConsole implements Runnable {
 							song = new BasicSong(new URL(insertionString));
 						}
 						try {
-							if(audioDevice == null) {
-								this.mConsole.mMusicPlayer.insert(song);
-							} else {
-								this.mConsole.mMusicPlayer.insert(song,
-										audioDevice);
-							}
+							this.mConsole.mMusicPlayer.insert(song,
+									new MultiAudioDevice(audioDevices));
 						} catch(MusicPlayerException e) {
 							throw new ExecutionException(e, this);
 						}
