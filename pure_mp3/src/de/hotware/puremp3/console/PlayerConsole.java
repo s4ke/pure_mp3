@@ -38,12 +38,15 @@ import java.util.regex.Pattern;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.FloatControl;
 
-import de.hotware.hotsound.audio.data.BasicAudioDevice;
+import de.hotware.hotsound.audio.data.BasicPlaybackAudioDevice;
 import de.hotware.hotsound.audio.data.IAudioDevice;
+import de.hotware.hotsound.audio.data.IAudioDevice.AudioDeviceException;
 import de.hotware.hotsound.audio.data.IPlaybackAudioDevice;
 import de.hotware.hotsound.audio.data.MultiAudioDevice;
 import de.hotware.hotsound.audio.data.RecordingAudioDevice;
-import de.hotware.hotsound.audio.player.BasicSong;
+import de.hotware.hotsound.audio.player.BasicPlaybackSong;
+import de.hotware.hotsound.audio.player.MusicEndEvent;
+import de.hotware.hotsound.audio.player.MusicExceptionEvent;
 import de.hotware.hotsound.audio.player.SavingSong;
 import de.hotware.hotsound.audio.player.IMusicListener;
 import de.hotware.hotsound.audio.player.MusicPlayerException;
@@ -55,6 +58,7 @@ import de.hotware.puremp3.console.ICommand.UsageException;
 public class PlayerConsole implements Runnable {
 
 	private IListMusicPlayer mMusicPlayer;
+	private IPlaybackAudioDevice mPlaybackAudioDevice;
 	private PrintStream mPrintStream;
 	private Map<String, ICommand> mCommands;
 	private Map<String, IPlaylistParser> mPlaylistParsers;
@@ -138,41 +142,51 @@ public class PlayerConsole implements Runnable {
 
 			@Override
 			public void onEnd(MusicEndEvent pEvent) {
-				try {
-					if(PlayerConsole.this.mMusicPlayer.size() > 1) {
-						PlayerConsole.this.mMusicPlayer.next();
+//				try {
+					try {
+						PlayerConsole.this.mMusicPlayer.getAudioDevice().close();
+					} catch(AudioDeviceException e) {
+						e.printStackTrace(PlayerConsole.this.mPrintStream);
 					}
-				} catch(MusicPlayerException e) {
-					PlayerConsole.this.runOnConsoleThread(new Runnable() {
-
-						@Override
-						public void run() {
-							IListMusicPlayer player = PlayerConsole.this.mMusicPlayer;
-							boolean fail = true;
-							while(player.size() > 0 && fail) {
-								player.removeAt(player.getCurrent());
-								try {
-									player.next();
-									fail = false;
-								} catch(MusicPlayerException e) {
-									e.printStackTrace(PlayerConsole.this.mPrintStream);
-								}
-							}
-						}
-
-					});
-				}
+//					if(PlayerConsole.this.mMusicPlayer.size() > 1) {
+//						PlayerConsole.this.mMusicPlayer.next();
+//					}
+//				} catch(MusicPlayerException e) {
+//					PlayerConsole.this.runOnConsoleThread(new Runnable() {
+//
+//						@Override
+//						public void run() {
+//							IListMusicPlayer player = PlayerConsole.this.mMusicPlayer;
+//							boolean fail = true;
+//							while(player.size() > 0 && fail) {
+//								player.removeAt(player.getCurrent());
+//								try {
+//									player.next();
+//									fail = false;
+//								} catch(MusicPlayerException e) {
+//									e.printStackTrace(PlayerConsole.this.mPrintStream);
+//								}
+//							}
+//						}
+//
+//					});
+//				}
 			}
 
 			@Override
-			public void onExeption(MusicExceptionEvent pEvent) {
-					pEvent.getException().printStackTrace(PlayerConsole.this.mPrintStream);
+			public void onException(MusicExceptionEvent pEvent) {
+				pEvent.getException()
+						.printStackTrace(PlayerConsole.this.mPrintStream);
+				try {
+					PlayerConsole.this.mMusicPlayer.getAudioDevice().close();
+				} catch(AudioDeviceException e) {
+					e.printStackTrace(PlayerConsole.this.mPrintStream);
+				}
 			}
 
 		},
-			this.mPlayerExecutorService);
+				this.mPlayerExecutorService);
 	}
-	
 
 	private void cleanUp() throws MusicPlayerException {
 		if(this.mMusicPlayer != null) {
@@ -236,8 +250,9 @@ public class PlayerConsole implements Runnable {
 						}
 					} else {
 						List<IAudioDevice> audioDevices = new ArrayList<>();
-						audioDevices.add(new BasicAudioDevice());
-						BasicSong song = null;
+						audioDevices
+								.add(this.mConsole.mPlaybackAudioDevice = new BasicPlaybackAudioDevice());
+						BasicPlaybackSong song = null;
 						String insertionString = "";
 						if(first.equals("-url")) {
 							error = length < 3;
@@ -248,7 +263,8 @@ public class PlayerConsole implements Runnable {
 								if(pArgs[3].equals("-save")) {
 									error = length < 5;
 									if(!error) {
-										audioDevices.add(new RecordingAudioDevice(new File(pArgs[4])));
+										audioDevices
+												.add(new RecordingAudioDevice(new File(pArgs[4])));
 									}
 								}
 								song = new SavingSong(new URL(insertionString));
@@ -257,7 +273,7 @@ public class PlayerConsole implements Runnable {
 							insertionString = "file:" + pArgs[1];
 						}
 						if(song == null) {
-							song = new BasicSong(new URL(insertionString));
+							song = new BasicPlaybackSong(new URL(insertionString));
 						}
 						try {
 							this.mConsole.mMusicPlayer.insert(song,
@@ -302,7 +318,8 @@ public class PlayerConsole implements Runnable {
 						!this.mConsole.mMusicPlayer.isStopped()) {
 					this.mConsole.mMusicPlayer.stop();
 					this.mConsole.mExecutorService.shutdown();
-					this.mConsole.mExecutorService.awaitTermination(1000, TimeUnit.MINUTES);
+					this.mConsole.mExecutorService.awaitTermination(1000,
+							TimeUnit.MINUTES);
 				}
 				this.mConsole.mStop = true;
 			}
@@ -329,8 +346,8 @@ public class PlayerConsole implements Runnable {
 			@Override
 			public void execute(String... pArgs) throws UsageException {
 				int length = pArgs.length;
-				DataLine dataLine = ((IPlaybackAudioDevice) this.mConsole.mMusicPlayer
-						.getAudioDevice()).getDataLine();
+				DataLine dataLine = this.mConsole.mPlaybackAudioDevice
+						.getDataLine();
 				if(dataLine.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
 					FloatControl floatControl = (FloatControl) dataLine
 							.getControl(FloatControl.Type.MASTER_GAIN);
@@ -384,7 +401,10 @@ public class PlayerConsole implements Runnable {
 	public static void main(String args[]) {
 		ExecutorService exec = Executors.newSingleThreadExecutor();
 		ExecutorService exec2 = Executors.newSingleThreadExecutor();
-		PlayerConsole console = new PlayerConsole(exec, exec2, System.out, System.in);
+		PlayerConsole console = new PlayerConsole(exec,
+				exec2,
+				System.out,
+				System.in);
 		console.run();
 	}
 
