@@ -220,7 +220,7 @@ public class PlayerConsole implements Runnable {
 					this.mConsole.initPlayer(null);
 				}
 				if(length == 1) {
-					this.mConsole.mMusicPlayer.unpause();
+					this.mConsole.mMusicPlayer.pause(false);
 				} else {
 					String first = pArgs[1];
 					boolean error = false;
@@ -297,7 +297,7 @@ public class PlayerConsole implements Runnable {
 
 			@Override
 			public void execute(String... pArgs) {
-				this.mConsole.mMusicPlayer.pause();
+				this.mConsole.mMusicPlayer.pause(true);
 			}
 
 		},
